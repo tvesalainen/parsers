@@ -39,7 +39,7 @@ public class SAXParserFactoryImpl extends SAXParserFactory
     {
         try
         {
-            XMLReaderFactory reader = XMLReaderFactory.getInstance();
+            XMLDocumentParser reader = XMLDocumentParser.getInstance();
             SAXFeatures f = features.clone();
             f.setNamespaceAware(isNamespaceAware());
             f.setValidating(isValidating());

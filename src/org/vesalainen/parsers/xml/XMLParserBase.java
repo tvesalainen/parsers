@@ -38,6 +38,14 @@ public abstract class XMLParserBase<R extends Element> extends XMLDTDBaseGrammar
         parse(in, document);
         return document;
     }
+    /**
+     * 
+     * @param in
+     * @param document
+     * @return
+     * @throws IOException 
+     * @see <a href="doc-files/XMLParserBase-document.html#BNF">BNF Syntax for document</a>
+     */
     @ParseMethod(start="document", size=4096)
     protected abstract Document parse(InputStream in, @ParserContext("Document") Document document) throws IOException;
 

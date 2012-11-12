@@ -39,10 +39,11 @@ import org.vesalainen.parsers.date.SQLDateParser;
 import org.vesalainen.regex.Regex;
 
 /**
- * @author Timo Vesalainen This SQL grammar is very small subset of the standard
+ * This SQL parser implements a very small subset of the standard
+ * @author Timo Vesalainen 
  * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
  * @see <a href="doc-files/SqlParser-statements.html#BNF">BNF Syntax for SQL-statements</a>
- * @see http://savage.net.au/SQL/sql-2003-2.bnf.html
+ * @see <a href="http://savage.net.au/SQL/sql-2003-2.bnf.html">BNF Grammar for ISO/IEC 9075-2:2003 - Database Language SQL (SQL-2003) SQL/Foundation</a>
  */
 @GenClassname("org.vesalainen.parsers.sql.SqlParserImpl")
 @GrammarDef()

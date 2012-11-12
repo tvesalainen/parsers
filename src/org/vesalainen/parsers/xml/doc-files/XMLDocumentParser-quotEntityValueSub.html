@@ -1,0 +1,77 @@
+<html>
+<body>
+<h1>BNF</h1>
+<a name="BNF"/>
+<a name="Accept"/>
+<p>
+<a name="rule0"/>
+Accept ::= <a href="#quotEntityValueSub">quotEntityValueSub</a><a name="quotEntityValueSub"/>
+<p>
+<a name="rule1"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#quotEntityValueSub(java.lang.String)">1: quotEntityValueSub</a> ::= <a href="#quotEntityValue">quotEntityValue</a><a name="quotEntityValue"/>
+<p>
+<a name="rule2"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#quotEntityValue(java.lang.String, java.lang.String)">2: quotEntityValue</a> ::= <a href="#quotEntityValue">quotEntityValue</a> <a href="#reference">reference</a><p>
+<a name="rule3"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#quotEntityValue()">3: quotEntityValue</a> ::=<p>
+<a name="rule4"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#quotEntityValue(java.lang.String, java.lang.String)">4: quotEntityValue</a> ::= <a href="#quotEntityValue">quotEntityValue</a> <a href="#notQuotValue">notQuotValue</a><a name="reference"/>
+<p>
+<a name="rule5"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#reference(java.lang.String)">5: reference</a> ::= <a href="#entityRef">entityRef</a><p>
+<a name="rule6"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#reference(java.lang.String)">6: reference</a> ::= <a href="#charRef">charRef</a><a name="charRef"/>
+<p>
+<a name="rule7"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#charRef(int)">7: charRef</a> ::= <a href="#charRefDecimal">charRefDecimal</a><p>
+<a name="rule8"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#charRef(int)">8: charRef</a> ::= <a href="#charRefHex">charRefHex</a><h1>Terminals</h1>
+<a name="Terminals"/>
+<a name="peReference"/>
+<p>
+peReference = '%[:A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][:A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*;'<a name="Eof(singleQuot)"/>
+<p>
+Eof(singleQuot) = '"'<a name="notQuotValue"/>
+<p>
+notQuotValue = '[^%\&amp;"]+'<a name="charRefHex"/>
+<p>
+charRefHex = '\&amp;#x[0-9a-fA-F]+;'<a name="entityRef"/>
+<p>
+entityRef = '\&amp;[:A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][:A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*;'<a name="charRefDecimal"/>
+<p>
+charRefDecimal = '\&amp;#[0-9]+;'<h1>States</h1>
+<a name="States"/>
+<a name="state1"/>
+<h2>State 1</h2>
+( )
+<p>
+<a href="#rule0">Accept</a>->.<a href="#quotEntityValueSub">quotEntityValueSub</a> <p>
+<a href="#rule3">quotEntityValue</a>->.<a href="#rule3"> (3)</a><p>
+<a href="#quotEntityValueSub">quotEntityValueSub</a> Goto <a href="#state2">2</a><p>
+<a href="#quotEntityValue">quotEntityValue</a> Goto <a href="#state3">3</a><p>
+<a href="#entityRef">entityRef</a> Reduce <a href="#rule3">3</a><p>
+<a href="#charRefDecimal">charRefDecimal</a> Reduce <a href="#rule3">3</a><p>
+<a href="#charRefHex">charRefHex</a> Reduce <a href="#rule3">3</a><p>
+<a href="#notQuotValue">notQuotValue</a> Reduce <a href="#rule3">3</a><p>
+Eof Reduce <a href="#rule3">3</a><a name="state2"/>
+<h2>State 2</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule0">Accept</a>-><a href="#quotEntityValueSub">quotEntityValueSub</a> .<a href="#rule0"> (0)</a><p>
+<a href="#rule0">Accept</a>-><a href="#quotEntityValueSub">quotEntityValueSub</a> .<a href="#rule0"> (0)</a><p>
+Eof Reduce <a href="#rule0">0</a><a name="state3"/>
+<h2>State 3</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule1">quotEntityValueSub</a>-><a href="#quotEntityValue">quotEntityValue</a> .<a href="#rule1"> (1)</a><p>
+<a href="#rule2">quotEntityValue</a>-><a href="#quotEntityValue">quotEntityValue</a> .<a href="#reference">reference</a> <p>
+<a href="#rule4">quotEntityValue</a>-><a href="#quotEntityValue">quotEntityValue</a> .<a href="#notQuotValue">notQuotValue</a> <p>
+<a href="#rule1">quotEntityValueSub</a>-><a href="#quotEntityValue">quotEntityValue</a> .<a href="#rule1"> (1)</a><p>
+<a href="#notQuotValue">notQuotValue</a> Sh/Rd <a href="#rule4">4</a><p>
+<a href="#entityRef">entityRef</a> Sh/Rd <a href="#rule5">5</a><p>
+<a href="#charRefHex">charRefHex</a> Sh/Rd <a href="#rule8">8</a><p>
+<a href="#charRefDecimal">charRefDecimal</a> Sh/Rd <a href="#rule7">7</a><p>
+<a href="#reference">reference</a> Gt/Rd <a href="#rule2">2</a><p>
+<a href="#charRef">charRef</a> Gt/Rd <a href="#rule6">6</a><p>
+Eof Reduce <a href="#rule1">1</a></body>
+</html>

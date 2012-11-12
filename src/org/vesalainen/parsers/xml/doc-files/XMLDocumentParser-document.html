@@ -1,0 +1,1105 @@
+<html>
+<body>
+<h1>BNF</h1>
+<a name="BNF"/>
+<a name="Accept"/>
+<p>
+<a name="rule0"/>
+Accept ::= <a href="#document">document</a><a name="document"/>
+<p>
+<a name="rule1"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#document()">1: document</a> ::= <a href="#prolog">prolog</a> <a href="#element">element</a> <a href="#misc*">misc*</a><a name="prolog"/>
+<p>
+<a name="rule2"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDTDBaseGrammar.html#prolog()">2: prolog</a> ::= <a href="#xmlDecl?">xmlDecl?</a> <a href="#misc*">misc*</a> <a href="#(doctypedecl misc*)?">(doctypedecl misc*)?</a><a name="element"/>
+<p>
+<a name="rule3"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#element()">3: element</a> ::= <a href="#sTag">sTag</a><a name="misc*"/>
+<a name="xmlDecl?"/>
+<a name="(doctypedecl misc*)?"/>
+<a name="sTag"/>
+<p>
+<a name="rule10"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#sTag(org.vesalainen.parsers.xml.QName, org.vesalainen.parser.util.InputReader)">10: sTag</a> ::= <a href="#sTagName">sTagName</a><a name="misc"/>
+<p>
+<a name="rule11"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#misc()">11: misc</a> ::= <a href="#(comment|pi)">(comment|pi)</a><a name="xmlDecl"/>
+<p>
+<a name="rule12"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#xmlDecl()">12: xmlDecl</a> ::= <a href="#byteOrderMark?">byteOrderMark?</a> <a href="#xmlPrefix">xmlPrefix</a> <a href="#versionInfo">versionInfo</a> <a href="#encodingDecl?">encodingDecl?</a> <a href="#sdDecl?">sdDecl?</a> '?&gt;'<a name="(doctypedecl misc*)"/>
+<a name="(comment|pi)"/>
+<a name="byteOrderMark?"/>
+<a name="xmlPrefix"/>
+<p>
+<a name="rule18"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#xmlPrefix()">18: xmlPrefix</a> ::= <a href="#utf16LEPrefix">utf16LEPrefix</a><p>
+<a name="rule19"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#xmlPrefix()">19: xmlPrefix</a> ::= <a href="#utf32BEPrefix">utf32BEPrefix</a><p>
+<a name="rule20"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#xmlPrefix()">20: xmlPrefix</a> ::= <a href="#utf32LEPrefix">utf32LEPrefix</a><p>
+<a name="rule21"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#xmlPrefix()">21: xmlPrefix</a> ::= <a href="#utf8Prefix">utf8Prefix</a><p>
+<a name="rule22"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#xmlPrefix()">22: xmlPrefix</a> ::= <a href="#utf16BEPrefix">utf16BEPrefix</a><a name="versionInfo"/>
+<p>
+<a name="rule23"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#versionInfo(java.lang.String)">23: versionInfo</a> ::= 'version' <a href="#eq">eq</a> <a href="#versionNum">versionNum</a><a name="encodingDecl?"/>
+<a name="sdDecl?"/>
+<a name="doctypedecl"/>
+<p>
+<a name="rule28"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDTDBaseGrammar.html#doctypedecl()">28: doctypedecl</a> ::= <a href="#doctypedeclStart">doctypedeclStart</a> <a href="#doctypedeclContent">doctypedeclContent</a> <a href="#doctypedeclEnd">doctypedeclEnd</a><a name="byteOrderMark"/>
+<p>
+<a name="rule29"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#byteOrderMark()">29: byteOrderMark</a> ::= <a href="#utf8">utf8</a><p>
+<a name="rule30"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#byteOrderMark()">30: byteOrderMark</a> ::= <a href="#utf16LE">utf16LE</a><p>
+<a name="rule31"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#byteOrderMark()">31: byteOrderMark</a> ::= <a href="#utf32LE">utf32LE</a><p>
+<a name="rule32"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#byteOrderMark()">32: byteOrderMark</a> ::= <a href="#utf16BE">utf16BE</a><p>
+<a name="rule33"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#byteOrderMark()">33: byteOrderMark</a> ::= <a href="#utf32BE">utf32BE</a><a name="eq"/>
+<p>
+<a name="rule34"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#eq()">34: eq</a> ::= '='<a name="versionNum"/>
+<p>
+<a name="rule35"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#versionNum(java.lang.String)">35: versionNum</a> ::= <a href="#version">version</a><a name="encodingDecl"/>
+<p>
+<a name="rule36"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#encodingDecl(java.lang.String)">36: encodingDecl</a> ::= 'encoding' <a href="#eq">eq</a> '"' <a href="#encName">encName</a> '"'<p>
+<a name="rule37"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#encodingDecl(java.lang.String)">37: encodingDecl</a> ::= 'encoding' <a href="#eq">eq</a> ''' <a href="#encName">encName</a> '''<a name="sdDecl"/>
+<p>
+<a name="rule38"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#sdDecl(boolean)">38: sdDecl</a> ::= 'standalone' <a href="#eq">eq</a> <a href="#yesNo">yesNo</a> '''<p>
+<a name="rule39"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#sdDecl(boolean)">39: sdDecl</a> ::= 'standalone' <a href="#eq">eq</a> <a href="#yesNo">yesNo</a> '"'<a name="doctypedeclStart"/>
+<p>
+<a name="rule40"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#doctypedeclStart(org.vesalainen.parsers.xml.QName, java.lang.String[])">40: doctypedeclStart</a> ::= '&lt;!DOCTYPE' <a href="#qName">qName</a> <a href="#optExternalID">optExternalID</a><a name="doctypedeclContent"/>
+<p>
+<a name="rule41"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDTDBaseGrammar.html#doctypedeclContent()">41: doctypedeclContent</a> ::= <a href="#('\[' intSubset '\]')?">('\[' intSubset '\]')?</a><a name="doctypedeclEnd"/>
+<p>
+<a name="rule42"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#doctypedeclEnd()">42: doctypedeclEnd</a> ::= '&gt;'<a name="utf8"/>
+<p>
+<a name="rule43"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#utf8()">43: utf8</a> ::= 'xEFxBBxBF'<a name="utf16LE"/>
+<p>
+<a name="rule44"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#utf16LE()">44: utf16LE</a> ::= 'xFFxFE'<a name="utf32LE"/>
+<p>
+<a name="rule45"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#utf32LE()">45: utf32LE</a> ::= 'xFFxFEx00x00'<a name="utf16BE"/>
+<p>
+<a name="rule46"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#utf16BE()">46: utf16BE</a> ::= 'xFExFF'<a name="utf32BE"/>
+<p>
+<a name="rule47"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#utf32BE()">47: utf32BE</a> ::= 'x00x00xFExFF'<a name="optExternalID"/>
+<p>
+<a name="rule48"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#optExternalID()">48: optExternalID</a> ::=<p>
+<a name="rule49"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#optExternalID(java.lang.String[])">49: optExternalID</a> ::= <a href="#externalID">externalID</a><a name="('\[' intSubset '\]')?"/>
+<a name="externalID"/>
+<p>
+<a name="rule52"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#externalID(java.lang.String)">52: externalID</a> ::= 'SYSTEM' <a href="#systemLiteral">systemLiteral</a><p>
+<a name="rule53"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#externalID(java.lang.String, java.lang.String)">53: externalID</a> ::= 'PUBLIC' <a href="#pubidLiteral">pubidLiteral</a> <a href="#systemLiteral">systemLiteral</a><a name="('\[' intSubset '\]')"/>
+<a name="pubidLiteral"/>
+<p>
+<a name="rule55"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#pubidLiteral(java.lang.String)">55: pubidLiteral</a> ::= <a href="#pubidLiteralMinusApostrophe">pubidLiteralMinusApostrophe</a><p>
+<a name="rule56"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#pubidLiteral(java.lang.String)">56: pubidLiteral</a> ::= <a href="#pubidLiteralWithApostrophe">pubidLiteralWithApostrophe</a><a name="intSubset"/>
+<p>
+<a name="rule57"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDTDBaseGrammar.html#intSubset()">57: intSubset</a> ::= <a href="#markupdecl*">markupdecl*</a><a name="markupdecl*"/>
+<a name="markupdecl"/>
+<p>
+<a name="rule60"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDTDBaseGrammar.html#markupdecl()">60: markupdecl</a> ::= <a href="#attlistDecl">attlistDecl</a><p>
+<a name="rule61"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDTDBaseGrammar.html#markupdecl()">61: markupdecl</a> ::= <a href="#elementdecl">elementdecl</a><p>
+<a name="rule62"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDTDBaseGrammar.html#markupdecl()">62: markupdecl</a> ::= <a href="#entityDecl">entityDecl</a><p>
+<a name="rule63"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDTDBaseGrammar.html#markupdecl()">63: markupdecl</a> ::= <a href="#notationDecl">notationDecl</a><a name="attlistDecl"/>
+<p>
+<a name="rule64"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#attlistDecl(org.vesalainen.parsers.xml.QName)">64: attlistDecl</a> ::= '&lt;!ATTLIST' <a href="#qName">qName</a> <a href="#attDef*">attDef*</a> '&gt;'<a name="elementdecl"/>
+<p>
+<a name="rule65"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#elementdecl(org.vesalainen.parsers.xml.QName)">65: elementdecl</a> ::= '&lt;!ELEMENT' <a href="#qName">qName</a> <a href="#contentspec">contentspec</a> '&gt;'<a name="entityDecl"/>
+<p>
+<a name="rule66"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#entityDecl()">66: entityDecl</a> ::= <a href="#geDecl">geDecl</a><p>
+<a name="rule67"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#entityDecl()">67: entityDecl</a> ::= <a href="#peDecl">peDecl</a><a name="notationDecl"/>
+<p>
+<a name="rule68"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#notationDecl(java.lang.String, java.lang.String[])">68: notationDecl</a> ::= '&lt;!NOTATION' <a href="#name">name</a> <a href="#externalID">externalID</a> '&gt;'<p>
+<a name="rule69"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#notationDecl(java.lang.String, java.lang.String)">69: notationDecl</a> ::= '&lt;!NOTATION' <a href="#name">name</a> <a href="#publicID">publicID</a> '&gt;'<a name="attDef*"/>
+<a name="contentspec"/>
+<p>
+<a name="rule72"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#contentspec()">72: contentspec</a> ::= 'EMPTY'<p>
+<a name="rule73"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#contentspec()">73: contentspec</a> ::= 'ANY'<p>
+<a name="rule74"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#contentspec()">74: contentspec</a> ::= <a href="#children">children</a><p>
+<a name="rule75"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#contentspec()">75: contentspec</a> ::= <a href="#mixed">mixed</a><a name="geDecl"/>
+<p>
+<a name="rule76"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#geDecl(java.lang.String)">76: geDecl</a> ::= '&lt;!ENTITY' <a href="#name">name</a> <a href="#entityDef">entityDef</a> '&gt;'<a name="peDecl"/>
+<p>
+<a name="rule77"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#peDecl(java.lang.String, java.lang.Object)">77: peDecl</a> ::= '&lt;!ENTITY' '%' <a href="#name">name</a> <a href="#peDef">peDef</a> '&gt;'<a name="publicID"/>
+<p>
+<a name="rule78"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#publicID(java.lang.String)">78: publicID</a> ::= 'PUBLIC' <a href="#pubidLiteral">pubidLiteral</a><a name="attDef"/>
+<p>
+<a name="rule79"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#attDef(org.vesalainen.parsers.xml.QName)">79: attDef</a> ::= <a href="#qName">qName</a> <a href="#attType">attType</a> <a href="#defaultDecl">defaultDecl</a><p>
+<a name="rule80"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#attDef(java.lang.String)">80: attDef</a> ::= <a href="#nsAttName">nsAttName</a> <a href="#attType">attType</a> <a href="#defaultDecl">defaultDecl</a><a name="children"/>
+<p>
+<a name="rule81"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#children()">81: children</a> ::= <a href="#seq">seq</a> <a href="#('[\+\*\?]')?">('[\+\*\?]')?</a><p>
+<a name="rule82"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#children()">82: children</a> ::= <a href="#choice">choice</a> <a href="#('[\+\*\?]')?">('[\+\*\?]')?</a><a name="mixed"/>
+<p>
+<a name="rule83"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#mixed()">83: mixed</a> ::= '(' '#PCDATA' ')'<p>
+<a name="rule84"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#mixed()">84: mixed</a> ::= '(' '#PCDATA' <a href="#mixedNames">mixedNames</a> ')' '*'<a name="entityDef"/>
+<p>
+<a name="rule85"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#entityDef(java.lang.String[])">85: entityDef</a> ::= <a href="#externalID">externalID</a> <a href="#nDataDecl?">nDataDecl?</a><p>
+<a name="rule86"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#entityDef(java.lang.String)">86: entityDef</a> ::= <a href="#entityValue">entityValue</a><a name="peDef"/>
+<p>
+<a name="rule87"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#peDef(java.lang.String[])">87: peDef</a> ::= <a href="#externalID">externalID</a><p>
+<a name="rule88"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#peDef(java.lang.String)">88: peDef</a> ::= <a href="#entityValue">entityValue</a><a name="attType"/>
+<p>
+<a name="rule89"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#attType()">89: attType</a> ::= <a href="#stringType">stringType</a><p>
+<a name="rule90"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#attType()">90: attType</a> ::= <a href="#tokenizedType">tokenizedType</a><p>
+<a name="rule91"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#attType()">91: attType</a> ::= <a href="#enumeratedType">enumeratedType</a><a name="defaultDecl"/>
+<p>
+<a name="rule92"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#defaultDecl()">92: defaultDecl</a> ::= '#IMPLIED'<p>
+<a name="rule93"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#defaultDecl(java.lang.String)">93: defaultDecl</a> ::= <a href="#'#FIXED'?">'#FIXED'?</a> <a href="#attValue">attValue</a><p>
+<a name="rule94"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#defaultDecl()">94: defaultDecl</a> ::= '#REQUIRED'<a name="seq"/>
+<p>
+<a name="rule95"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#seq()">95: seq</a> ::= '(' <a href="#cp">cp</a> <a href="#('\,' cp)*">('\,' cp)*</a> ')'<a name="('[\+\*\?]')?"/>
+<a name="choice"/>
+<p>
+<a name="rule98"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#choice()">98: choice</a> ::= '(' <a href="#cp">cp</a> <a href="#('\|' cp)+">('\|' cp)+</a> ')'<a name="mixedNames"/>
+<p>
+<a name="rule99"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#mixedNames()">99: mixedNames</a> ::=<p>
+<a name="rule100"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#mixedNames(org.vesalainen.parsers.xml.QName)">100: mixedNames</a> ::= <a href="#mixedNames">mixedNames</a> '|' <a href="#qName">qName</a><a name="nDataDecl?"/>
+<a name="entityValue"/>
+<p>
+<a name="rule103"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#entityValue(java.lang.String)">103: entityValue</a> ::= <a href="#quotEntityValueStart">quotEntityValueStart</a><p>
+<a name="rule104"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#entityValue(java.lang.String)">104: entityValue</a> ::= <a href="#aposEntityValueStart">aposEntityValueStart</a><a name="stringType"/>
+<p>
+<a name="rule105"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#stringType()">105: stringType</a> ::= 'CDATA'<a name="tokenizedType"/>
+<p>
+<a name="rule106"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#tokenizedType()">106: tokenizedType</a> ::= 'ID' 'REF'<p>
+<a name="rule107"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#tokenizedType()">107: tokenizedType</a> ::= 'ENTITY'<p>
+<a name="rule108"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#tokenizedType()">108: tokenizedType</a> ::= 'ID' 'REF' 'S'<p>
+<a name="rule109"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#tokenizedType()">109: tokenizedType</a> ::= 'NMTOKEN'<p>
+<a name="rule110"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#tokenizedType()">110: tokenizedType</a> ::= 'ID'<p>
+<a name="rule111"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#tokenizedType()">111: tokenizedType</a> ::= 'NMTOKEN' 'S'<p>
+<a name="rule112"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#tokenizedType()">112: tokenizedType</a> ::= 'ENTITIES'<a name="enumeratedType"/>
+<p>
+<a name="rule113"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#enumeratedType()">113: enumeratedType</a> ::= <a href="#enumeration">enumeration</a><p>
+<a name="rule114"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#enumeratedType()">114: enumeratedType</a> ::= <a href="#notationType">notationType</a><a name="'#FIXED'?"/>
+<a name="attValue"/>
+<p>
+<a name="rule117"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#attValue(java.lang.String)">117: attValue</a> ::= <a href="#quotAttValueStart">quotAttValueStart</a><p>
+<a name="rule118"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#attValue(java.lang.String)">118: attValue</a> ::= <a href="#aposAttValueStart">aposAttValueStart</a><a name="cp"/>
+<p>
+<a name="rule119"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#cp(org.vesalainen.parsers.xml.QName)">119: cp</a> ::= <a href="#qName">qName</a> <a href="#('[\+\*\?]')?">('[\+\*\?]')?</a><p>
+<a name="rule120"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#cp()">120: cp</a> ::= <a href="#seq">seq</a> <a href="#('[\+\*\?]')?">('[\+\*\?]')?</a><p>
+<a name="rule121"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#cp()">121: cp</a> ::= <a href="#choice">choice</a> <a href="#('[\+\*\?]')?">('[\+\*\?]')?</a><a name="('\,' cp)*"/>
+<a name="('[\+\*\?]')"/>
+<a name="('\|' cp)+"/>
+<a name="nDataDecl"/>
+<p>
+<a name="rule127"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#nDataDecl(java.lang.String)">127: nDataDecl</a> ::= 'NDATA' <a href="#name">name</a><a name="quotEntityValueStart"/>
+<p>
+<a name="rule128"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#quotEntityValueStart(org.vesalainen.parser.util.InputReader)">128: quotEntityValueStart</a> ::= '"'<a name="aposEntityValueStart"/>
+<p>
+<a name="rule129"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#aposEntityValueStart(org.vesalainen.parser.util.InputReader)">129: aposEntityValueStart</a> ::= '''<a name="enumeration"/>
+<p>
+<a name="rule130"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#enumeration(java.lang.String)">130: enumeration</a> ::= '(' <a href="#nmtoken">nmtoken</a> <a href="#enumerationNMTokens">enumerationNMTokens</a> ')'<a name="notationType"/>
+<p>
+<a name="rule131"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#notationType(java.lang.String)">131: notationType</a> ::= 'NOTATION' '(' <a href="#name">name</a> <a href="#notationTypeNames">notationTypeNames</a> ')'<a name="quotAttValueStart"/>
+<p>
+<a name="rule132"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#quotAttValueStart(org.vesalainen.parser.util.InputReader)">132: quotAttValueStart</a> ::= '"'<a name="aposAttValueStart"/>
+<p>
+<a name="rule133"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#aposAttValueStart(org.vesalainen.parser.util.InputReader)">133: aposAttValueStart</a> ::= '''<a name="('\,' cp)"/>
+<a name="('\|' cp)"/>
+<a name="enumerationNMTokens"/>
+<p>
+<a name="rule136"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#enumerationNMTokens(java.lang.String)">136: enumerationNMTokens</a> ::= <a href="#enumerationNMTokens">enumerationNMTokens</a> '|' <a href="#nmtoken">nmtoken</a><p>
+<a name="rule137"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#enumerationNMTokens()">137: enumerationNMTokens</a> ::=<a name="notationTypeNames"/>
+<p>
+<a name="rule138"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#notationTypeNames(java.lang.String)">138: notationTypeNames</a> ::= <a href="#notationTypeNames">notationTypeNames</a> '|' <a href="#name">name</a><p>
+<a name="rule139"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#notationTypeNames()">139: notationTypeNames</a> ::=<h1>Terminals</h1>
+<a name="Terminals"/>
+<a name="comment"/>
+<p>
+comment = '&lt;!\-\-[\x01-\uD7FF\uE000-\uFFFD\x{10000}-\x{10FFFF}]*\-\-&gt;'<a name="name"/>
+<p>
+name = '[:A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][:A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*'<a name="s"/>
+<p>
+s = '[\x20\x09\x0A]+'<a name="version"/>
+<p>
+version = '"[0-9]\.[0-9]"|'[0-9]\.[0-9]''<a name="qName"/>
+<p>
+qName = '[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*(:[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*)?'<a name="nmtoken"/>
+<p>
+nmtoken = '[:A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]+'<a name="encName"/>
+<p>
+encName = '[A-Za-z][A-Za-z0-9\._\-]*'<a name="eol"/>
+<p>
+eol = '\x0d\x0a|\x0d\x85|\x85|\x0d|\u2028'<a name="pi"/>
+<p>
+pi = '&lt;\?[\x01-\uD7FF\uE000-\uFFFD\x{10000}-\x{10FFFF}]*\?&gt;'<a name="sTagName"/>
+<p>
+sTagName = '&lt;[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*(:[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*)?'<a name="nsAttName"/>
+<p>
+nsAttName = 'xmlns(:[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*)?'<a name="utf8Prefix"/>
+<p>
+utf8Prefix = '&lt;\?xml'<a name="yesNo"/>
+<p>
+yesNo = '(yes)|(no)'<a name="systemLiteral"/>
+<p>
+systemLiteral = '"[^"]*"|'[^']*''<a name="pubidLiteralWithApostrophe"/>
+<p>
+pubidLiteralWithApostrophe = '"[\x20\x0D\x0Aa-zA-Z0-9\-'\(\)\+\,\./:=\?;!\*#@\$_%]*"'<a name="pubidLiteralMinusApostrophe"/>
+<p>
+pubidLiteralMinusApostrophe = ''[\x20\x0D\x0Aa-zA-Z0-9\-\(\)\+\,\./:=\?;!\*#@\$_%]*''<a name="utf32BEPrefix"/>
+<p>
+utf32BEPrefix = '\x00\x00\x00&lt;\x00\x00\x00\?\x00\x00\x00x\x00\x00\x00m\x00\x00\x00l'<a name="utf32LEPrefix"/>
+<p>
+utf32LEPrefix = '&lt;\x00\x00\x00\?\x00\x00\x00x\x00\x00\x00m\x00\x00\x00l\x00\x00\x00'<a name="utf16BEPrefix"/>
+<p>
+utf16BEPrefix = '\x00&lt;\x00\?\x00x\x00m\x00l'<a name="utf16LEPrefix"/>
+<p>
+utf16LEPrefix = '&lt;\x00\?\x00x\x00m\x00l\x00'<h1>States</h1>
+<a name="States"/>
+<a name="state1"/>
+<h2>State 1</h2>
+( )
+<p>
+<a href="#rule0">Accept</a>->.<a href="#document">document</a> <p>
+<a href="#rule16">byteOrderMark?</a>->.<a href="#rule16"> (16)</a><p>
+<a href="#rule6">xmlDecl?</a>->.<a href="#rule6"> (6)</a><p>
+'xEFxBBxBF' Sh/Rd <a href="#rule43">43</a><p>
+'xFFxFE' Sh/Rd <a href="#rule44">44</a><p>
+'xFFxFEx00x00' Sh/Rd <a href="#rule45">45</a><p>
+'xFExFF' Sh/Rd <a href="#rule46">46</a><p>
+'x00x00xFExFF' Sh/Rd <a href="#rule47">47</a><p>
+<a href="#document">document</a> Goto <a href="#state2">2</a><p>
+<a href="#prolog">prolog</a> Goto <a href="#state3">3</a><p>
+<a href="#xmlDecl">xmlDecl</a> Gt/Rd <a href="#rule7">7</a><p>
+<a href="#byteOrderMark">byteOrderMark</a> Gt/Rd <a href="#rule17">17</a><p>
+<a href="#utf32BE">utf32BE</a> Gt/Rd <a href="#rule33">33</a><p>
+<a href="#utf16BE">utf16BE</a> Gt/Rd <a href="#rule32">32</a><p>
+<a href="#utf32LE">utf32LE</a> Gt/Rd <a href="#rule31">31</a><p>
+<a href="#utf16LE">utf16LE</a> Gt/Rd <a href="#rule30">30</a><p>
+<a href="#utf8">utf8</a> Gt/Rd <a href="#rule29">29</a><p>
+<a href="#byteOrderMark?">byteOrderMark?</a> Goto <a href="#state4">4</a><p>
+<a href="#xmlDecl?">xmlDecl?</a> Goto <a href="#state5">5</a><p>
+<a href="#utf16LEPrefix">utf16LEPrefix</a> Reduce <a href="#rule16">16</a><p>
+<a href="#utf32BEPrefix">utf32BEPrefix</a> Reduce <a href="#rule16">16</a><p>
+<a href="#utf32LEPrefix">utf32LEPrefix</a> Reduce <a href="#rule16">16</a><p>
+<a href="#utf8Prefix">utf8Prefix</a> Reduce <a href="#rule16">16</a><p>
+<a href="#utf16BEPrefix">utf16BEPrefix</a> Reduce <a href="#rule16">16</a><p>
+<a href="#pi">pi</a> Reduce <a href="#rule6">6</a><p>
+<a href="#comment">comment</a> Reduce <a href="#rule6">6</a><p>
+'&lt;!DOCTYPE' Reduce <a href="#rule6">6</a><p>
+<a href="#sTagName">sTagName</a> Reduce <a href="#rule6">6</a><a name="state2"/>
+<h2>State 2</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule0">Accept</a>-><a href="#document">document</a> .<a href="#rule0"> (0)</a><p>
+<a href="#rule0">Accept</a>-><a href="#document">document</a> .<a href="#rule0"> (0)</a><p>
+Eof Reduce <a href="#rule0">0</a><a name="state3"/>
+<h2>State 3</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule1">document</a>-><a href="#prolog">prolog</a> .<a href="#element">element</a> <a href="#misc*">misc*</a> <p>
+<a href="#sTagName">sTagName</a> Sh/Rd <a href="#rule10">10</a><p>
+<a href="#element">element</a> Goto <a href="#state6">6</a><p>
+<a href="#sTag">sTag</a> Gt/Rd <a href="#rule3">3</a><a name="state4"/>
+<h2>State 4</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule12">xmlDecl</a>-><a href="#byteOrderMark?">byteOrderMark?</a> .<a href="#xmlPrefix">xmlPrefix</a> <a href="#versionInfo">versionInfo</a> <a href="#encodingDecl?">encodingDecl?</a> <a href="#sdDecl?">sdDecl?</a> '?&gt;' <p>
+<a href="#utf16BEPrefix">utf16BEPrefix</a> Sh/Rd <a href="#rule22">22</a><p>
+<a href="#utf8Prefix">utf8Prefix</a> Sh/Rd <a href="#rule21">21</a><p>
+<a href="#utf32LEPrefix">utf32LEPrefix</a> Sh/Rd <a href="#rule20">20</a><p>
+<a href="#utf32BEPrefix">utf32BEPrefix</a> Sh/Rd <a href="#rule19">19</a><p>
+<a href="#utf16LEPrefix">utf16LEPrefix</a> Sh/Rd <a href="#rule18">18</a><p>
+<a href="#xmlPrefix">xmlPrefix</a> Goto <a href="#state7">7</a><a name="state5"/>
+<h2>State 5</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule2">prolog</a>-><a href="#xmlDecl?">xmlDecl?</a> .<a href="#misc*">misc*</a> <a href="#(doctypedecl misc*)?">(doctypedecl misc*)?</a> <p>
+<a href="#rule5">misc*</a>->.<a href="#rule5"> (5)</a><p>
+<a href="#misc*">misc*</a> Goto <a href="#state8">8</a><p>
+'&lt;!DOCTYPE' Reduce <a href="#rule5">5</a><p>
+<a href="#pi">pi</a> Reduce <a href="#rule5">5</a><p>
+<a href="#comment">comment</a> Reduce <a href="#rule5">5</a><p>
+<a href="#sTagName">sTagName</a> Reduce <a href="#rule5">5</a><a name="state6"/>
+<h2>State 6</h2>
+(<a href="#state3"> 3</a> )
+<p>
+<a href="#rule1">document</a>-><a href="#prolog">prolog</a> <a href="#element">element</a> .<a href="#misc*">misc*</a> <p>
+<a href="#rule5">misc*</a>->.<a href="#rule5"> (5)</a><p>
+<a href="#misc*">misc*</a> Goto <a href="#state9">9</a><p>
+<a href="#pi">pi</a> Reduce <a href="#rule5">5</a><p>
+<a href="#comment">comment</a> Reduce <a href="#rule5">5</a><p>
+Eof Reduce <a href="#rule5">5</a><a name="state7"/>
+<h2>State 7</h2>
+(<a href="#state4"> 4</a> )
+<p>
+<a href="#rule12">xmlDecl</a>-><a href="#byteOrderMark?">byteOrderMark?</a> <a href="#xmlPrefix">xmlPrefix</a> .<a href="#versionInfo">versionInfo</a> <a href="#encodingDecl?">encodingDecl?</a> <a href="#sdDecl?">sdDecl?</a> '?&gt;' <p>
+'version' Shift <a href="#state11">11</a><p>
+<a href="#versionInfo">versionInfo</a> Goto <a href="#state10">10</a><a name="state8"/>
+<h2>State 8</h2>
+(<a href="#state5"> 5</a> )
+<p>
+<a href="#rule2">prolog</a>-><a href="#xmlDecl?">xmlDecl?</a> <a href="#misc*">misc*</a> .<a href="#(doctypedecl misc*)?">(doctypedecl misc*)?</a> <p>
+<a href="#rule4">misc*</a>-><a href="#misc*">misc*</a> .<a href="#misc">misc</a> <p>
+<a href="#rule8">(doctypedecl misc*)?</a>->.<a href="#rule8"> (8)</a><p>
+'&lt;!DOCTYPE' Shift <a href="#state13">13</a><p>
+<a href="#comment">comment</a> Sh/Rd <a href="#rule15">15</a><p>
+<a href="#pi">pi</a> Sh/Rd <a href="#rule14">14</a><p>
+<a href="#misc">misc</a> Gt/Rd <a href="#rule4">4</a><p>
+<a href="#(doctypedecl misc*)?">(doctypedecl misc*)?</a> Gt/Rd <a href="#rule2">2</a><p>
+<a href="#(doctypedecl misc*)">(doctypedecl misc*)</a> Gt/Rd <a href="#rule9">9</a><p>
+<a href="#doctypedeclStart">doctypedeclStart</a> Goto <a href="#state12">12</a><p>
+<a href="#doctypedecl">doctypedecl</a> Goto <a href="#state14">14</a><p>
+<a href="#(comment|pi)">(comment|pi)</a> Gt/Rd <a href="#rule11">11</a><p>
+<a href="#sTagName">sTagName</a> Reduce <a href="#rule8">8</a><a name="state9"/>
+<h2>State 9</h2>
+(<a href="#state6"> 6</a> )
+<p>
+<a href="#rule1">document</a>-><a href="#prolog">prolog</a> <a href="#element">element</a> <a href="#misc*">misc*</a> .<a href="#rule1"> (1)</a><p>
+<a href="#rule4">misc*</a>-><a href="#misc*">misc*</a> .<a href="#misc">misc</a> <p>
+<a href="#rule1">document</a>-><a href="#prolog">prolog</a> <a href="#element">element</a> <a href="#misc*">misc*</a> .<a href="#rule1"> (1)</a><p>
+<a href="#comment">comment</a> Sh/Rd <a href="#rule15">15</a><p>
+<a href="#pi">pi</a> Sh/Rd <a href="#rule14">14</a><p>
+<a href="#misc">misc</a> Gt/Rd <a href="#rule4">4</a><p>
+<a href="#(comment|pi)">(comment|pi)</a> Gt/Rd <a href="#rule11">11</a><p>
+Eof Reduce <a href="#rule1">1</a><a name="state10"/>
+<h2>State 10</h2>
+(<a href="#state7"> 7</a> )
+<p>
+<a href="#rule12">xmlDecl</a>-><a href="#byteOrderMark?">byteOrderMark?</a> <a href="#xmlPrefix">xmlPrefix</a> <a href="#versionInfo">versionInfo</a> .<a href="#encodingDecl?">encodingDecl?</a> <a href="#sdDecl?">sdDecl?</a> '?&gt;' <p>
+<a href="#rule25">encodingDecl?</a>->.<a href="#rule25"> (25)</a><p>
+'encoding' Shift <a href="#state16">16</a><p>
+<a href="#encodingDecl?">encodingDecl?</a> Goto <a href="#state15">15</a><p>
+<a href="#encodingDecl">encodingDecl</a> Gt/Rd <a href="#rule24">24</a><p>
+'standalone' Reduce <a href="#rule25">25</a><p>
+'?&gt;' Reduce <a href="#rule25">25</a><a name="state11"/>
+<h2>State 11</h2>
+(<a href="#state7"> 7</a> )
+<p>
+<a href="#rule23">versionInfo</a>->'version' .<a href="#eq">eq</a> <a href="#versionNum">versionNum</a> <p>
+'=' Sh/Rd <a href="#rule34">34</a><p>
+<a href="#eq">eq</a> Goto <a href="#state17">17</a><a name="state12"/>
+<h2>State 12</h2>
+(<a href="#state8"> 8</a> )
+<p>
+<a href="#rule28">doctypedecl</a>-><a href="#doctypedeclStart">doctypedeclStart</a> .<a href="#doctypedeclContent">doctypedeclContent</a> <a href="#doctypedeclEnd">doctypedeclEnd</a> <p>
+<a href="#rule50">('\[' intSubset '\]')?</a>->.<a href="#rule50"> (50)</a><p>
+'[' Shift <a href="#state19">19</a><p>
+<a href="#doctypedeclContent">doctypedeclContent</a> Goto <a href="#state18">18</a><p>
+<a href="#('\[' intSubset '\]')?">('\[' intSubset '\]')?</a> Gt/Rd <a href="#rule41">41</a><p>
+<a href="#('\[' intSubset '\]')">('\[' intSubset '\]')</a> Gt/Rd <a href="#rule51">51</a><p>
+'&gt;' Reduce <a href="#rule50">50</a><a name="state13"/>
+<h2>State 13</h2>
+(<a href="#state8"> 8</a> )
+<p>
+<a href="#rule40">doctypedeclStart</a>->'&lt;!DOCTYPE' .<a href="#qName">qName</a> <a href="#optExternalID">optExternalID</a> <p>
+<a href="#qName">qName</a> Shift <a href="#state20">20</a><a name="state14"/>
+<h2>State 14</h2>
+(<a href="#state8"> 8</a> )
+<p>
+<a href="#rule13">(doctypedecl misc*)</a>-><a href="#doctypedecl">doctypedecl</a> .<a href="#misc*">misc*</a> <p>
+<a href="#rule5">misc*</a>->.<a href="#rule5"> (5)</a><p>
+<a href="#misc*">misc*</a> Goto <a href="#state21">21</a><p>
+<a href="#pi">pi</a> Reduce <a href="#rule5">5</a><p>
+<a href="#comment">comment</a> Reduce <a href="#rule5">5</a><p>
+<a href="#sTagName">sTagName</a> Reduce <a href="#rule5">5</a><a name="state15"/>
+<h2>State 15</h2>
+(<a href="#state10"> 10</a> )
+<p>
+<a href="#rule12">xmlDecl</a>-><a href="#byteOrderMark?">byteOrderMark?</a> <a href="#xmlPrefix">xmlPrefix</a> <a href="#versionInfo">versionInfo</a> <a href="#encodingDecl?">encodingDecl?</a> .<a href="#sdDecl?">sdDecl?</a> '?&gt;' <p>
+<a href="#rule27">sdDecl?</a>->.<a href="#rule27"> (27)</a><p>
+'standalone' Shift <a href="#state23">23</a><p>
+<a href="#sdDecl?">sdDecl?</a> Goto <a href="#state22">22</a><p>
+<a href="#sdDecl">sdDecl</a> Gt/Rd <a href="#rule26">26</a><p>
+'?&gt;' Reduce <a href="#rule27">27</a><a name="state16"/>
+<h2>State 16</h2>
+(<a href="#state10"> 10</a> )
+<p>
+<a href="#rule36">encodingDecl</a>->'encoding' .<a href="#eq">eq</a> '"' <a href="#encName">encName</a> '"' <p>
+<a href="#rule37">encodingDecl</a>->'encoding' .<a href="#eq">eq</a> ''' <a href="#encName">encName</a> ''' <p>
+'=' Sh/Rd <a href="#rule34">34</a><p>
+<a href="#eq">eq</a> Goto <a href="#state24">24</a><a name="state17"/>
+<h2>State 17</h2>
+(<a href="#state11"> 11</a> )
+<p>
+<a href="#rule23">versionInfo</a>->'version' <a href="#eq">eq</a> .<a href="#versionNum">versionNum</a> <p>
+<a href="#version">version</a> Sh/Rd <a href="#rule35">35</a><p>
+<a href="#versionNum">versionNum</a> Gt/Rd <a href="#rule23">23</a><a name="state18"/>
+<h2>State 18</h2>
+(<a href="#state12"> 12</a> )
+<p>
+<a href="#rule28">doctypedecl</a>-><a href="#doctypedeclStart">doctypedeclStart</a> <a href="#doctypedeclContent">doctypedeclContent</a> .<a href="#doctypedeclEnd">doctypedeclEnd</a> <p>
+'&gt;' Sh/Rd <a href="#rule42">42</a><p>
+<a href="#doctypedeclEnd">doctypedeclEnd</a> Gt/Rd <a href="#rule28">28</a><a name="state19"/>
+<h2>State 19</h2>
+(<a href="#state12"> 12</a> )
+<p>
+<a href="#rule54">('\[' intSubset '\]')</a>->'[' .<a href="#intSubset">intSubset</a> ']' <p>
+<a href="#rule58">markupdecl*</a>->.<a href="#rule58"> (58)</a><p>
+<a href="#intSubset">intSubset</a> Goto <a href="#state25">25</a><p>
+<a href="#markupdecl*">markupdecl*</a> Goto <a href="#state26">26</a><p>
+'&lt;!ATTLIST' Reduce <a href="#rule58">58</a><p>
+'&lt;!ELEMENT' Reduce <a href="#rule58">58</a><p>
+'&lt;!ENTITY' Reduce <a href="#rule58">58</a><p>
+'&lt;!NOTATION' Reduce <a href="#rule58">58</a><p>
+']' Reduce <a href="#rule58">58</a><a name="state20"/>
+<h2>State 20</h2>
+(<a href="#state13"> 13</a> )
+<p>
+<a href="#rule40">doctypedeclStart</a>->'&lt;!DOCTYPE' <a href="#qName">qName</a> .<a href="#optExternalID">optExternalID</a> <p>
+<a href="#rule48">optExternalID</a>->.<a href="#rule48"> (48)</a><p>
+'PUBLIC' Shift <a href="#state27">27</a><p>
+'SYSTEM' Shift <a href="#state28">28</a><p>
+<a href="#optExternalID">optExternalID</a> Gt/Rd <a href="#rule40">40</a><p>
+<a href="#externalID">externalID</a> Gt/Rd <a href="#rule49">49</a><p>
+'[' Reduce <a href="#rule48">48</a><p>
+'&gt;' Reduce <a href="#rule48">48</a><a name="state21"/>
+<h2>State 21</h2>
+(<a href="#state14"> 14</a> )
+<p>
+<a href="#rule4">misc*</a>-><a href="#misc*">misc*</a> .<a href="#misc">misc</a> <p>
+<a href="#rule13">(doctypedecl misc*)</a>-><a href="#doctypedecl">doctypedecl</a> <a href="#misc*">misc*</a> .<a href="#rule13"> (13)</a><p>
+<a href="#rule13">(doctypedecl misc*)</a>-><a href="#doctypedecl">doctypedecl</a> <a href="#misc*">misc*</a> .<a href="#rule13"> (13)</a><p>
+<a href="#comment">comment</a> Sh/Rd <a href="#rule15">15</a><p>
+<a href="#pi">pi</a> Sh/Rd <a href="#rule14">14</a><p>
+<a href="#misc">misc</a> Gt/Rd <a href="#rule4">4</a><p>
+<a href="#(comment|pi)">(comment|pi)</a> Gt/Rd <a href="#rule11">11</a><p>
+<a href="#sTagName">sTagName</a> Reduce <a href="#rule13">13</a><a name="state22"/>
+<h2>State 22</h2>
+(<a href="#state15"> 15</a> )
+<p>
+<a href="#rule12">xmlDecl</a>-><a href="#byteOrderMark?">byteOrderMark?</a> <a href="#xmlPrefix">xmlPrefix</a> <a href="#versionInfo">versionInfo</a> <a href="#encodingDecl?">encodingDecl?</a> <a href="#sdDecl?">sdDecl?</a> .'?&gt;' <p>
+'?&gt;' Sh/Rd <a href="#rule12">12</a><a name="state23"/>
+<h2>State 23</h2>
+(<a href="#state15"> 15</a> )
+<p>
+<a href="#rule38">sdDecl</a>->'standalone' .<a href="#eq">eq</a> <a href="#yesNo">yesNo</a> ''' <p>
+<a href="#rule39">sdDecl</a>->'standalone' .<a href="#eq">eq</a> <a href="#yesNo">yesNo</a> '"' <p>
+'=' Sh/Rd <a href="#rule34">34</a><p>
+<a href="#eq">eq</a> Goto <a href="#state29">29</a><a name="state24"/>
+<h2>State 24</h2>
+(<a href="#state16"> 16</a> )
+<p>
+<a href="#rule36">encodingDecl</a>->'encoding' <a href="#eq">eq</a> .'"' <a href="#encName">encName</a> '"' <p>
+<a href="#rule37">encodingDecl</a>->'encoding' <a href="#eq">eq</a> .''' <a href="#encName">encName</a> ''' <p>
+''' Shift <a href="#state30">30</a><p>
+'"' Shift <a href="#state31">31</a><a name="state25"/>
+<h2>State 25</h2>
+(<a href="#state19"> 19</a> )
+<p>
+<a href="#rule54">('\[' intSubset '\]')</a>->'[' <a href="#intSubset">intSubset</a> .']' <p>
+']' Sh/Rd <a href="#rule54">54</a><a name="state26"/>
+<h2>State 26</h2>
+(<a href="#state19"> 19</a> )
+<p>
+<a href="#rule57">intSubset</a>-><a href="#markupdecl*">markupdecl*</a> .<a href="#rule57"> (57)</a><p>
+<a href="#rule59">markupdecl*</a>-><a href="#markupdecl*">markupdecl*</a> .<a href="#markupdecl">markupdecl</a> <p>
+<a href="#rule57">intSubset</a>-><a href="#markupdecl*">markupdecl*</a> .<a href="#rule57"> (57)</a><p>
+'&lt;!NOTATION' Shift <a href="#state32">32</a><p>
+'&lt;!ENTITY' Shift <a href="#state33">33</a><p>
+'&lt;!ELEMENT' Shift <a href="#state34">34</a><p>
+'&lt;!ATTLIST' Shift <a href="#state35">35</a><p>
+<a href="#markupdecl">markupdecl</a> Gt/Rd <a href="#rule59">59</a><p>
+<a href="#notationDecl">notationDecl</a> Gt/Rd <a href="#rule63">63</a><p>
+<a href="#entityDecl">entityDecl</a> Gt/Rd <a href="#rule62">62</a><p>
+<a href="#elementdecl">elementdecl</a> Gt/Rd <a href="#rule61">61</a><p>
+<a href="#attlistDecl">attlistDecl</a> Gt/Rd <a href="#rule60">60</a><p>
+<a href="#peDecl">peDecl</a> Gt/Rd <a href="#rule67">67</a><p>
+<a href="#geDecl">geDecl</a> Gt/Rd <a href="#rule66">66</a><p>
+']' Reduce <a href="#rule57">57</a><a name="state27"/>
+<h2>State 27</h2>
+(<a href="#state20"> 20</a><a href="#state42"> 42</a><a href="#state48"> 48</a> )
+<p>
+<a href="#rule53">externalID</a>->'PUBLIC' .<a href="#pubidLiteral">pubidLiteral</a> <a href="#systemLiteral">systemLiteral</a> <p>
+<a href="#pubidLiteralWithApostrophe">pubidLiteralWithApostrophe</a> Sh/Rd <a href="#rule56">56</a><p>
+<a href="#pubidLiteralMinusApostrophe">pubidLiteralMinusApostrophe</a> Sh/Rd <a href="#rule55">55</a><p>
+<a href="#pubidLiteral">pubidLiteral</a> Goto <a href="#state36">36</a><a name="state28"/>
+<h2>State 28</h2>
+(<a href="#state20"> 20</a><a href="#state40"> 40</a><a href="#state42"> 42</a><a href="#state48"> 48</a> )
+<p>
+<a href="#rule52">externalID</a>->'SYSTEM' .<a href="#systemLiteral">systemLiteral</a> <p>
+<a href="#systemLiteral">systemLiteral</a> Sh/Rd <a href="#rule52">52</a><a name="state29"/>
+<h2>State 29</h2>
+(<a href="#state23"> 23</a> )
+<p>
+<a href="#rule38">sdDecl</a>->'standalone' <a href="#eq">eq</a> .<a href="#yesNo">yesNo</a> ''' <p>
+<a href="#rule39">sdDecl</a>->'standalone' <a href="#eq">eq</a> .<a href="#yesNo">yesNo</a> '"' <p>
+<a href="#yesNo">yesNo</a> Shift <a href="#state37">37</a><a name="state30"/>
+<h2>State 30</h2>
+(<a href="#state24"> 24</a> )
+<p>
+<a href="#rule37">encodingDecl</a>->'encoding' <a href="#eq">eq</a> ''' .<a href="#encName">encName</a> ''' <p>
+<a href="#encName">encName</a> Shift <a href="#state38">38</a><a name="state31"/>
+<h2>State 31</h2>
+(<a href="#state24"> 24</a> )
+<p>
+<a href="#rule36">encodingDecl</a>->'encoding' <a href="#eq">eq</a> '"' .<a href="#encName">encName</a> '"' <p>
+<a href="#encName">encName</a> Shift <a href="#state39">39</a><a name="state32"/>
+<h2>State 32</h2>
+(<a href="#state26"> 26</a> )
+<p>
+<a href="#rule68">notationDecl</a>->'&lt;!NOTATION' .<a href="#name">name</a> <a href="#externalID">externalID</a> '&gt;' <p>
+<a href="#rule69">notationDecl</a>->'&lt;!NOTATION' .<a href="#name">name</a> <a href="#publicID">publicID</a> '&gt;' <p>
+<a href="#name">name</a> Shift <a href="#state40">40</a><a name="state33"/>
+<h2>State 33</h2>
+(<a href="#state26"> 26</a> )
+<p>
+<a href="#rule76">geDecl</a>->'&lt;!ENTITY' .<a href="#name">name</a> <a href="#entityDef">entityDef</a> '&gt;' <p>
+<a href="#rule77">peDecl</a>->'&lt;!ENTITY' .'%' <a href="#name">name</a> <a href="#peDef">peDef</a> '&gt;' <p>
+'%' Shift <a href="#state41">41</a><p>
+<a href="#name">name</a> Shift <a href="#state42">42</a><a name="state34"/>
+<h2>State 34</h2>
+(<a href="#state26"> 26</a> )
+<p>
+<a href="#rule65">elementdecl</a>->'&lt;!ELEMENT' .<a href="#qName">qName</a> <a href="#contentspec">contentspec</a> '&gt;' <p>
+<a href="#qName">qName</a> Shift <a href="#state43">43</a><a name="state35"/>
+<h2>State 35</h2>
+(<a href="#state26"> 26</a> )
+<p>
+<a href="#rule64">attlistDecl</a>->'&lt;!ATTLIST' .<a href="#qName">qName</a> <a href="#attDef*">attDef*</a> '&gt;' <p>
+<a href="#qName">qName</a> Shift <a href="#state44">44</a><a name="state36"/>
+<h2>State 36</h2>
+(<a href="#state27"> 27</a> )
+<p>
+<a href="#rule53">externalID</a>->'PUBLIC' <a href="#pubidLiteral">pubidLiteral</a> .<a href="#systemLiteral">systemLiteral</a> <p>
+<a href="#systemLiteral">systemLiteral</a> Sh/Rd <a href="#rule53">53</a><a name="state37"/>
+<h2>State 37</h2>
+(<a href="#state29"> 29</a> )
+<p>
+<a href="#rule38">sdDecl</a>->'standalone' <a href="#eq">eq</a> <a href="#yesNo">yesNo</a> .''' <p>
+<a href="#rule39">sdDecl</a>->'standalone' <a href="#eq">eq</a> <a href="#yesNo">yesNo</a> .'"' <p>
+'"' Sh/Rd <a href="#rule39">39</a><p>
+''' Sh/Rd <a href="#rule38">38</a><a name="state38"/>
+<h2>State 38</h2>
+(<a href="#state30"> 30</a> )
+<p>
+<a href="#rule37">encodingDecl</a>->'encoding' <a href="#eq">eq</a> ''' <a href="#encName">encName</a> .''' <p>
+''' Sh/Rd <a href="#rule37">37</a><a name="state39"/>
+<h2>State 39</h2>
+(<a href="#state31"> 31</a> )
+<p>
+<a href="#rule36">encodingDecl</a>->'encoding' <a href="#eq">eq</a> '"' <a href="#encName">encName</a> .'"' <p>
+'"' Sh/Rd <a href="#rule36">36</a><a name="state40"/>
+<h2>State 40</h2>
+(<a href="#state32"> 32</a> )
+<p>
+<a href="#rule68">notationDecl</a>->'&lt;!NOTATION' <a href="#name">name</a> .<a href="#externalID">externalID</a> '&gt;' <p>
+<a href="#rule69">notationDecl</a>->'&lt;!NOTATION' <a href="#name">name</a> .<a href="#publicID">publicID</a> '&gt;' <p>
+'SYSTEM' Shift <a href="#state28">28</a><p>
+'PUBLIC' Shift <a href="#state47">47</a><p>
+<a href="#publicID">publicID</a> Goto <a href="#state45">45</a><p>
+<a href="#externalID">externalID</a> Goto <a href="#state46">46</a><a name="state41"/>
+<h2>State 41</h2>
+(<a href="#state33"> 33</a> )
+<p>
+<a href="#rule77">peDecl</a>->'&lt;!ENTITY' '%' .<a href="#name">name</a> <a href="#peDef">peDef</a> '&gt;' <p>
+<a href="#name">name</a> Shift <a href="#state48">48</a><a name="state42"/>
+<h2>State 42</h2>
+(<a href="#state33"> 33</a> )
+<p>
+<a href="#rule76">geDecl</a>->'&lt;!ENTITY' <a href="#name">name</a> .<a href="#entityDef">entityDef</a> '&gt;' <p>
+'"' Sh/Rd <a href="#rule128">128</a><p>
+''' Sh/Rd <a href="#rule129">129</a><p>
+'PUBLIC' Shift <a href="#state27">27</a><p>
+'SYSTEM' Shift <a href="#state28">28</a><p>
+<a href="#entityDef">entityDef</a> Goto <a href="#state49">49</a><p>
+<a href="#entityValue">entityValue</a> Gt/Rd <a href="#rule86">86</a><p>
+<a href="#externalID">externalID</a> Goto <a href="#state50">50</a><p>
+<a href="#aposEntityValueStart">aposEntityValueStart</a> Gt/Rd <a href="#rule104">104</a><p>
+<a href="#quotEntityValueStart">quotEntityValueStart</a> Gt/Rd <a href="#rule103">103</a><a name="state43"/>
+<h2>State 43</h2>
+(<a href="#state34"> 34</a> )
+<p>
+<a href="#rule65">elementdecl</a>->'&lt;!ELEMENT' <a href="#qName">qName</a> .<a href="#contentspec">contentspec</a> '&gt;' <p>
+'ANY' Sh/Rd <a href="#rule73">73</a><p>
+'EMPTY' Sh/Rd <a href="#rule72">72</a><p>
+'(' Shift <a href="#state52">52</a><p>
+<a href="#contentspec">contentspec</a> Goto <a href="#state51">51</a><p>
+<a href="#mixed">mixed</a> Gt/Rd <a href="#rule75">75</a><p>
+<a href="#children">children</a> Gt/Rd <a href="#rule74">74</a><p>
+<a href="#choice">choice</a> Goto <a href="#state53">53</a><p>
+<a href="#seq">seq</a> Goto <a href="#state54">54</a><a name="state44"/>
+<h2>State 44</h2>
+(<a href="#state35"> 35</a> )
+<p>
+<a href="#rule64">attlistDecl</a>->'&lt;!ATTLIST' <a href="#qName">qName</a> .<a href="#attDef*">attDef*</a> '&gt;' <p>
+<a href="#rule70">attDef*</a>->.<a href="#rule70"> (70)</a><p>
+<a href="#attDef*">attDef*</a> Goto <a href="#state55">55</a><p>
+'&gt;' Reduce <a href="#rule70">70</a><p>
+<a href="#qName">qName</a> Reduce <a href="#rule70">70</a><p>
+<a href="#nsAttName">nsAttName</a> Reduce <a href="#rule70">70</a><a name="state45"/>
+<h2>State 45</h2>
+(<a href="#state40"> 40</a> )
+<p>
+<a href="#rule69">notationDecl</a>->'&lt;!NOTATION' <a href="#name">name</a> <a href="#publicID">publicID</a> .'&gt;' <p>
+'&gt;' Sh/Rd <a href="#rule69">69</a><a name="state46"/>
+<h2>State 46</h2>
+(<a href="#state40"> 40</a> )
+<p>
+<a href="#rule68">notationDecl</a>->'&lt;!NOTATION' <a href="#name">name</a> <a href="#externalID">externalID</a> .'&gt;' <p>
+'&gt;' Sh/Rd <a href="#rule68">68</a><a name="state47"/>
+<h2>State 47</h2>
+(<a href="#state40"> 40</a> )
+<p>
+<a href="#rule53">externalID</a>->'PUBLIC' .<a href="#pubidLiteral">pubidLiteral</a> <a href="#systemLiteral">systemLiteral</a> <p>
+<a href="#rule78">publicID</a>->'PUBLIC' .<a href="#pubidLiteral">pubidLiteral</a> <p>
+<a href="#pubidLiteralWithApostrophe">pubidLiteralWithApostrophe</a> Sh/Rd <a href="#rule56">56</a><p>
+<a href="#pubidLiteralMinusApostrophe">pubidLiteralMinusApostrophe</a> Sh/Rd <a href="#rule55">55</a><p>
+<a href="#pubidLiteral">pubidLiteral</a> Goto <a href="#state56">56</a><a name="state48"/>
+<h2>State 48</h2>
+(<a href="#state41"> 41</a> )
+<p>
+<a href="#rule77">peDecl</a>->'&lt;!ENTITY' '%' <a href="#name">name</a> .<a href="#peDef">peDef</a> '&gt;' <p>
+'"' Sh/Rd <a href="#rule128">128</a><p>
+''' Sh/Rd <a href="#rule129">129</a><p>
+'PUBLIC' Shift <a href="#state27">27</a><p>
+'SYSTEM' Shift <a href="#state28">28</a><p>
+<a href="#peDef">peDef</a> Goto <a href="#state57">57</a><p>
+<a href="#entityValue">entityValue</a> Gt/Rd <a href="#rule88">88</a><p>
+<a href="#externalID">externalID</a> Gt/Rd <a href="#rule87">87</a><p>
+<a href="#aposEntityValueStart">aposEntityValueStart</a> Gt/Rd <a href="#rule104">104</a><p>
+<a href="#quotEntityValueStart">quotEntityValueStart</a> Gt/Rd <a href="#rule103">103</a><a name="state49"/>
+<h2>State 49</h2>
+(<a href="#state42"> 42</a> )
+<p>
+<a href="#rule76">geDecl</a>->'&lt;!ENTITY' <a href="#name">name</a> <a href="#entityDef">entityDef</a> .'&gt;' <p>
+'&gt;' Sh/Rd <a href="#rule76">76</a><a name="state50"/>
+<h2>State 50</h2>
+(<a href="#state42"> 42</a> )
+<p>
+<a href="#rule85">entityDef</a>-><a href="#externalID">externalID</a> .<a href="#nDataDecl?">nDataDecl?</a> <p>
+<a href="#rule102">nDataDecl?</a>->.<a href="#rule102"> (102)</a><p>
+'NDATA' Shift <a href="#state58">58</a><p>
+<a href="#nDataDecl?">nDataDecl?</a> Gt/Rd <a href="#rule85">85</a><p>
+<a href="#nDataDecl">nDataDecl</a> Gt/Rd <a href="#rule101">101</a><p>
+'&gt;' Reduce <a href="#rule102">102</a><a name="state51"/>
+<h2>State 51</h2>
+(<a href="#state43"> 43</a> )
+<p>
+<a href="#rule65">elementdecl</a>->'&lt;!ELEMENT' <a href="#qName">qName</a> <a href="#contentspec">contentspec</a> .'&gt;' <p>
+'&gt;' Sh/Rd <a href="#rule65">65</a><a name="state52"/>
+<h2>State 52</h2>
+(<a href="#state43"> 43</a> )
+<p>
+<a href="#rule83">mixed</a>->'(' .'#PCDATA' ')' <p>
+<a href="#rule84">mixed</a>->'(' .'#PCDATA' <a href="#mixedNames">mixedNames</a> ')' '*' <p>
+<a href="#rule95">seq</a>->'(' .<a href="#cp">cp</a> <a href="#('\,' cp)*">('\,' cp)*</a> ')' <p>
+<a href="#rule98">choice</a>->'(' .<a href="#cp">cp</a> <a href="#('\|' cp)+">('\|' cp)+</a> ')' <p>
+'#PCDATA' Shift <a href="#state60">60</a><p>
+<a href="#qName">qName</a> Shift <a href="#state63">63</a><p>
+'(' Shift <a href="#state64">64</a><p>
+<a href="#cp">cp</a> Goto <a href="#state59">59</a><p>
+<a href="#choice">choice</a> Goto <a href="#state61">61</a><p>
+<a href="#seq">seq</a> Goto <a href="#state62">62</a><a name="state53"/>
+<h2>State 53</h2>
+(<a href="#state43"> 43</a> )
+<p>
+<a href="#rule82">children</a>-><a href="#choice">choice</a> .<a href="#('[\+\*\?]')?">('[\+\*\?]')?</a> <p>
+<a href="#rule97">('[\+\*\?]')?</a>->.<a href="#rule97"> (97)</a><p>
+'[+*?]' Sh/Rd <a href="#rule124">124</a><p>
+<a href="#('[\+\*\?]')?">('[\+\*\?]')?</a> Gt/Rd <a href="#rule82">82</a><p>
+<a href="#('[\+\*\?]')">('[\+\*\?]')</a> Gt/Rd <a href="#rule96">96</a><p>
+'&gt;' Reduce <a href="#rule97">97</a><a name="state54"/>
+<h2>State 54</h2>
+(<a href="#state43"> 43</a> )
+<p>
+<a href="#rule81">children</a>-><a href="#seq">seq</a> .<a href="#('[\+\*\?]')?">('[\+\*\?]')?</a> <p>
+<a href="#rule97">('[\+\*\?]')?</a>->.<a href="#rule97"> (97)</a><p>
+'[+*?]' Sh/Rd <a href="#rule124">124</a><p>
+<a href="#('[\+\*\?]')?">('[\+\*\?]')?</a> Gt/Rd <a href="#rule81">81</a><p>
+<a href="#('[\+\*\?]')">('[\+\*\?]')</a> Gt/Rd <a href="#rule96">96</a><p>
+'&gt;' Reduce <a href="#rule97">97</a><a name="state55"/>
+<h2>State 55</h2>
+(<a href="#state44"> 44</a> )
+<p>
+<a href="#rule64">attlistDecl</a>->'&lt;!ATTLIST' <a href="#qName">qName</a> <a href="#attDef*">attDef*</a> .'&gt;' <p>
+<a href="#rule71">attDef*</a>-><a href="#attDef*">attDef*</a> .<a href="#attDef">attDef</a> <p>
+'&gt;' Sh/Rd <a href="#rule64">64</a><p>
+<a href="#nsAttName">nsAttName</a> Shift <a href="#state65">65</a><p>
+<a href="#qName">qName</a> Shift <a href="#state66">66</a><p>
+<a href="#attDef">attDef</a> Gt/Rd <a href="#rule71">71</a><a name="state56"/>
+<h2>State 56</h2>
+(<a href="#state47"> 47</a> )
+<p>
+<a href="#rule53">externalID</a>->'PUBLIC' <a href="#pubidLiteral">pubidLiteral</a> .<a href="#systemLiteral">systemLiteral</a> <p>
+<a href="#rule78">publicID</a>->'PUBLIC' <a href="#pubidLiteral">pubidLiteral</a> .<a href="#rule78"> (78)</a><p>
+<a href="#rule78">publicID</a>->'PUBLIC' <a href="#pubidLiteral">pubidLiteral</a> .<a href="#rule78"> (78)</a><p>
+<a href="#systemLiteral">systemLiteral</a> Sh/Rd <a href="#rule53">53</a><p>
+'&gt;' Reduce <a href="#rule78">78</a><a name="state57"/>
+<h2>State 57</h2>
+(<a href="#state48"> 48</a> )
+<p>
+<a href="#rule77">peDecl</a>->'&lt;!ENTITY' '%' <a href="#name">name</a> <a href="#peDef">peDef</a> .'&gt;' <p>
+'&gt;' Sh/Rd <a href="#rule77">77</a><a name="state58"/>
+<h2>State 58</h2>
+(<a href="#state50"> 50</a> )
+<p>
+<a href="#rule127">nDataDecl</a>->'NDATA' .<a href="#name">name</a> <p>
+<a href="#name">name</a> Sh/Rd <a href="#rule127">127</a><a name="state59"/>
+<h2>State 59</h2>
+(<a href="#state52"> 52</a><a href="#state64"> 64</a> )
+<p>
+<a href="#rule95">seq</a>->'(' <a href="#cp">cp</a> .<a href="#('\,' cp)*">('\,' cp)*</a> ')' <p>
+<a href="#rule98">choice</a>->'(' <a href="#cp">cp</a> .<a href="#('\|' cp)+">('\|' cp)+</a> ')' <p>
+<a href="#rule122">('\,' cp)*</a>->.<a href="#rule122"> (122)</a><p>
+'|' Shift <a href="#state69">69</a><p>
+<a href="#('\,' cp)*">('\,' cp)*</a> Goto <a href="#state67">67</a><p>
+<a href="#('\|' cp)">('\|' cp)</a> Gt/Rd <a href="#rule126">126</a><p>
+<a href="#('\|' cp)+">('\|' cp)+</a> Goto <a href="#state68">68</a><p>
+')' Reduce <a href="#rule122">122</a><p>
+',' Reduce <a href="#rule122">122</a><a name="state60"/>
+<h2>State 60</h2>
+(<a href="#state52"> 52</a> )
+<p>
+<a href="#rule83">mixed</a>->'(' '#PCDATA' .')' <p>
+<a href="#rule84">mixed</a>->'(' '#PCDATA' .<a href="#mixedNames">mixedNames</a> ')' '*' <p>
+<a href="#rule99">mixedNames</a>->.<a href="#rule99"> (99)</a><p>
+')' Shift <a href="#state89">89</a><p>
+<a href="#mixedNames">mixedNames</a> Goto <a href="#state70">70</a><p>
+'|' Reduce <a href="#rule99">99</a><a name="state61"/>
+<h2>State 61</h2>
+(<a href="#state52"> 52</a><a href="#state64"> 64</a><a href="#state69"> 69</a><a href="#state77"> 77</a> )
+<p>
+<a href="#rule121">cp</a>-><a href="#choice">choice</a> .<a href="#('[\+\*\?]')?">('[\+\*\?]')?</a> <p>
+<a href="#rule97">('[\+\*\?]')?</a>->.<a href="#rule97"> (97)</a><p>
+'[+*?]' Sh/Rd <a href="#rule124">124</a><p>
+<a href="#('[\+\*\?]')?">('[\+\*\?]')?</a> Gt/Rd <a href="#rule121">121</a><p>
+<a href="#('[\+\*\?]')">('[\+\*\?]')</a> Gt/Rd <a href="#rule96">96</a><p>
+')' Reduce <a href="#rule97">97</a><p>
+',' Reduce <a href="#rule97">97</a><p>
+'|' Reduce <a href="#rule97">97</a><a name="state62"/>
+<h2>State 62</h2>
+(<a href="#state52"> 52</a><a href="#state64"> 64</a><a href="#state69"> 69</a><a href="#state77"> 77</a> )
+<p>
+<a href="#rule120">cp</a>-><a href="#seq">seq</a> .<a href="#('[\+\*\?]')?">('[\+\*\?]')?</a> <p>
+<a href="#rule97">('[\+\*\?]')?</a>->.<a href="#rule97"> (97)</a><p>
+'[+*?]' Sh/Rd <a href="#rule124">124</a><p>
+<a href="#('[\+\*\?]')?">('[\+\*\?]')?</a> Gt/Rd <a href="#rule120">120</a><p>
+<a href="#('[\+\*\?]')">('[\+\*\?]')</a> Gt/Rd <a href="#rule96">96</a><p>
+')' Reduce <a href="#rule97">97</a><p>
+',' Reduce <a href="#rule97">97</a><p>
+'|' Reduce <a href="#rule97">97</a><a name="state63"/>
+<h2>State 63</h2>
+(<a href="#state52"> 52</a><a href="#state64"> 64</a><a href="#state69"> 69</a><a href="#state77"> 77</a> )
+<p>
+<a href="#rule119">cp</a>-><a href="#qName">qName</a> .<a href="#('[\+\*\?]')?">('[\+\*\?]')?</a> <p>
+<a href="#rule97">('[\+\*\?]')?</a>->.<a href="#rule97"> (97)</a><p>
+'[+*?]' Sh/Rd <a href="#rule124">124</a><p>
+<a href="#('[\+\*\?]')?">('[\+\*\?]')?</a> Gt/Rd <a href="#rule119">119</a><p>
+<a href="#('[\+\*\?]')">('[\+\*\?]')</a> Gt/Rd <a href="#rule96">96</a><p>
+')' Reduce <a href="#rule97">97</a><p>
+',' Reduce <a href="#rule97">97</a><p>
+'|' Reduce <a href="#rule97">97</a><a name="state64"/>
+<h2>State 64</h2>
+(<a href="#state52"> 52</a><a href="#state64"> 64</a><a href="#state69"> 69</a><a href="#state77"> 77</a> )
+<p>
+<a href="#rule95">seq</a>->'(' .<a href="#cp">cp</a> <a href="#('\,' cp)*">('\,' cp)*</a> ')' <p>
+<a href="#rule98">choice</a>->'(' .<a href="#cp">cp</a> <a href="#('\|' cp)+">('\|' cp)+</a> ')' <p>
+<a href="#qName">qName</a> Shift <a href="#state63">63</a><p>
+'(' Shift <a href="#state64">64</a><p>
+<a href="#cp">cp</a> Goto <a href="#state59">59</a><p>
+<a href="#choice">choice</a> Goto <a href="#state61">61</a><p>
+<a href="#seq">seq</a> Goto <a href="#state62">62</a><a name="state65"/>
+<h2>State 65</h2>
+(<a href="#state55"> 55</a> )
+<p>
+<a href="#rule80">attDef</a>-><a href="#nsAttName">nsAttName</a> .<a href="#attType">attType</a> <a href="#defaultDecl">defaultDecl</a> <p>
+'(' Shift <a href="#state72">72</a><p>
+'NOTATION' Shift <a href="#state73">73</a><p>
+'ENTITIES' Sh/Rd <a href="#rule112">112</a><p>
+'NMTOKEN' Shift <a href="#state74">74</a><p>
+'ENTITY' Sh/Rd <a href="#rule107">107</a><p>
+'ID' Shift <a href="#state75">75</a><p>
+'CDATA' Sh/Rd <a href="#rule105">105</a><p>
+<a href="#attType">attType</a> Goto <a href="#state71">71</a><p>
+<a href="#enumeratedType">enumeratedType</a> Gt/Rd <a href="#rule91">91</a><p>
+<a href="#tokenizedType">tokenizedType</a> Gt/Rd <a href="#rule90">90</a><p>
+<a href="#stringType">stringType</a> Gt/Rd <a href="#rule89">89</a><p>
+<a href="#notationType">notationType</a> Gt/Rd <a href="#rule114">114</a><p>
+<a href="#enumeration">enumeration</a> Gt/Rd <a href="#rule113">113</a><a name="state66"/>
+<h2>State 66</h2>
+(<a href="#state55"> 55</a> )
+<p>
+<a href="#rule79">attDef</a>-><a href="#qName">qName</a> .<a href="#attType">attType</a> <a href="#defaultDecl">defaultDecl</a> <p>
+'(' Shift <a href="#state72">72</a><p>
+'NOTATION' Shift <a href="#state73">73</a><p>
+'ENTITIES' Sh/Rd <a href="#rule112">112</a><p>
+'NMTOKEN' Shift <a href="#state74">74</a><p>
+'ENTITY' Sh/Rd <a href="#rule107">107</a><p>
+'ID' Shift <a href="#state75">75</a><p>
+'CDATA' Sh/Rd <a href="#rule105">105</a><p>
+<a href="#attType">attType</a> Goto <a href="#state76">76</a><p>
+<a href="#enumeratedType">enumeratedType</a> Gt/Rd <a href="#rule91">91</a><p>
+<a href="#tokenizedType">tokenizedType</a> Gt/Rd <a href="#rule90">90</a><p>
+<a href="#stringType">stringType</a> Gt/Rd <a href="#rule89">89</a><p>
+<a href="#notationType">notationType</a> Gt/Rd <a href="#rule114">114</a><p>
+<a href="#enumeration">enumeration</a> Gt/Rd <a href="#rule113">113</a><a name="state67"/>
+<h2>State 67</h2>
+(<a href="#state59"> 59</a> )
+<p>
+<a href="#rule95">seq</a>->'(' <a href="#cp">cp</a> <a href="#('\,' cp)*">('\,' cp)*</a> .')' <p>
+<a href="#rule123">('\,' cp)*</a>-><a href="#('\,' cp)*">('\,' cp)*</a> .<a href="#('\,' cp)">('\,' cp)</a> <p>
+')' Sh/Rd <a href="#rule95">95</a><p>
+',' Shift <a href="#state77">77</a><p>
+<a href="#('\,' cp)">('\,' cp)</a> Gt/Rd <a href="#rule123">123</a><a name="state68"/>
+<h2>State 68</h2>
+(<a href="#state59"> 59</a> )
+<p>
+<a href="#rule98">choice</a>->'(' <a href="#cp">cp</a> <a href="#('\|' cp)+">('\|' cp)+</a> .')' <p>
+<a href="#rule125">('\|' cp)+</a>-><a href="#('\|' cp)+">('\|' cp)+</a> .<a href="#('\|' cp)">('\|' cp)</a> <p>
+')' Sh/Rd <a href="#rule98">98</a><p>
+'|' Shift <a href="#state69">69</a><p>
+<a href="#('\|' cp)">('\|' cp)</a> Gt/Rd <a href="#rule125">125</a><a name="state69"/>
+<h2>State 69</h2>
+(<a href="#state59"> 59</a><a href="#state68"> 68</a> )
+<p>
+<a href="#rule135">('\|' cp)</a>->'|' .<a href="#cp">cp</a> <p>
+<a href="#qName">qName</a> Shift <a href="#state63">63</a><p>
+'(' Shift <a href="#state64">64</a><p>
+<a href="#cp">cp</a> Gt/Rd <a href="#rule135">135</a><p>
+<a href="#choice">choice</a> Goto <a href="#state61">61</a><p>
+<a href="#seq">seq</a> Goto <a href="#state62">62</a><a name="state70"/>
+<h2>State 70</h2>
+(<a href="#state60"> 60</a> )
+<p>
+<a href="#rule84">mixed</a>->'(' '#PCDATA' <a href="#mixedNames">mixedNames</a> .')' '*' <p>
+<a href="#rule100">mixedNames</a>-><a href="#mixedNames">mixedNames</a> .'|' <a href="#qName">qName</a> <p>
+'|' Shift <a href="#state78">78</a><p>
+')' Shift <a href="#state79">79</a><a name="state71"/>
+<h2>State 71</h2>
+(<a href="#state65"> 65</a> )
+<p>
+<a href="#rule80">attDef</a>-><a href="#nsAttName">nsAttName</a> <a href="#attType">attType</a> .<a href="#defaultDecl">defaultDecl</a> <p>
+<a href="#rule115">'#FIXED'?</a>->.<a href="#rule115"> (115)</a><p>
+'#REQUIRED' Sh/Rd <a href="#rule94">94</a><p>
+'#IMPLIED' Sh/Rd <a href="#rule92">92</a><p>
+'#FIXED' Sh/Rd <a href="#rule116">116</a><p>
+<a href="#defaultDecl">defaultDecl</a> Gt/Rd <a href="#rule80">80</a><p>
+<a href="#'#FIXED'?">'#FIXED'?</a> Goto <a href="#state80">80</a><p>
+'"' Reduce <a href="#rule115">115</a><p>
+''' Reduce <a href="#rule115">115</a><a name="state72"/>
+<h2>State 72</h2>
+(<a href="#state65"> 65</a><a href="#state66"> 66</a> )
+<p>
+<a href="#rule130">enumeration</a>->'(' .<a href="#nmtoken">nmtoken</a> <a href="#enumerationNMTokens">enumerationNMTokens</a> ')' <p>
+<a href="#nmtoken">nmtoken</a> Shift <a href="#state81">81</a><a name="state73"/>
+<h2>State 73</h2>
+(<a href="#state65"> 65</a><a href="#state66"> 66</a> )
+<p>
+<a href="#rule131">notationType</a>->'NOTATION' .'(' <a href="#name">name</a> <a href="#notationTypeNames">notationTypeNames</a> ')' <p>
+'(' Shift <a href="#state82">82</a><a name="state74"/>
+<h2>State 74</h2>
+(<a href="#state65"> 65</a><a href="#state66"> 66</a> )
+<p>
+<a href="#rule109">tokenizedType</a>->'NMTOKEN' .<a href="#rule109"> (109)</a><p>
+<a href="#rule111">tokenizedType</a>->'NMTOKEN' .'S' <p>
+<a href="#rule109">tokenizedType</a>->'NMTOKEN' .<a href="#rule109"> (109)</a><p>
+'S' Sh/Rd <a href="#rule111">111</a><p>
+'#IMPLIED' Reduce <a href="#rule109">109</a><p>
+'#FIXED' Reduce <a href="#rule109">109</a><p>
+'"' Reduce <a href="#rule109">109</a><p>
+''' Reduce <a href="#rule109">109</a><p>
+'#REQUIRED' Reduce <a href="#rule109">109</a><a name="state75"/>
+<h2>State 75</h2>
+(<a href="#state65"> 65</a><a href="#state66"> 66</a> )
+<p>
+<a href="#rule106">tokenizedType</a>->'ID' .'REF' <p>
+<a href="#rule108">tokenizedType</a>->'ID' .'REF' 'S' <p>
+<a href="#rule110">tokenizedType</a>->'ID' .<a href="#rule110"> (110)</a><p>
+<a href="#rule110">tokenizedType</a>->'ID' .<a href="#rule110"> (110)</a><p>
+'REF' Shift <a href="#state83">83</a><p>
+'#IMPLIED' Reduce <a href="#rule110">110</a><p>
+'#FIXED' Reduce <a href="#rule110">110</a><p>
+'"' Reduce <a href="#rule110">110</a><p>
+''' Reduce <a href="#rule110">110</a><p>
+'#REQUIRED' Reduce <a href="#rule110">110</a><a name="state76"/>
+<h2>State 76</h2>
+(<a href="#state66"> 66</a> )
+<p>
+<a href="#rule79">attDef</a>-><a href="#qName">qName</a> <a href="#attType">attType</a> .<a href="#defaultDecl">defaultDecl</a> <p>
+<a href="#rule115">'#FIXED'?</a>->.<a href="#rule115"> (115)</a><p>
+'#REQUIRED' Sh/Rd <a href="#rule94">94</a><p>
+'#IMPLIED' Sh/Rd <a href="#rule92">92</a><p>
+'#FIXED' Sh/Rd <a href="#rule116">116</a><p>
+<a href="#defaultDecl">defaultDecl</a> Gt/Rd <a href="#rule79">79</a><p>
+<a href="#'#FIXED'?">'#FIXED'?</a> Goto <a href="#state80">80</a><p>
+'"' Reduce <a href="#rule115">115</a><p>
+''' Reduce <a href="#rule115">115</a><a name="state77"/>
+<h2>State 77</h2>
+(<a href="#state67"> 67</a> )
+<p>
+<a href="#rule134">('\,' cp)</a>->',' .<a href="#cp">cp</a> <p>
+<a href="#qName">qName</a> Shift <a href="#state63">63</a><p>
+'(' Shift <a href="#state64">64</a><p>
+<a href="#cp">cp</a> Gt/Rd <a href="#rule134">134</a><p>
+<a href="#choice">choice</a> Goto <a href="#state61">61</a><p>
+<a href="#seq">seq</a> Goto <a href="#state62">62</a><a name="state78"/>
+<h2>State 78</h2>
+(<a href="#state70"> 70</a> )
+<p>
+<a href="#rule100">mixedNames</a>-><a href="#mixedNames">mixedNames</a> '|' .<a href="#qName">qName</a> <p>
+<a href="#qName">qName</a> Sh/Rd <a href="#rule100">100</a><a name="state79"/>
+<h2>State 79</h2>
+(<a href="#state70"> 70</a> )
+<p>
+<a href="#rule84">mixed</a>->'(' '#PCDATA' <a href="#mixedNames">mixedNames</a> ')' .'*' <p>
+'*' Sh/Rd <a href="#rule84">84</a><a name="state80"/>
+<h2>State 80</h2>
+(<a href="#state71"> 71</a><a href="#state76"> 76</a> )
+<p>
+<a href="#rule93">defaultDecl</a>-><a href="#'#FIXED'?">'#FIXED'?</a> .<a href="#attValue">attValue</a> <p>
+''' Sh/Rd <a href="#rule133">133</a><p>
+'"' Sh/Rd <a href="#rule132">132</a><p>
+<a href="#attValue">attValue</a> Gt/Rd <a href="#rule93">93</a><p>
+<a href="#aposAttValueStart">aposAttValueStart</a> Gt/Rd <a href="#rule118">118</a><p>
+<a href="#quotAttValueStart">quotAttValueStart</a> Gt/Rd <a href="#rule117">117</a><a name="state81"/>
+<h2>State 81</h2>
+(<a href="#state72"> 72</a> )
+<p>
+<a href="#rule130">enumeration</a>->'(' <a href="#nmtoken">nmtoken</a> .<a href="#enumerationNMTokens">enumerationNMTokens</a> ')' <p>
+<a href="#rule137">enumerationNMTokens</a>->.<a href="#rule137"> (137)</a><p>
+<a href="#enumerationNMTokens">enumerationNMTokens</a> Goto <a href="#state84">84</a><p>
+')' Reduce <a href="#rule137">137</a><p>
+'|' Reduce <a href="#rule137">137</a><a name="state82"/>
+<h2>State 82</h2>
+(<a href="#state73"> 73</a> )
+<p>
+<a href="#rule131">notationType</a>->'NOTATION' '(' .<a href="#name">name</a> <a href="#notationTypeNames">notationTypeNames</a> ')' <p>
+<a href="#name">name</a> Shift <a href="#state85">85</a><a name="state83"/>
+<h2>State 83</h2>
+(<a href="#state75"> 75</a> )
+<p>
+<a href="#rule106">tokenizedType</a>->'ID' 'REF' .<a href="#rule106"> (106)</a><p>
+<a href="#rule108">tokenizedType</a>->'ID' 'REF' .'S' <p>
+<a href="#rule106">tokenizedType</a>->'ID' 'REF' .<a href="#rule106"> (106)</a><p>
+'S' Sh/Rd <a href="#rule108">108</a><p>
+'#IMPLIED' Reduce <a href="#rule106">106</a><p>
+'#FIXED' Reduce <a href="#rule106">106</a><p>
+'"' Reduce <a href="#rule106">106</a><p>
+''' Reduce <a href="#rule106">106</a><p>
+'#REQUIRED' Reduce <a href="#rule106">106</a><a name="state84"/>
+<h2>State 84</h2>
+(<a href="#state81"> 81</a> )
+<p>
+<a href="#rule130">enumeration</a>->'(' <a href="#nmtoken">nmtoken</a> <a href="#enumerationNMTokens">enumerationNMTokens</a> .')' <p>
+<a href="#rule136">enumerationNMTokens</a>-><a href="#enumerationNMTokens">enumerationNMTokens</a> .'|' <a href="#nmtoken">nmtoken</a> <p>
+'|' Shift <a href="#state86">86</a><p>
+')' Sh/Rd <a href="#rule130">130</a><a name="state85"/>
+<h2>State 85</h2>
+(<a href="#state82"> 82</a> )
+<p>
+<a href="#rule131">notationType</a>->'NOTATION' '(' <a href="#name">name</a> .<a href="#notationTypeNames">notationTypeNames</a> ')' <p>
+<a href="#rule139">notationTypeNames</a>->.<a href="#rule139"> (139)</a><p>
+<a href="#notationTypeNames">notationTypeNames</a> Goto <a href="#state87">87</a><p>
+')' Reduce <a href="#rule139">139</a><p>
+'|' Reduce <a href="#rule139">139</a><a name="state86"/>
+<h2>State 86</h2>
+(<a href="#state84"> 84</a> )
+<p>
+<a href="#rule136">enumerationNMTokens</a>-><a href="#enumerationNMTokens">enumerationNMTokens</a> '|' .<a href="#nmtoken">nmtoken</a> <p>
+<a href="#nmtoken">nmtoken</a> Sh/Rd <a href="#rule136">136</a><a name="state87"/>
+<h2>State 87</h2>
+(<a href="#state85"> 85</a> )
+<p>
+<a href="#rule131">notationType</a>->'NOTATION' '(' <a href="#name">name</a> <a href="#notationTypeNames">notationTypeNames</a> .')' <p>
+<a href="#rule138">notationTypeNames</a>-><a href="#notationTypeNames">notationTypeNames</a> .'|' <a href="#name">name</a> <p>
+'|' Shift <a href="#state88">88</a><p>
+')' Sh/Rd <a href="#rule131">131</a><a name="state88"/>
+<h2>State 88</h2>
+(<a href="#state87"> 87</a> )
+<p>
+<a href="#rule138">notationTypeNames</a>-><a href="#notationTypeNames">notationTypeNames</a> '|' .<a href="#name">name</a> <p>
+<a href="#name">name</a> Sh/Rd <a href="#rule138">138</a><h1>Lookahead States</h1>
+<a name="LaStates"/>
+<a name="state89"/>
+<h2>State 89</h2>
+(<a href="#state60"> 60</a> )
+<p>
+<p>
+'&gt;'  Sh/Rd 
+<a href="rule83"> 83</a><p>
+<p>
+'*'  Reduce 
+<a href="rule99"> 99</a></body>
+</html>

@@ -46,9 +46,9 @@ import org.xml.sax.helpers.AttributesImpl;
  *
  * @author tkv
  */
-@GenClassname("org.vesalainen.parsers.xml.XMLDocumentParser")
+@GenClassname("org.vesalainen.parsers.xml.XMLDocumentParserImpl")
 @GrammarDef()
-public abstract class XMLReaderFactory extends XMLDTDBaseGrammar implements XMLReader, SAX2Constants, ParserInfo
+public abstract class XMLDocumentParser extends XMLDTDBaseGrammar implements XMLReader, SAX2Constants, ParserInfo
 {
     private DefaultHandler2 defaultHandler = new DefaultHandler2();
     private ContentHandler contentHandler = defaultHandler;
@@ -66,14 +66,14 @@ public abstract class XMLReaderFactory extends XMLDTDBaseGrammar implements XMLR
     private Map<Integer,List<String>> nsScope = new HashMap<>();
     private Map<String,String> nameSpaces;
 
-    public XMLReaderFactory()
+    public XMLDocumentParser()
     {
         nameSpaces = new HashMap<>();
         nameSpaces.put("", "");
     }
-    public static XMLReaderFactory getInstance() throws IOException
+    public static XMLDocumentParser getInstance() throws IOException
     {
-        return (XMLReaderFactory) ParserFactory.getParserInstance(XMLReaderFactory.class);
+        return (XMLDocumentParser) ParserFactory.getParserInstance(XMLDocumentParser.class);
     }
 
     void setFeatures(SAXFeatures features)
@@ -150,7 +150,11 @@ public abstract class XMLReaderFactory extends XMLDTDBaseGrammar implements XMLR
     
     @Rule({"content"})
     protected abstract void elementContent();
-    
+    /**
+     * 
+     * @param reader 
+     * @see <a href="doc-files/XMLDocumentParser-elementContent.html#BNF">BNF Syntax for Element Content</a>
+     */
     @ParseMethod(start="elementContent", eof="eTag", whiteSpace={"eol", "pi", "comment", "charData"})
     protected abstract void parseContent(InputReader reader);
 
@@ -211,6 +215,12 @@ public abstract class XMLReaderFactory extends XMLDTDBaseGrammar implements XMLR
     {
         return hasContent;
     }
+    /**
+     * 
+     * @param reader
+     * @return 
+     * @see <a href="doc-files/XMLDocumentParser-attributesSub.html#BNF">BNF Syntax for Attributes Sub</a>
+     */
     @ParseMethod(start="attributesSub", eof="endTag")
     protected abstract boolean parseAttributes(InputReader reader);
     

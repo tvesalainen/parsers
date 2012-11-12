@@ -32,15 +32,16 @@ import org.vesalainen.parser.annotation.GenClassname;
  *
  * <p>
  * @author tkv
+ * @see <a href="doc-files/InternetHeaderParser-messageHeader.html#BNF">BNF Syntax for Message Header</a>
  */
-@GenClassname("org.vesalainen.parsers.http.InternetHeaderParser")
+@GenClassname("org.vesalainen.parsers.http.InternetHeaderParserImpl")
 @GrammarDef()
 @Terminals({
 @Terminal(left="COLON", expression="[ \t]*:[ \t]*"),
 @Terminal(left="CRLF", expression="\r\n"),
 @Terminal(left="LWS", expression="\r\n[ \t]+")
 })
-public abstract class InternetHeaderTmpl
+public abstract class InternetHeaderParser
 {
     public Map<String,List<String>> parse(String str)
     {
@@ -54,9 +55,22 @@ public abstract class InternetHeaderTmpl
         parse(is, hdr);
         return hdr;
     }
+    /**
+     * 
+     * @param str
+     * @param hdr
+     * @return 
+     * @see <a href="doc-files/InternetHeaderParser-messageHeader.html#BNF">BNF Syntax for Message Header</a>
+     */
     @ParseMethod(start="messageHeader", size=80)
     protected abstract Map<String,List<String>> parse(String str, @ParserContext Map<String,List<String>> hdr);
-
+    /**
+     * 
+     * @param is
+     * @param hdr
+     * @return 
+     * @see <a href="doc-files/InternetHeaderParser-messageHeader.html#BNF">BNF Syntax for Message Header</a>
+     */
     @ParseMethod(start="messageHeader", size=80)
     protected abstract Map<String,List<String>> parse(InputStream is, @ParserContext Map<String,List<String>> hdr);
 
@@ -102,9 +116,9 @@ public abstract class InternetHeaderTmpl
     {
         try
         {
-            ParserCompiler pc = new ParserCompiler(InternetHeaderTmpl.class);
+            ParserCompiler pc = new ParserCompiler(InternetHeaderParser.class);
             pc.compile();
-            InternetHeaderTmpl ih = (InternetHeaderTmpl) pc.parserInstance();
+            InternetHeaderParser ih = (InternetHeaderParser) pc.parserInstance();
             String sr = "a: a-hdr\r\nb: b-hdr\r\nc: c-hdr\r\n c-cont1\r\n c-cont2\r\n\r\n";
             Map<String,List<String>> hdr = ih.parse(sr);
             System.err.println(hdr);

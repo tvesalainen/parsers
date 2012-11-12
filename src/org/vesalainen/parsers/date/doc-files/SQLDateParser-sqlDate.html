@@ -1,0 +1,72 @@
+<html>
+<body>
+<h1>BNF</h1>
+<a name="BNF"/>
+<a name="Accept"/>
+<p>
+<a name="rule0"/>
+Accept ::= <a href="#sqlDate">sqlDate</a><a name="sqlDate"/>
+<p>
+<a name="rule1"/>
+sqlDate ::= <a href="#yyyy">yyyy</a> '-' <a href="#MM">MM</a> '-' <a href="#dd">dd</a><a name="yyyy"/>
+<p>
+<a name="rule2"/>
+yyyy ::= <a href="#year4">year4</a><a name="MM"/>
+<p>
+<a name="rule3"/>
+MM ::= <a href="#month">month</a><a name="dd"/>
+<p>
+<a name="rule4"/>
+dd ::= <a href="#dayInMonth">dayInMonth</a><a name="month"/>
+<p>
+<a name="rule5"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month(int, java.util.Calendar)">5: month</a> ::= <a href="#digit12">digit12</a><a name="dayInMonth"/>
+<p>
+<a name="rule6"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#dayInMonth(int, java.util.Calendar)">6: dayInMonth</a> ::= <a href="#digit12">digit12</a><h1>Terminals</h1>
+<a name="Terminals"/>
+<a name="year4"/>
+<p>
+year4 = '[0-9]{4}'<a name="digit12"/>
+<p>
+digit12 = '[0-9]{1,2}'<h1>States</h1>
+<a name="States"/>
+<a name="state1"/>
+<h2>State 1</h2>
+( )
+<p>
+<a href="#rule0">Accept</a>->.<a href="#sqlDate">sqlDate</a> <p>
+<a href="#year4">year4</a> Sh/Rd <a href="#rule2">2</a><p>
+<a href="#sqlDate">sqlDate</a> Goto <a href="#state2">2</a><p>
+<a href="#yyyy">yyyy</a> Goto <a href="#state3">3</a><a name="state2"/>
+<h2>State 2</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule0">Accept</a>-><a href="#sqlDate">sqlDate</a> .<a href="#rule0"> (0)</a><p>
+<a href="#rule0">Accept</a>-><a href="#sqlDate">sqlDate</a> .<a href="#rule0"> (0)</a><p>
+Eof Reduce <a href="#rule0">0</a><a name="state3"/>
+<h2>State 3</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule1">sqlDate</a>-><a href="#yyyy">yyyy</a> .'-' <a href="#MM">MM</a> '-' <a href="#dd">dd</a> <p>
+'-' Shift <a href="#state4">4</a><a name="state4"/>
+<h2>State 4</h2>
+(<a href="#state3"> 3</a> )
+<p>
+<a href="#rule1">sqlDate</a>-><a href="#yyyy">yyyy</a> '-' .<a href="#MM">MM</a> '-' <a href="#dd">dd</a> <p>
+<a href="#digit12">digit12</a> Sh/Rd <a href="#rule5">5</a><p>
+<a href="#MM">MM</a> Goto <a href="#state5">5</a><p>
+<a href="#month">month</a> Gt/Rd <a href="#rule3">3</a><a name="state5"/>
+<h2>State 5</h2>
+(<a href="#state4"> 4</a> )
+<p>
+<a href="#rule1">sqlDate</a>-><a href="#yyyy">yyyy</a> '-' <a href="#MM">MM</a> .'-' <a href="#dd">dd</a> <p>
+'-' Shift <a href="#state6">6</a><a name="state6"/>
+<h2>State 6</h2>
+(<a href="#state5"> 5</a> )
+<p>
+<a href="#rule1">sqlDate</a>-><a href="#yyyy">yyyy</a> '-' <a href="#MM">MM</a> '-' .<a href="#dd">dd</a> <p>
+<a href="#digit12">digit12</a> Sh/Rd <a href="#rule6">6</a><p>
+<a href="#dd">dd</a> Gt/Rd <a href="#rule1">1</a><p>
+<a href="#dayInMonth">dayInMonth</a> Gt/Rd <a href="#rule4">4</a></body>
+</html>

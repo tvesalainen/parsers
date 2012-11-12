@@ -88,22 +88,50 @@ public abstract class XMLBaseGrammar
         generalReferences.put("apos", "'");
         generalReferences.put("quot", "\"");
     }
-
+    /**
+     * 
+     * @param reader 
+     * @see <a href="doc-files/XMLBaseGrammar-extSubset.html#BNF">BNF Syntax for extSubset</a>
+     */
     @ParseMethod(start="extSubset", whiteSpace={"eol", "s", "pi", "comment", "peReference"})
     protected abstract void parseExtSubset(InputReader reader);
-
+    /**
+     * 
+     * @param reader 
+     * @see <a href="doc-files/XMLBaseGrammar-document.html#BNF">BNF Syntax for document</a>
+     */
     @ParseMethod(start="document", whiteSpace={"eol", "s"})
     protected abstract void parseDocument(InputReader reader);
-
+    /**
+     * 
+     * @param reader
+     * @return 
+     * @see <a href="doc-files/XMLBaseGrammar-quotAttValueSub.html#BNF">BNF Syntax for quotAttValueSub</a>
+     */
     @ParseMethod(start="quotAttValueSub", eof="singleQuot")
     protected abstract String parseQuotAttValue(InputReader reader);
-
+    /**
+     * 
+     * @param reader
+     * @return 
+     * @see <a href="doc-files/XMLBaseGrammar-aposAttValueSub.html#BNF">BNF Syntax for aposAttValueSub</a>
+     */
     @ParseMethod(start="aposAttValueSub", eof="singleApostrophe")
     protected abstract String parseAposAttValue(InputReader reader);
-    
+    /**
+     * 
+     * @param reader
+     * @return 
+     * @see <a href="doc-files/XMLBaseGrammar-quotEntityValueSub.html#BNF">BNF Syntax for quotEntityValueSub</a>
+     */
     @ParseMethod(start="quotEntityValueSub", eof="singleQuot", whiteSpace={"peReference"})
     protected abstract String parseQuotEntityValue(InputReader reader);
-    
+    /**
+     * 
+     * @param reader
+     * @return 
+     * @see <a href="doc-files/XMLBaseGrammar-aposEntityValueSub.html#BNF">BNF Syntax for aposEntityValueSub</a>
+     */
     @ParseMethod(start="aposEntityValueSub", eof="singleApostrophe", whiteSpace={"peReference"})
     protected abstract String parseAposEntityValue(InputReader reader);
     

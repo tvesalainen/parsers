@@ -1,0 +1,137 @@
+<html>
+<body>
+<h1>BNF</h1>
+<a name="BNF"/>
+<a name="Accept"/>
+<p>
+<a name="rule0"/>
+Accept ::= <a href="#attributesSub">attributesSub</a><a name="attributesSub"/>
+<p>
+<a name="rule1"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#attributesSub(boolean)">1: attributesSub</a> ::= <a href="#attributes">attributes</a> <a href="#s?">s?</a> <a href="#tagType">tagType</a><a name="attributes"/>
+<p>
+<a name="rule2"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#attributes()">2: attributes</a> ::=<p>
+<a name="rule3"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#attributes()">3: attributes</a> ::= <a href="#attributes">attributes</a> <a href="#s">s</a> <a href="#attribute">attribute</a><a name="s?"/>
+<a name="tagType"/>
+<p>
+<a name="rule6"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#tagType(boolean)">6: tagType</a> ::= <a href="#emptyTag">emptyTag</a><p>
+<a name="rule7"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#tagType(boolean)">7: tagType</a> ::= <a href="#contentTag">contentTag</a><a name="attribute"/>
+<p>
+<a name="rule8"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#attribute(org.vesalainen.parsers.xml.QName, java.lang.String)">8: attribute</a> ::= <a href="#qName">qName</a> <a href="#eq">eq</a> <a href="#attValue">attValue</a><p>
+<a name="rule9"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#attribute(java.lang.String, java.lang.String)">9: attribute</a> ::= <a href="#nsAttName">nsAttName</a> <a href="#eq">eq</a> <a href="#attValue">attValue</a><a name="emptyTag"/>
+<p>
+<a name="rule10"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#emptyTag()">10: emptyTag</a> ::= '/'<a name="contentTag"/>
+<p>
+<a name="rule11"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#contentTag()">11: contentTag</a> ::=<a name="eq"/>
+<p>
+<a name="rule12"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#eq()">12: eq</a> ::= '='<a name="attValue"/>
+<p>
+<a name="rule13"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#attValue(java.lang.String)">13: attValue</a> ::= <a href="#quotAttValueStart">quotAttValueStart</a><p>
+<a name="rule14"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#attValue(java.lang.String)">14: attValue</a> ::= <a href="#aposAttValueStart">aposAttValueStart</a><a name="quotAttValueStart"/>
+<p>
+<a name="rule15"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#quotAttValueStart(org.vesalainen.parser.util.InputReader)">15: quotAttValueStart</a> ::= '"'<a name="aposAttValueStart"/>
+<p>
+<a name="rule16"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#aposAttValueStart(org.vesalainen.parser.util.InputReader)">16: aposAttValueStart</a> ::= '''<h1>Terminals</h1>
+<a name="Terminals"/>
+<a name="Eof(endTag)"/>
+<p>
+Eof(endTag) = '&gt;'<a name="s"/>
+<p>
+s = '[\x20\x09\x0A]+'<a name="qName"/>
+<p>
+qName = '[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*(:[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*)?'<a name="nsAttName"/>
+<p>
+nsAttName = 'xmlns(:[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*)?'<h1>States</h1>
+<a name="States"/>
+<a name="state1"/>
+<h2>State 1</h2>
+( )
+<p>
+<a href="#rule0">Accept</a>->.<a href="#attributesSub">attributesSub</a> <p>
+<a href="#rule2">attributes</a>->.<a href="#rule2"> (2)</a><p>
+<a href="#attributesSub">attributesSub</a> Goto <a href="#state2">2</a><p>
+<a href="#attributes">attributes</a> Goto <a href="#state3">3</a><p>
+<a href="#s">s</a> Reduce <a href="#rule2">2</a><p>
+'/' Reduce <a href="#rule2">2</a><p>
+Eof Reduce <a href="#rule2">2</a><a name="state2"/>
+<h2>State 2</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule0">Accept</a>-><a href="#attributesSub">attributesSub</a> .<a href="#rule0"> (0)</a><p>
+<a href="#rule0">Accept</a>-><a href="#attributesSub">attributesSub</a> .<a href="#rule0"> (0)</a><p>
+Eof Reduce <a href="#rule0">0</a><a name="state3"/>
+<h2>State 3</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule1">attributesSub</a>-><a href="#attributes">attributes</a> .<a href="#s?">s?</a> <a href="#tagType">tagType</a> <p>
+<a href="#rule3">attributes</a>-><a href="#attributes">attributes</a> .<a href="#s">s</a> <a href="#attribute">attribute</a> <p>
+<a href="#rule5">s?</a>->.<a href="#rule5"> (5)</a><p>
+<a href="#s">s</a> Shift <a href="#state5">5</a><p>
+<a href="#s?">s?</a> Goto <a href="#state4">4</a><p>
+'/' Reduce <a href="#rule5">5</a><p>
+Eof Reduce <a href="#rule5">5</a><a name="state4"/>
+<h2>State 4</h2>
+(<a href="#state3"> 3</a> )
+<p>
+<a href="#rule1">attributesSub</a>-><a href="#attributes">attributes</a> <a href="#s?">s?</a> .<a href="#tagType">tagType</a> <p>
+<a href="#rule11">contentTag</a>->.<a href="#rule11"> (11)</a><p>
+'/' Sh/Rd <a href="#rule10">10</a><p>
+<a href="#tagType">tagType</a> Gt/Rd <a href="#rule1">1</a><p>
+<a href="#contentTag">contentTag</a> Gt/Rd <a href="#rule7">7</a><p>
+<a href="#emptyTag">emptyTag</a> Gt/Rd <a href="#rule6">6</a><p>
+Eof Reduce <a href="#rule11">11</a><a name="state5"/>
+<h2>State 5</h2>
+(<a href="#state3"> 3</a> )
+<p>
+<a href="#rule3">attributes</a>-><a href="#attributes">attributes</a> <a href="#s">s</a> .<a href="#attribute">attribute</a> <p>
+<a href="#rule4">s?</a>-><a href="#s">s</a> .<a href="#rule4"> (4)</a><p>
+<a href="#rule4">s?</a>-><a href="#s">s</a> .<a href="#rule4"> (4)</a><p>
+<a href="#nsAttName">nsAttName</a> Shift <a href="#state6">6</a><p>
+<a href="#qName">qName</a> Shift <a href="#state7">7</a><p>
+<a href="#attribute">attribute</a> Gt/Rd <a href="#rule3">3</a><p>
+'/' Reduce <a href="#rule4">4</a><p>
+Eof Reduce <a href="#rule4">4</a><a name="state6"/>
+<h2>State 6</h2>
+(<a href="#state5"> 5</a> )
+<p>
+<a href="#rule9">attribute</a>-><a href="#nsAttName">nsAttName</a> .<a href="#eq">eq</a> <a href="#attValue">attValue</a> <p>
+'=' Sh/Rd <a href="#rule12">12</a><p>
+<a href="#eq">eq</a> Goto <a href="#state8">8</a><a name="state7"/>
+<h2>State 7</h2>
+(<a href="#state5"> 5</a> )
+<p>
+<a href="#rule8">attribute</a>-><a href="#qName">qName</a> .<a href="#eq">eq</a> <a href="#attValue">attValue</a> <p>
+'=' Sh/Rd <a href="#rule12">12</a><p>
+<a href="#eq">eq</a> Goto <a href="#state9">9</a><a name="state8"/>
+<h2>State 8</h2>
+(<a href="#state6"> 6</a> )
+<p>
+<a href="#rule9">attribute</a>-><a href="#nsAttName">nsAttName</a> <a href="#eq">eq</a> .<a href="#attValue">attValue</a> <p>
+''' Sh/Rd <a href="#rule16">16</a><p>
+'"' Sh/Rd <a href="#rule15">15</a><p>
+<a href="#attValue">attValue</a> Gt/Rd <a href="#rule9">9</a><p>
+<a href="#aposAttValueStart">aposAttValueStart</a> Gt/Rd <a href="#rule14">14</a><p>
+<a href="#quotAttValueStart">quotAttValueStart</a> Gt/Rd <a href="#rule13">13</a><a name="state9"/>
+<h2>State 9</h2>
+(<a href="#state7"> 7</a> )
+<p>
+<a href="#rule8">attribute</a>-><a href="#qName">qName</a> <a href="#eq">eq</a> .<a href="#attValue">attValue</a> <p>
+''' Sh/Rd <a href="#rule16">16</a><p>
+'"' Sh/Rd <a href="#rule15">15</a><p>
+<a href="#attValue">attValue</a> Gt/Rd <a href="#rule8">8</a><p>
+<a href="#aposAttValueStart">aposAttValueStart</a> Gt/Rd <a href="#rule14">14</a><p>
+<a href="#quotAttValueStart">quotAttValueStart</a> Gt/Rd <a href="#rule13">13</a></body>
+</html>

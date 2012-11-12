@@ -1,0 +1,98 @@
+<html>
+<body>
+<h1>BNF</h1>
+<a name="BNF"/>
+<a name="Accept"/>
+<p>
+<a name="rule0"/>
+Accept ::= <a href="#elementContent">elementContent</a><a name="elementContent"/>
+<p>
+<a name="rule1"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#elementContent()">1: elementContent</a> ::= <a href="#content">content</a><a name="content"/>
+<p>
+<a name="rule2"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#content()">2: content</a> ::=<p>
+<a name="rule3"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#content()">3: content</a> ::= <a href="#content">content</a> <a href="#cdSect">cdSect</a><p>
+<a name="rule4"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#content(java.lang.String)">4: content</a> ::= <a href="#content">content</a> <a href="#reference">reference</a><p>
+<a name="rule5"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#content()">5: content</a> ::= <a href="#content">content</a> <a href="#element">element</a><a name="reference"/>
+<p>
+<a name="rule6"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#reference(java.lang.String)">6: reference</a> ::= <a href="#entityRef">entityRef</a><p>
+<a name="rule7"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#reference(java.lang.String)">7: reference</a> ::= <a href="#charRef">charRef</a><a name="element"/>
+<p>
+<a name="rule8"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#element()">8: element</a> ::= <a href="#sTag">sTag</a><a name="charRef"/>
+<p>
+<a name="rule9"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#charRef(int)">9: charRef</a> ::= <a href="#charRefDecimal">charRefDecimal</a><p>
+<a name="rule10"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLBaseGrammar.html#charRef(int)">10: charRef</a> ::= <a href="#charRefHex">charRefHex</a><a name="sTag"/>
+<p>
+<a name="rule11"/>
+<a href="../../../../../org/vesalainen/parsers/xml/XMLDocumentParser.html#sTag(org.vesalainen.parsers.xml.QName, org.vesalainen.parser.util.InputReader)">11: sTag</a> ::= <a href="#sTagName">sTagName</a><h1>Terminals</h1>
+<a name="Terminals"/>
+<a name="comment"/>
+<p>
+comment = '&lt;!\-\-[\x01-\uD7FF\uE000-\uFFFD\x{10000}-\x{10FFFF}]*\-\-&gt;'<a name="charData"/>
+<p>
+charData = '[^&lt;\&amp;\x0d\x85\u2028]+'<a name="Eof(eTag)"/>
+<p>
+Eof(eTag) = '&lt;/[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*(:[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*)?[\x20\x09\x0A]*&gt;'<a name="eol"/>
+<p>
+eol = '\x0d\x0a|\x0d\x85|\x85|\x0d|\u2028'<a name="pi"/>
+<p>
+pi = '&lt;\?[\x01-\uD7FF\uE000-\uFFFD\x{10000}-\x{10FFFF}]*\?&gt;'<a name="sTagName"/>
+<p>
+sTagName = '&lt;[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*(:[A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*)?'<a name="cdSect"/>
+<p>
+cdSect = '&lt;!\[CDATA\[[\x01-\uD7FF\uE000-\uFFFD\x{10000}-\x{10FFFF}]*\]\]&gt;'<a name="charRefHex"/>
+<p>
+charRefHex = '\&amp;#x[0-9a-fA-F]+;'<a name="entityRef"/>
+<p>
+entityRef = '\&amp;[:A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}][:A-Z_a-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\x{10000}-\x{10FFFF}\-\.0-9\xB7\u0300-\u036F\u203F-\u2040]*;'<a name="charRefDecimal"/>
+<p>
+charRefDecimal = '\&amp;#[0-9]+;'<h1>States</h1>
+<a name="States"/>
+<a name="state1"/>
+<h2>State 1</h2>
+( )
+<p>
+<a href="#rule0">Accept</a>->.<a href="#elementContent">elementContent</a> <p>
+<a href="#rule2">content</a>->.<a href="#rule2"> (2)</a><p>
+<a href="#elementContent">elementContent</a> Goto <a href="#state2">2</a><p>
+<a href="#content">content</a> Goto <a href="#state3">3</a><p>
+<a href="#cdSect">cdSect</a> Reduce <a href="#rule2">2</a><p>
+<a href="#entityRef">entityRef</a> Reduce <a href="#rule2">2</a><p>
+<a href="#charRefDecimal">charRefDecimal</a> Reduce <a href="#rule2">2</a><p>
+<a href="#charRefHex">charRefHex</a> Reduce <a href="#rule2">2</a><p>
+<a href="#sTagName">sTagName</a> Reduce <a href="#rule2">2</a><p>
+Eof Reduce <a href="#rule2">2</a><a name="state2"/>
+<h2>State 2</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule0">Accept</a>-><a href="#elementContent">elementContent</a> .<a href="#rule0"> (0)</a><p>
+<a href="#rule0">Accept</a>-><a href="#elementContent">elementContent</a> .<a href="#rule0"> (0)</a><p>
+Eof Reduce <a href="#rule0">0</a><a name="state3"/>
+<h2>State 3</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule1">elementContent</a>-><a href="#content">content</a> .<a href="#rule1"> (1)</a><p>
+<a href="#rule3">content</a>-><a href="#content">content</a> .<a href="#cdSect">cdSect</a> <p>
+<a href="#rule4">content</a>-><a href="#content">content</a> .<a href="#reference">reference</a> <p>
+<a href="#rule5">content</a>-><a href="#content">content</a> .<a href="#element">element</a> <p>
+<a href="#rule1">elementContent</a>-><a href="#content">content</a> .<a href="#rule1"> (1)</a><p>
+<a href="#cdSect">cdSect</a> Sh/Rd <a href="#rule3">3</a><p>
+<a href="#entityRef">entityRef</a> Sh/Rd <a href="#rule6">6</a><p>
+<a href="#charRefHex">charRefHex</a> Sh/Rd <a href="#rule10">10</a><p>
+<a href="#charRefDecimal">charRefDecimal</a> Sh/Rd <a href="#rule9">9</a><p>
+<a href="#sTagName">sTagName</a> Sh/Rd <a href="#rule11">11</a><p>
+<a href="#element">element</a> Gt/Rd <a href="#rule5">5</a><p>
+<a href="#reference">reference</a> Gt/Rd <a href="#rule4">4</a><p>
+<a href="#charRef">charRef</a> Gt/Rd <a href="#rule7">7</a><p>
+<a href="#sTag">sTag</a> Gt/Rd <a href="#rule8">8</a><p>
+Eof Reduce <a href="#rule1">1</a></body>
+</html>

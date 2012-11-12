@@ -27,16 +27,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.vesalainen.bcc.BulkCompiler;
-import org.vesalainen.bcc.type.ClassWrapper;
 import org.vesalainen.grammar.AnnotatedGrammar;
 import org.vesalainen.grammar.Grammar;
-import org.vesalainen.parser.ParserCompiler;
 import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.util.InputReader;
 import org.vesalainen.parsers.xml.model.Attribute;
-import org.vesalainen.parsers.xml.model.Document;
 import org.vesalainen.parsers.xml.model.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -46,9 +42,9 @@ import org.xml.sax.SAXParseException;
  *
  * @author tkv
  */
-@GenClassname(Classnames.DTDPARSERCOMPILER)
+@GenClassname("org.vesalainen.parsers.xml.DTDParserImpl")
 @GrammarDef()
-public abstract class DTDParserCompilerFactory extends XMLDTDBaseGrammar
+public abstract class DTDParser extends XMLDTDBaseGrammar
 {
     public static final char ELPRF = '#';   // Element prefix in grammar
     private Map<QName,String> elementMap = new HashMap<>();
@@ -58,9 +54,9 @@ public abstract class DTDParserCompilerFactory extends XMLDTDBaseGrammar
     private String publicId;
     private String officialSystemId;
 
-    public static DTDParserCompilerFactory createDTDParser() throws IOException
+    public static DTDParser createDTDParser() throws IOException
     {
-        return (DTDParserCompilerFactory) ParserFactory.getParserInstance(DTDParserCompilerFactory.class);
+        return (DTDParser) ParserFactory.getParserInstance(DTDParser.class);
     }
     public void parse(String officialSystemId) throws IOException, SAXException, URISyntaxException
     {
@@ -113,10 +109,10 @@ public abstract class DTDParserCompilerFactory extends XMLDTDBaseGrammar
                 if (!attList.isEmpty())
                 {
                     lhsAttrs = lhs+"Attrs";
-                    g.addRule(DTDParserCompilerFactory.class.getDeclaredMethod("attributeListStart"), lhsAttrs);
+                    g.addRule(DTDParser.class.getDeclaredMethod("attributeListStart"), lhsAttrs);
                     for (AttDef attr : attList)
                     {
-                        Member reducer = DTDParserCompilerFactory.class.getDeclaredMethod("attributeListNext", List.class, Attribute.class);
+                        Member reducer = DTDParser.class.getDeclaredMethod("attributeListNext", List.class, Attribute.class);
                         g.addRule(reducer, lhsAttrs, lhsAttrs, attr.greateRhs());
                     }
                 }
@@ -140,6 +136,7 @@ public abstract class DTDParserCompilerFactory extends XMLDTDBaseGrammar
                 }
                 g.addRule("any", "any", lhs);
             }
+            /*
             g.print(System.err);
             String packet = Document.getPackagename(officialSystemId);
             String className = packet+".DocumentParser";
@@ -147,7 +144,6 @@ public abstract class DTDParserCompilerFactory extends XMLDTDBaseGrammar
             ParserCompiler pc = new ParserCompiler(parserClass, g);
             BulkCompiler.compile(pc);
             XMLParserBase parserInstance = (XMLParserBase) pc.parserInstance();
-            /*
             g = g.subGrammar("document");
             g.dump(System.err);
             g.checkGrammar();
@@ -691,11 +687,7 @@ public abstract class DTDParserCompilerFactory extends XMLDTDBaseGrammar
     {
         try
         {
-            File dir = new File("C:\\Users\\tkv\\Documents\\NetBeansProjects\\Parsers\\build\\classes");
-            File src = new File("C:\\Users\\tkv\\Documents\\NetBeansProjects\\Parsers\\src");
-            BulkCompiler.setClasses(dir);
-            BulkCompiler.setSrc(src);
-            DTDParserCompilerFactory parser = DTDParserCompilerFactory .createDTDParser();
+            DTDParser parser = DTDParser .createDTDParser();
             File f = new File("c:\\temp\\XMLSchema.dtd");
             parser.parse("-//W3C//DTD XMLSCHEMA 200102//EN", "http://www.w3.org/2001/XMLSchema.dtd", f.toURI().toString());
         }

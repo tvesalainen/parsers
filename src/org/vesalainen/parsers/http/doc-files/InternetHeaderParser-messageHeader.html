@@ -1,0 +1,88 @@
+<html>
+<body>
+<h1>BNF</h1>
+<a name="BNF"/>
+<a name="Accept"/>
+<p>
+<a name="rule0"/>
+Accept ::= <a href="#messageHeader">messageHeader</a><a name="messageHeader"/>
+<p>
+<a name="rule1"/>
+<a href="../../../../../org/vesalainen/parsers/http/InternetHeaderParser.html#messageHeader(java.util.Map)">1: messageHeader</a> ::= <a href="#messageHeaders">messageHeaders</a> <a href="#CRLF">CRLF</a><a name="messageHeaders"/>
+<p>
+<a name="rule2"/>
+<a href="../../../../../org/vesalainen/parsers/http/InternetHeaderParser.html#messageHeaders(java.lang.String, java.lang.String, java.util.Map)">2: messageHeaders</a> ::= <a href="#messageHeaders">messageHeaders</a> <a href="#fieldName">fieldName</a> <a href="#COLON">COLON</a> <a href="#fieldValue">fieldValue</a> <a href="#CRLF">CRLF</a><p>
+<a name="rule3"/>
+<a href="../../../../../org/vesalainen/parsers/http/InternetHeaderParser.html#messageHeaders()">3: messageHeaders</a> ::=<a name="fieldValue"/>
+<p>
+<a name="rule4"/>
+<a href="../../../../../org/vesalainen/parsers/http/InternetHeaderParser.html#fieldValue(java.lang.String, java.lang.String)">4: fieldValue</a> ::= <a href="#line">line</a> <a href="#LWS">LWS</a> <a href="#fieldValue">fieldValue</a><p>
+<a name="rule5"/>
+<a href="../../../../../org/vesalainen/parsers/http/InternetHeaderParser.html#fieldValue(java.lang.String)">5: fieldValue</a> ::= <a href="#line">line</a><h1>Terminals</h1>
+<a name="Terminals"/>
+<a name="line"/>
+<p>
+line = '[^\r\n]+'<a name="fieldName"/>
+<p>
+fieldName = '[^\x00-\x20\(\)&lt;&gt;@\,;:\\"/\[\]\?=\{\}\t]+'<a name="COLON"/>
+<p>
+COLON = '[ \t]*:[ \t]*'<a name="CRLF"/>
+<p>
+CRLF = '\r\n'<a name="LWS"/>
+<p>
+LWS = '\r\n[ \t]+'<h1>States</h1>
+<a name="States"/>
+<a name="state1"/>
+<h2>State 1</h2>
+( )
+<p>
+<a href="#rule0">Accept</a>->.<a href="#messageHeader">messageHeader</a> <p>
+<a href="#rule3">messageHeaders</a>->.<a href="#rule3"> (3)</a><p>
+<a href="#messageHeader">messageHeader</a> Goto <a href="#state2">2</a><p>
+<a href="#messageHeaders">messageHeaders</a> Goto <a href="#state3">3</a><p>
+<a href="#CRLF">CRLF</a> Reduce <a href="#rule3">3</a><p>
+<a href="#fieldName">fieldName</a> Reduce <a href="#rule3">3</a><a name="state2"/>
+<h2>State 2</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule0">Accept</a>-><a href="#messageHeader">messageHeader</a> .<a href="#rule0"> (0)</a><p>
+<a href="#rule0">Accept</a>-><a href="#messageHeader">messageHeader</a> .<a href="#rule0"> (0)</a><p>
+Eof Reduce <a href="#rule0">0</a><a name="state3"/>
+<h2>State 3</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule1">messageHeader</a>-><a href="#messageHeaders">messageHeaders</a> .<a href="#CRLF">CRLF</a> <p>
+<a href="#rule2">messageHeaders</a>-><a href="#messageHeaders">messageHeaders</a> .<a href="#fieldName">fieldName</a> <a href="#COLON">COLON</a> <a href="#fieldValue">fieldValue</a> <a href="#CRLF">CRLF</a> <p>
+<a href="#fieldName">fieldName</a> Shift <a href="#state4">4</a><p>
+<a href="#CRLF">CRLF</a> Sh/Rd <a href="#rule1">1</a><a name="state4"/>
+<h2>State 4</h2>
+(<a href="#state3"> 3</a> )
+<p>
+<a href="#rule2">messageHeaders</a>-><a href="#messageHeaders">messageHeaders</a> <a href="#fieldName">fieldName</a> .<a href="#COLON">COLON</a> <a href="#fieldValue">fieldValue</a> <a href="#CRLF">CRLF</a> <p>
+<a href="#COLON">COLON</a> Shift <a href="#state5">5</a><a name="state5"/>
+<h2>State 5</h2>
+(<a href="#state4"> 4</a> )
+<p>
+<a href="#rule2">messageHeaders</a>-><a href="#messageHeaders">messageHeaders</a> <a href="#fieldName">fieldName</a> <a href="#COLON">COLON</a> .<a href="#fieldValue">fieldValue</a> <a href="#CRLF">CRLF</a> <p>
+<a href="#line">line</a> Shift <a href="#state7">7</a><p>
+<a href="#fieldValue">fieldValue</a> Goto <a href="#state6">6</a><a name="state6"/>
+<h2>State 6</h2>
+(<a href="#state5"> 5</a> )
+<p>
+<a href="#rule2">messageHeaders</a>-><a href="#messageHeaders">messageHeaders</a> <a href="#fieldName">fieldName</a> <a href="#COLON">COLON</a> <a href="#fieldValue">fieldValue</a> .<a href="#CRLF">CRLF</a> <p>
+<a href="#CRLF">CRLF</a> Sh/Rd <a href="#rule2">2</a><a name="state7"/>
+<h2>State 7</h2>
+(<a href="#state5"> 5</a><a href="#state8"> 8</a> )
+<p>
+<a href="#rule4">fieldValue</a>-><a href="#line">line</a> .<a href="#LWS">LWS</a> <a href="#fieldValue">fieldValue</a> <p>
+<a href="#rule5">fieldValue</a>-><a href="#line">line</a> .<a href="#rule5"> (5)</a><p>
+<a href="#rule5">fieldValue</a>-><a href="#line">line</a> .<a href="#rule5"> (5)</a><p>
+<a href="#LWS">LWS</a> Shift <a href="#state8">8</a><p>
+<a href="#CRLF">CRLF</a> Reduce <a href="#rule5">5</a><a name="state8"/>
+<h2>State 8</h2>
+(<a href="#state7"> 7</a> )
+<p>
+<a href="#rule4">fieldValue</a>-><a href="#line">line</a> <a href="#LWS">LWS</a> .<a href="#fieldValue">fieldValue</a> <p>
+<a href="#line">line</a> Shift <a href="#state7">7</a><p>
+<a href="#fieldValue">fieldValue</a> Gt/Rd <a href="#rule4">4</a></body>
+</html>
