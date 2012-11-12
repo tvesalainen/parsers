@@ -1,0 +1,187 @@
+<html>
+<body>
+<h1>BNF</h1>
+<a name="BNF"/>
+<a name="Accept"/>
+<p>
+<a name="rule0"/>
+Accept ::= <a href="#ascTime">ascTime</a><a name="ascTime"/>
+<p>
+<a name="rule1"/>
+ascTime ::= <a href="#EEE">EEE</a> ', ' <a href="#MMM">MMM</a> ' ' <a href="#dd">dd</a> ' ' <a href="#HH">HH</a> ':' <a href="#mm">mm</a> ':' <a href="#ss">ss</a> ' ' <a href="#yyyy">yyyy</a><a name="EEE"/>
+<p>
+<a name="rule2"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#weekday7(java.util.Calendar)">2: EEE</a> ::= 'Sat|Satu|Satur|Saturd|Saturda|Saturday'<p>
+<a name="rule3"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#weekday4(java.util.Calendar)">3: EEE</a> ::= 'Wed|Wedn|Wedne|Wednes|Wednesd|Wednesda|Wednesday'<p>
+<a name="rule4"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#weekday6(java.util.Calendar)">4: EEE</a> ::= 'Fri|Frid|Frida|Friday'<p>
+<a name="rule5"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#weekday5(java.util.Calendar)">5: EEE</a> ::= 'Thu|Thur|Thurs|Thursd|Thursda|Thursday'<p>
+<a name="rule6"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#weekday1(java.util.Calendar)">6: EEE</a> ::= 'Sun|Sund|Sunda|Sunday'<p>
+<a name="rule7"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#weekday2(java.util.Calendar)">7: EEE</a> ::= 'Mon|Mond|Monda|Monday'<p>
+<a name="rule8"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#weekday3(java.util.Calendar)">8: EEE</a> ::= 'Tue|Tues|Tuesd|Tuesda|Tuesday'<a name="MMM"/>
+<p>
+<a name="rule9"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month4(java.util.Calendar)">9: MMM</a> ::= 'Apr|Apri|April'<p>
+<a name="rule10"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month8(java.util.Calendar)">10: MMM</a> ::= 'Aug|Augu|Augus|August'<p>
+<a name="rule11"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month12(java.util.Calendar)">11: MMM</a> ::= 'Dec|Dece|Decem|Decemb|Decembe|December'<p>
+<a name="rule12"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month9(java.util.Calendar)">12: MMM</a> ::= 'Sep|Sept|Septe|Septem|Septemb|Septembe|September'<p>
+<a name="rule13"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month2(java.util.Calendar)">13: MMM</a> ::= 'Feb|Febr|Febru|Februa|Februar|February'<p>
+<a name="rule14"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month3(java.util.Calendar)">14: MMM</a> ::= 'Mar|Marc|March'<p>
+<a name="rule15"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month6(java.util.Calendar)">15: MMM</a> ::= 'Jun|June'<p>
+<a name="rule16"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month5(java.util.Calendar)">16: MMM</a> ::= 'May'<p>
+<a name="rule17"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month7(java.util.Calendar)">17: MMM</a> ::= 'Jul|July'<p>
+<a name="rule18"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month1(java.util.Calendar)">18: MMM</a> ::= 'Jan|Janu|Janua|Januar|January'<p>
+<a name="rule19"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month11(java.util.Calendar)">19: MMM</a> ::= 'Nov|Nove|Novem|Novemb|Novembe|November'<p>
+<a name="rule20"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#month10(java.util.Calendar)">20: MMM</a> ::= 'Oct|Octo|Octob|Octobe|October'<a name="dd"/>
+<p>
+<a name="rule21"/>
+dd ::= <a href="#dayInMonth">dayInMonth</a><a name="HH"/>
+<p>
+<a name="rule22"/>
+HH ::= <a href="#hour23">hour23</a><a name="mm"/>
+<p>
+<a name="rule23"/>
+mm ::= <a href="#minute">minute</a><a name="ss"/>
+<p>
+<a name="rule24"/>
+ss ::= <a href="#second">second</a><a name="yyyy"/>
+<p>
+<a name="rule25"/>
+yyyy ::= <a href="#year4">year4</a><a name="dayInMonth"/>
+<p>
+<a name="rule26"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#dayInMonth(int, java.util.Calendar)">26: dayInMonth</a> ::= <a href="#digit12">digit12</a><a name="hour23"/>
+<p>
+<a name="rule27"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#hour23(int, java.util.Calendar)">27: hour23</a> ::= <a href="#digit12">digit12</a><a name="minute"/>
+<p>
+<a name="rule28"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#minute(int, java.util.Calendar)">28: minute</a> ::= <a href="#digit12">digit12</a><a name="second"/>
+<p>
+<a name="rule29"/>
+<a href="../../../../../org/vesalainen/parsers/date/DateReducers.html#second(int, java.util.Calendar)">29: second</a> ::= <a href="#digit12">digit12</a><h1>Terminals</h1>
+<a name="Terminals"/>
+<a name="year4"/>
+<p>
+year4 = '[0-9]{4}'<a name="digit12"/>
+<p>
+digit12 = '[0-9]{1,2}'<h1>States</h1>
+<a name="States"/>
+<a name="state1"/>
+<h2>State 1</h2>
+( )
+<p>
+<a href="#rule0">Accept</a>->.<a href="#ascTime">ascTime</a> <p>
+'Tue|Tues|Tuesd|Tuesda|Tuesday' Sh/Rd <a href="#rule8">8</a><p>
+'Mon|Mond|Monda|Monday' Sh/Rd <a href="#rule7">7</a><p>
+'Sun|Sund|Sunda|Sunday' Sh/Rd <a href="#rule6">6</a><p>
+'Thu|Thur|Thurs|Thursd|Thursda|Thursday' Sh/Rd <a href="#rule5">5</a><p>
+'Fri|Frid|Frida|Friday' Sh/Rd <a href="#rule4">4</a><p>
+'Wed|Wedn|Wedne|Wednes|Wednesd|Wednesda|Wednesday' Sh/Rd <a href="#rule3">3</a><p>
+'Sat|Satu|Satur|Saturd|Saturda|Saturday' Sh/Rd <a href="#rule2">2</a><p>
+<a href="#ascTime">ascTime</a> Goto <a href="#state2">2</a><p>
+<a href="#EEE">EEE</a> Goto <a href="#state3">3</a><a name="state2"/>
+<h2>State 2</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule0">Accept</a>-><a href="#ascTime">ascTime</a> .<a href="#rule0"> (0)</a><p>
+<a href="#rule0">Accept</a>-><a href="#ascTime">ascTime</a> .<a href="#rule0"> (0)</a><p>
+Eof Reduce <a href="#rule0">0</a><a name="state3"/>
+<h2>State 3</h2>
+(<a href="#state1"> 1</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> .', ' <a href="#MMM">MMM</a> ' ' <a href="#dd">dd</a> ' ' <a href="#HH">HH</a> ':' <a href="#mm">mm</a> ':' <a href="#ss">ss</a> ' ' <a href="#yyyy">yyyy</a> <p>
+', ' Shift <a href="#state4">4</a><a name="state4"/>
+<h2>State 4</h2>
+(<a href="#state3"> 3</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> ', ' .<a href="#MMM">MMM</a> ' ' <a href="#dd">dd</a> ' ' <a href="#HH">HH</a> ':' <a href="#mm">mm</a> ':' <a href="#ss">ss</a> ' ' <a href="#yyyy">yyyy</a> <p>
+'Oct|Octo|Octob|Octobe|October' Sh/Rd <a href="#rule20">20</a><p>
+'Nov|Nove|Novem|Novemb|Novembe|November' Sh/Rd <a href="#rule19">19</a><p>
+'Jan|Janu|Janua|Januar|January' Sh/Rd <a href="#rule18">18</a><p>
+'Jul|July' Sh/Rd <a href="#rule17">17</a><p>
+'May' Sh/Rd <a href="#rule16">16</a><p>
+'Jun|June' Sh/Rd <a href="#rule15">15</a><p>
+'Mar|Marc|March' Sh/Rd <a href="#rule14">14</a><p>
+'Feb|Febr|Febru|Februa|Februar|February' Sh/Rd <a href="#rule13">13</a><p>
+'Sep|Sept|Septe|Septem|Septemb|Septembe|September' Sh/Rd <a href="#rule12">12</a><p>
+'Dec|Dece|Decem|Decemb|Decembe|December' Sh/Rd <a href="#rule11">11</a><p>
+'Aug|Augu|Augus|August' Sh/Rd <a href="#rule10">10</a><p>
+'Apr|Apri|April' Sh/Rd <a href="#rule9">9</a><p>
+<a href="#MMM">MMM</a> Goto <a href="#state5">5</a><a name="state5"/>
+<h2>State 5</h2>
+(<a href="#state4"> 4</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> ', ' <a href="#MMM">MMM</a> .' ' <a href="#dd">dd</a> ' ' <a href="#HH">HH</a> ':' <a href="#mm">mm</a> ':' <a href="#ss">ss</a> ' ' <a href="#yyyy">yyyy</a> <p>
+' ' Shift <a href="#state6">6</a><a name="state6"/>
+<h2>State 6</h2>
+(<a href="#state5"> 5</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> ', ' <a href="#MMM">MMM</a> ' ' .<a href="#dd">dd</a> ' ' <a href="#HH">HH</a> ':' <a href="#mm">mm</a> ':' <a href="#ss">ss</a> ' ' <a href="#yyyy">yyyy</a> <p>
+<a href="#digit12">digit12</a> Sh/Rd <a href="#rule26">26</a><p>
+<a href="#dd">dd</a> Goto <a href="#state7">7</a><p>
+<a href="#dayInMonth">dayInMonth</a> Gt/Rd <a href="#rule21">21</a><a name="state7"/>
+<h2>State 7</h2>
+(<a href="#state6"> 6</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> ', ' <a href="#MMM">MMM</a> ' ' <a href="#dd">dd</a> .' ' <a href="#HH">HH</a> ':' <a href="#mm">mm</a> ':' <a href="#ss">ss</a> ' ' <a href="#yyyy">yyyy</a> <p>
+' ' Shift <a href="#state8">8</a><a name="state8"/>
+<h2>State 8</h2>
+(<a href="#state7"> 7</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> ', ' <a href="#MMM">MMM</a> ' ' <a href="#dd">dd</a> ' ' .<a href="#HH">HH</a> ':' <a href="#mm">mm</a> ':' <a href="#ss">ss</a> ' ' <a href="#yyyy">yyyy</a> <p>
+<a href="#digit12">digit12</a> Sh/Rd <a href="#rule27">27</a><p>
+<a href="#HH">HH</a> Goto <a href="#state9">9</a><p>
+<a href="#hour23">hour23</a> Gt/Rd <a href="#rule22">22</a><a name="state9"/>
+<h2>State 9</h2>
+(<a href="#state8"> 8</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> ', ' <a href="#MMM">MMM</a> ' ' <a href="#dd">dd</a> ' ' <a href="#HH">HH</a> .':' <a href="#mm">mm</a> ':' <a href="#ss">ss</a> ' ' <a href="#yyyy">yyyy</a> <p>
+':' Shift <a href="#state10">10</a><a name="state10"/>
+<h2>State 10</h2>
+(<a href="#state9"> 9</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> ', ' <a href="#MMM">MMM</a> ' ' <a href="#dd">dd</a> ' ' <a href="#HH">HH</a> ':' .<a href="#mm">mm</a> ':' <a href="#ss">ss</a> ' ' <a href="#yyyy">yyyy</a> <p>
+<a href="#digit12">digit12</a> Sh/Rd <a href="#rule28">28</a><p>
+<a href="#mm">mm</a> Goto <a href="#state11">11</a><p>
+<a href="#minute">minute</a> Gt/Rd <a href="#rule23">23</a><a name="state11"/>
+<h2>State 11</h2>
+(<a href="#state10"> 10</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> ', ' <a href="#MMM">MMM</a> ' ' <a href="#dd">dd</a> ' ' <a href="#HH">HH</a> ':' <a href="#mm">mm</a> .':' <a href="#ss">ss</a> ' ' <a href="#yyyy">yyyy</a> <p>
+':' Shift <a href="#state12">12</a><a name="state12"/>
+<h2>State 12</h2>
+(<a href="#state11"> 11</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> ', ' <a href="#MMM">MMM</a> ' ' <a href="#dd">dd</a> ' ' <a href="#HH">HH</a> ':' <a href="#mm">mm</a> ':' .<a href="#ss">ss</a> ' ' <a href="#yyyy">yyyy</a> <p>
+<a href="#digit12">digit12</a> Sh/Rd <a href="#rule29">29</a><p>
+<a href="#ss">ss</a> Goto <a href="#state13">13</a><p>
+<a href="#second">second</a> Gt/Rd <a href="#rule24">24</a><a name="state13"/>
+<h2>State 13</h2>
+(<a href="#state12"> 12</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> ', ' <a href="#MMM">MMM</a> ' ' <a href="#dd">dd</a> ' ' <a href="#HH">HH</a> ':' <a href="#mm">mm</a> ':' <a href="#ss">ss</a> .' ' <a href="#yyyy">yyyy</a> <p>
+' ' Shift <a href="#state14">14</a><a name="state14"/>
+<h2>State 14</h2>
+(<a href="#state13"> 13</a> )
+<p>
+<a href="#rule1">ascTime</a>-><a href="#EEE">EEE</a> ', ' <a href="#MMM">MMM</a> ' ' <a href="#dd">dd</a> ' ' <a href="#HH">HH</a> ':' <a href="#mm">mm</a> ':' <a href="#ss">ss</a> ' ' .<a href="#yyyy">yyyy</a> <p>
+<a href="#year4">year4</a> Sh/Rd <a href="#rule25">25</a><p>
+<a href="#yyyy">yyyy</a> Gt/Rd <a href="#rule1">1</a></body>
+</html>

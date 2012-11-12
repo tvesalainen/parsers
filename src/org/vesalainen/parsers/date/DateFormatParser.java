@@ -33,14 +33,16 @@ import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 
 /**
- * DateFormatGrammar is an abstract base class for DateFormatParser. Generated
+ * DateFormatParser is an abstract base class for DateFormatParser. Generated
  * DateFormatParser parses java.text.SimpleDateFormat style patterns and creates
- * grammar rules actual date parser.
+ * grammar rules for actual date parser.
  * @author tkv
+ * @see <a href="doc-files/DateFormatParser-rhs.html#BNF">BNF Syntax for DateFormat patterns</a>
+ * @see java.text.SimpleDateFormat
  */
-@GenClassname("org.vesalainen.parsers.date.DateFormatParser")
+@GenClassname("org.vesalainen.parsers.date.DateFormatParserImpl")
 @GrammarDef()
-public abstract class DateFormatGrammar
+public abstract class DateFormatParser
 {
     private Class<?> superClass;
 
@@ -49,15 +51,30 @@ public abstract class DateFormatGrammar
         this.superClass = superClass;
     }
     
-    public static DateFormatGrammar newInstance(Class<?> superClass)
+    public static DateFormatParser newInstance(Class<?> superClass)
     {
-        DateFormatGrammar dfg = (DateFormatGrammar) ParserFactory.getParserInstance(DateFormatGrammar.class);
+        DateFormatParser dfg = (DateFormatParser) ParserFactory.getParserInstance(DateFormatParser.class);
         dfg.setSuperClass(superClass);
         return dfg;
     }
+    /**
+     * 
+     * @param pattern 
+     * @param grammar
+     * @param locale
+     * @param symbols
+     * @param era
+     * @param month
+     * @param weekday
+     * @param ampm
+     * @return
+     * @throws IOException 
+     * @see <a href="doc-files/DateFormatParser-rhs.html#BNF">BNF Syntax for DateFormat patterns</a>
+     * @see java.text.SimpleDateFormat
+     */
     @ParseMethod(start="rhs")
     public abstract List<String> parse(
-            String format,
+            String pattern,
             @ParserContext("GRAMMAR") Grammar grammar,
             @ParserContext("LOCALE") Locale locale,
             @ParserContext("SYMBOLS") DateFormatSymbols symbols,

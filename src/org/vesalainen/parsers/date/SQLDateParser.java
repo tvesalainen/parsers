@@ -29,13 +29,13 @@ import org.vesalainen.parser.annotation.ParserContext;
 /**
  * @author Timo Vesalainen
  */
-@GenClassname("org.vesalainen.parsers.date.SQLDateParser")
+@GenClassname("org.vesalainen.parsers.date.SQLDateParserImpl")
 @GrammarDef
-public abstract class SQLDateParserBase extends DateReducers
+public abstract class SQLDateParser extends DateReducers
 {
-    public static SQLDateParserBase newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
+    public static SQLDateParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
     {
-        return (SQLDateParserBase) ParserFactory.getParserInstance(SQLDateParserBase.class, new SQLDatePatterns());
+        return (SQLDateParser) ParserFactory.getParserInstance(SQLDateParser.class, new SQLDateGrammar());
     }
     public Date parseDate(String text)
     {
@@ -55,12 +55,28 @@ public abstract class SQLDateParserBase extends DateReducers
         parseTimestamp(text, calendar);
         return calendar.getTime();
     }
+    /**
+     * 
+     * @param text
+     * @param calendar 
+     * @see <a href="doc-files/SQLDateParser-sqlDate.html#BNF">BNF Syntax for SQL Date</a>
+     */
     @ParseMethod(start = "sqlDate")
     protected abstract void parseDate(String text, @ParserContext Calendar calendar);
-    
+    /**
+     * 
+     * @param text
+     * @param calendar 
+     * @see <a href="doc-files/SQLDateParser-sqlTime.html#BNF">BNF Syntax for SQL Time</a>
+     */
     @ParseMethod(start = "sqlTime")
     protected abstract void parseTime(String text, @ParserContext Calendar calendar);
-    
+    /**
+     * 
+     * @param text
+     * @param calendar 
+     * @see <a href="doc-files/SQLDateParser-sqlTimestamp.html#BNF">BNF Syntax for SQL Timestamp</a>
+     */
     @ParseMethod(start = "sqlTimestamp")
     protected abstract void parseTimestamp(String text, @ParserContext Calendar calendar);
     

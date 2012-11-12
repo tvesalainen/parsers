@@ -24,11 +24,11 @@ import org.vesalainen.regex.SyntaxErrorException;
 /**
  * @author Timo Vesalainen
  */
-public class SQLDatePatterns extends AbstractDatePatterns
+public class SQLDateGrammar extends SimpleDateGrammar
 {
-    public SQLDatePatterns() throws UnsupportedOperationException, IOException
+    public SQLDateGrammar() throws UnsupportedOperationException, IOException
     {
-        super(Locale.US, SQLDateParserBase.class);
+        super(Locale.US, SQLDateParser.class);
         try
         {
             addPattern("sqlDate", "yyyy-MM-dd");

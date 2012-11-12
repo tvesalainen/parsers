@@ -35,7 +35,7 @@ import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.parser.util.InputReader;
-import org.vesalainen.parsers.date.SQLDateParserBase;
+import org.vesalainen.parsers.date.SQLDateParser;
 import org.vesalainen.regex.Regex;
 
 /**
@@ -49,13 +49,13 @@ import org.vesalainen.regex.Regex;
 public abstract class SqlParser<R, C>
 {
 
-    protected SQLDateParserBase dateParser;
+    protected SQLDateParser dateParser;
 
     public SqlParser()
     {
         try
         {
-            dateParser = SQLDateParserBase.newInstance();
+            dateParser = SQLDateParser.newInstance();
         }
         catch (NoSuchMethodException | IOException | NoSuchFieldException | ClassNotFoundException | InstantiationException | IllegalAccessException ex)
         {

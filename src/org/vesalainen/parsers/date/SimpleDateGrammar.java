@@ -16,13 +16,12 @@ import java.util.Set;
 import org.vesalainen.grammar.AnnotatedGrammar;
 
 /**
- * AbstractDatePatterns is a abstract class for parsing dates. Date grammar is
- * build by using same patterns as in java.text.SimpleDateFormat. 
+ * SimpleDateGrammar is build by using same patterns as in java.text.SimpleDateFormat. 
  * @author tkv
  */
-public class AbstractDatePatterns extends AnnotatedGrammar
+public class SimpleDateGrammar extends AnnotatedGrammar
 {
-    protected DateFormatGrammar formatParser;
+    protected DateFormatParser formatParser;
     protected Locale locale;
     protected DateFormatSymbols symbols;
     protected Method[] era;
@@ -31,12 +30,12 @@ public class AbstractDatePatterns extends AnnotatedGrammar
     protected Method[] ampm;
     protected Set<String> patternSet = new HashSet<>();
 
-    protected AbstractDatePatterns(Locale locale, Class<?> superClass) throws UnsupportedOperationException, IOException
+    protected SimpleDateGrammar(Locale locale, Class<?> superClass) throws UnsupportedOperationException, IOException
     {
         this(locale, DateFormatSymbols.getInstance(locale), superClass);
     }
 
-    protected AbstractDatePatterns(Locale locale, DateFormatSymbols symbols, Class<?> superClass) throws UnsupportedOperationException, IOException
+    protected SimpleDateGrammar(Locale locale, DateFormatSymbols symbols, Class<?> superClass) throws UnsupportedOperationException, IOException
     {
         super(DateReducers.class);
         this.locale = locale;
@@ -79,7 +78,7 @@ public class AbstractDatePatterns extends AnnotatedGrammar
                 DateReducers.class.getDeclaredMethod("pm", Calendar.class)
             };
 
-            formatParser = DateFormatGrammar.newInstance(superClass);
+            formatParser = DateFormatParser.newInstance(superClass);
         }
         catch (NoSuchMethodException | SecurityException ex)
         {

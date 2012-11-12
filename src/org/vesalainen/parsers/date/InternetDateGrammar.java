@@ -13,7 +13,7 @@ import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.regex.DFACompiler;
 
 /**
- * InternetDatePatterns makes rules for parses parsing dates in one of ISO8601 formats
+ * InternetDateGrammar makes rules for parses parsing dates in one of ISO8601 formats
  * <PRE>
  * yyyy-MM-dd'T'HH:mm:ss.SSSz
  * yyyy-MM-dd'T'HH:mm:ssz
@@ -34,11 +34,11 @@ import org.vesalainen.regex.DFACompiler;
  *
  * @author tkv
  */
-public class InternetDatePatterns extends AbstractDatePatterns
+public class InternetDateGrammar extends SimpleDateGrammar
 {
-    public InternetDatePatterns() throws UnsupportedOperationException, IOException
+    public InternetDateGrammar() throws UnsupportedOperationException, IOException
     {
-        super(Locale.US, InternetDateParserBase.class);
+        super(Locale.US, InternetDateParser.class);
         try
         {
             // RFC1123
@@ -71,7 +71,7 @@ public class InternetDatePatterns extends AbstractDatePatterns
     {
         try
         {
-            InternetDateParserBase dp = InternetDateParserBase.newInstance();
+            InternetDateParser dp = InternetDateParser.newInstance();
             
             if (DFACompiler.dfaCount > 0)
             {

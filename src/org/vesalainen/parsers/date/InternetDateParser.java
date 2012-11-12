@@ -27,17 +27,21 @@ import org.vesalainen.parser.annotation.ParseMethod;
 import org.vesalainen.parser.annotation.ParserContext;
 
 /**
- * InternetDateParserBase is an abstract base class for generated InternetDateParser.
  * InternetDateParser parses dates in either ISO8601, RFC1123, RFC850 or asctime format.
  * @author Timo Vesalainen
+ * @see <a href="doc-files/InternetDateParser-date.html#BNF">BNF Syntax for RFC1123 or RFC850 or AscTime or ISO8601 date</a>
+ * @see <a href="doc-files/InternetDateParser-rfc1123.html#BNF">BNF Syntax for RFC1123 date</a>
+ * @see <a href="doc-files/InternetDateParser-rfc850.html#BNF">BNF Syntax for RFC850 date</a>
+ * @see <a href="doc-files/InternetDateParser-ascTime.html#BNF">BNF Syntax for AscTime date</a>
+ * @see <a href="doc-files/InternetDateParser-iso8601.html#BNF">BNF Syntax for ISO8601 date</a>
  */
-@GenClassname("org.vesalainen.parsers.date.InternetDateParser")
+@GenClassname("org.vesalainen.parsers.date.InternetDateParserImpl")
 @GrammarDef
-public abstract class InternetDateParserBase extends DateReducers
+public abstract class InternetDateParser extends DateReducers
 {
-    public static InternetDateParserBase newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
+    public static InternetDateParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
     {
-        return (InternetDateParserBase) ParserFactory.getParserInstance(InternetDateParserBase.class, new InternetDatePatterns());
+        return (InternetDateParser) ParserFactory.getParserInstance(InternetDateParser.class, new InternetDateGrammar());
     }
     /**
      * Parses dates in either ISO8601, RFC1123, RFC850 or asctime format.
@@ -190,18 +194,49 @@ public abstract class InternetDateParserBase extends DateReducers
         cal.set(Calendar.DST_OFFSET, 0);
         return cal;
     }
+    /**
+     * 
+     * @param text
+     * @param calendar
+     * @throws IOException 
+     * @see <a href="doc-files/InternetDateParser-date.html#BNF">BNF Syntax for RFC1123 or RFC850 or AscTime or ISO8601 date</a>
+     */
     @ParseMethod(start = "date", wideIndex = true)
     protected abstract void parse(String text, @ParserContext Calendar calendar) throws IOException;
-
+    /**
+     * 
+     * @param text
+     * @param calendar
+     * @throws IOException 
+     * @see <a href="doc-files/InternetDateParser-rfc1123.html#BNF">BNF Syntax for RFC1123 date</a>
+     */
     @ParseMethod(start = "rfc1123", wideIndex = true)
     protected abstract void parseRFC1123(String text, @ParserContext Calendar calendar) throws IOException;
-
+    /**
+     * 
+     * @param text
+     * @param calendar
+     * @throws IOException 
+     * @see <a href="doc-files/InternetDateParser-rfc850.html#BNF">BNF Syntax for RFC850 date</a>
+     */
     @ParseMethod(start = "rfc850", wideIndex = true)
     protected abstract void parseRFC850(String text, @ParserContext Calendar calendar) throws IOException;
-
+    /**
+     * 
+     * @param text
+     * @param calendar
+     * @throws IOException 
+     * @see <a href="doc-files/InternetDateParser-ascTime.html#BNF">BNF Syntax for AscTime date</a>
+     */
     @ParseMethod(start = "ascTime", wideIndex = true)
     protected abstract void parseAscTime(String text, @ParserContext Calendar calendar) throws IOException;
-
+    /**
+     * 
+     * @param text
+     * @param calendar
+     * @throws IOException 
+     * @see <a href="doc-files/InternetDateParser-iso8601.html#BNF">BNF Syntax for ISO8601 date</a>
+     */
     @ParseMethod(start = "iso8601", wideIndex = true)
     protected abstract void parseISO8601(String text, @ParserContext Calendar calendar) throws IOException;
 
@@ -209,7 +244,7 @@ public abstract class InternetDateParserBase extends DateReducers
     {
         try
         {
-            InternetDateParserBase p = InternetDateParserBase.newInstance();
+            InternetDateParser p = InternetDateParser.newInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz");
             Date d = p.parseDate("1997-05-08T23:42:50.672EEST");
             String str = sdf.format(d);

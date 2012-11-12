@@ -11,25 +11,25 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
- * LocaleDatePatterns creates rules for date parsing in locale-sensitive way.
+ * LocaleDateGrammar creates rules for date parsing in locale-sensitive way.
  * @author tkv
  */
-public class LocaleDatePatterns extends AbstractDatePatterns
+public class LocaleDateGrammar extends SimpleDateGrammar
 {
 
-    public LocaleDatePatterns() throws UnsupportedOperationException, IOException
+    public LocaleDateGrammar() throws UnsupportedOperationException, IOException
     {
         this(Locale.getDefault(), DateFormatSymbols.getInstance());
     }
 
-    public LocaleDatePatterns(Locale locale) throws UnsupportedOperationException, IOException
+    public LocaleDateGrammar(Locale locale) throws UnsupportedOperationException, IOException
     {
         this(locale, DateFormatSymbols.getInstance(locale));
     }
 
-    public LocaleDatePatterns(Locale locale, DateFormatSymbols symbols) throws UnsupportedOperationException, IOException
+    public LocaleDateGrammar(Locale locale, DateFormatSymbols symbols) throws UnsupportedOperationException, IOException
     {
-        super(locale, symbols, LocaleDateParserBase.class);
+        super(locale, symbols, LocaleDateParser.class);
         this.locale = locale;
         SimpleDateFormat df = (SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locale);
         addPattern("dateTime", df.toPattern());

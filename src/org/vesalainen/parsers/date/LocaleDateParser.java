@@ -27,17 +27,19 @@ import org.vesalainen.parser.annotation.ParseMethod;
 import org.vesalainen.parser.annotation.ParserContext;
 
 /**
- * LocaleDateParserBase is a base class for generated LocaleDateParser class.
  * LocaleDateParser parses dates in locale-sensitive way.
  * <p>
  * Note that it is possible that in some locales there will
  * be conflicting rules in grammar. If that happens, try to remove some of the
- * patterns in LocaleDatePatterns. 
+ * patterns in LocaleDateGrammar. 
  * @author Timo Vesalainen
+ * @see <a href="doc-files/LocaleDateParser-dateTime.html#BNF">BNF Syntax for locale datetime</a>
+ * @see <a href="doc-files/LocaleDateParser-date.html#BNF">BNF Syntax for locale date</a>
+ * @see <a href="doc-files/LocaleDateParser-time.html#BNF">BNF Syntax for locale time</a>
  */
-@GenClassname("org.vesalainen.parsers.date.LocaleDateParser")
+@GenClassname("org.vesalainen.parsers.date.LocaleDateParserImpl")
 @GrammarDef
-public abstract class LocaleDateParserBase extends DateReducers
+public abstract class LocaleDateParser extends DateReducers
 {
     public Date parseDate(String text) throws IOException
     {
@@ -83,34 +85,37 @@ public abstract class LocaleDateParserBase extends DateReducers
         parseTime(text, cal);
         return cal;
     }
-
+    /**
+     * 
+     * @param text
+     * @param calendar
+     * @throws IOException 
+     * @see <a href="doc-files/LocaleDateParser-dateTime.html#BNF">BNF Syntax for locale datetime</a>
+     */
     @ParseMethod(start = "dateTime", wideIndex = true)
     protected abstract void parseDateTime(String text, @ParserContext Calendar calendar) throws IOException;
-
+    /**
+     * 
+     * @param text
+     * @param calendar
+     * @throws IOException 
+     * @see <a href="doc-files/LocaleDateParser-date.html#BNF">BNF Syntax for locale date</a>
+     */
     @ParseMethod(start = "date", wideIndex = true)
     protected abstract void parseDate(String text, @ParserContext Calendar calendar) throws IOException;
-
+    /**
+     * 
+     * @param text
+     * @param calendar
+     * @throws IOException 
+     * @see <a href="doc-files/LocaleDateParser-time.html#BNF">BNF Syntax for locale time</a>
+     */
     @ParseMethod(start = "time", wideIndex = true)
     protected abstract void parseTime(String text, @ParserContext Calendar calendar) throws IOException;
 
-    public static LocaleDateParserBase newInstance() throws IOException
+    public static LocaleDateParser newInstance() throws IOException
     {
-        return (LocaleDateParserBase) ParserFactory.getParserInstance(LocaleDateParserBase.class, new LocaleDatePatterns());
+        return (LocaleDateParser) ParserFactory.getParserInstance(LocaleDateParser.class, new LocaleDateGrammar());
     }
     
-    public static void main(String... args)
-    {
-        try
-        {
-            Locale.setDefault(new Locale("fi", "FI"));
-            LocaleDateParserBase p = LocaleDateParserBase.newInstance();
-            
-            Date d = p.parseDate("2011-12-17T16:48EET");
-            System.err.println(d);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
 }
