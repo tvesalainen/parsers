@@ -18,12 +18,9 @@ package org.vesalainen.parsers.magic;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.vesalainen.bcc.SubClass;
@@ -39,6 +36,8 @@ import org.vesalainen.regex.MatchCompiler;
 import org.vesalainen.regex.RegexParser;
 
 /**
+ * Ant task for creating of MagicImpl. MagicImpl can be used in detecting file
+ * type from file content.
  * @author Timo Vesalainen
  * @see <a href="http://en.wikipedia.org/wiki/Magic_number_(programming)">Magic number</a>
  * @see <a href="http://www.garykessler.net/library/file_sigs.html#acks">FILE SIGNATURES TABLE</a>
@@ -54,7 +53,7 @@ public class MagicTask extends Task
     {
         addMagic("AC ED", "SER", "Java Serialized Object");
         addMagic("FF D8", "JPEG", "JPEG");
-        addMagic("00", "PIC", "IBM Storyboard bitmap file");
+        //addMagic("00", "PIC", "IBM Storyboard bitmap file");
         addMagic("00 00 00 0C 6A 50 20 20", "JP2", "Various JPEG-2000 image file formats");
         addMagic("00 00 00 14 66 74 79 70", "MP4", "ISO Base Media file (MPEG-4) v1");
         addMagic("00 00 00 14 66 74 79 70", "MOV", "QuickTime movie file");
@@ -478,7 +477,6 @@ public class MagicTask extends Task
             mw.setImplementor(ic);
             log("implementing "+mw);
             subClass.implement(mw);
-destdir = new File("C:\\Users\\tkv\\Documents\\NetBeansProjects\\Parsers\\build\\classes")            ;
             log("saving "+thisClass+" to "+destdir);
             subClass.save(destdir);
         }
@@ -488,22 +486,4 @@ destdir = new File("C:\\Users\\tkv\\Documents\\NetBeansProjects\\Parsers\\build\
         }
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args)
-    {
-        try
-        {
-            MagicTask magic = new MagicTask();
-            magic.execute();
-            Magic m = Magic.newInstance();
-            File f = new File("C:\\Users\\tkv\\Pictures\\52.JPG");
-            System.err.println(m.quess(f));
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
 }
