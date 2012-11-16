@@ -174,6 +174,11 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         return engine.select(this);
     }
     
+    public UpdateableFetchResult selectForUpdate()
+    {
+        return engine.selectForUpdate(this);
+    }
+    
     public Collection<Table> getTables()
     {
         return correlationMap.values();

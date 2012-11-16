@@ -18,6 +18,7 @@
 package org.vesalainen.parsers.sql;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -33,7 +34,8 @@ public class UpdateableFetchResult<R,C> extends OrderedFetchResult<R,C>
 {
     protected List<Updateable<R,C>[]> updateable;
     protected Set<R> updated = new HashSet<>();
-
+    protected Set<R> deleted = new HashSet<>();
+    
     public UpdateableFetchResult(Engine<R, C> engine, SelectStatement<R,C> select)
     {
         super(engine, select);
@@ -42,13 +44,13 @@ public class UpdateableFetchResult<R,C> extends OrderedFetchResult<R,C>
     
     public void addRow(ArrayMap<Table, R> rowCandidate)
     {
-        Updateable<R,C>[] row = (Updateable<R,C>[]) new Object[length];
+        Updateable<R,C>[] row = (Updateable<R,C>[]) new Updateable[length];
         updateable.add(row);
         int index = 0;
         for (ColumnReference cf : columnReferences)
         {
             Updateable<R,C> col = engine.getUpdateable(rowCandidate.get(cf.getTable()), cf.getColumn());
-            if (col != null)
+            if (col != null && col.getValue() != null)
             {
                 columnLength[index] = Math.max(columnLength[index], col.getValue().toString().length());
             }
@@ -90,9 +92,26 @@ public class UpdateableFetchResult<R,C> extends OrderedFetchResult<R,C>
         }
     }
 
-    public Set<R> getUpdated()
+    public void deleteRow(int row)
     {
-        return updated;
+        for (Updateable<R,C> u : updateable.get(row))
+        {
+            R r = u.getRow();
+            deleted.add(r);
+            updated.remove(r);
+        }
+        updateable.remove(row);
+    }
+    
+    public void insertRow()
+    {
+        
+    }
+
+    public void update()
+    {
+        engine.delete(deleted);
+        engine.update(updated);
     }
     
     public class DataIterator implements Iterator<C[]>

@@ -53,7 +53,7 @@ public class FetchResult<R, C> implements Iterable<C[]>
         return header;
     }
 
-    public void addRow(C... row)
+    public void addRowArray(C... row)
     {
         data.add(row);
         int len = Math.min(columnLength.length, row.length);

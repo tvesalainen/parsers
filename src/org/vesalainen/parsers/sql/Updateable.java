@@ -22,6 +22,7 @@ package org.vesalainen.parsers.sql;
  */
 public interface Updateable<R,C>
 {
+    R getRow();
     C getValue();
     /**
      * Update value. Return row only if update actually changed rows content.

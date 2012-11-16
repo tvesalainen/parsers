@@ -181,4 +181,10 @@ public class ArrayMap<T,V> extends AbstractMap<T,V> implements Cloneable
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public String toString()
+    {
+        return "ArrayMap{" + "map=" + map + '}';
+    }
+
 }

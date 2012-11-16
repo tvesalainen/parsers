@@ -51,8 +51,7 @@ public class MagicTask extends Task
 
     public MagicTask()
     {
-        addMagic("AC ED", "SER", "Java Serialized Object");
-        addMagic("FF D8", "JPEG", "JPEG");
+        addMagic("FF D8", "JPEG", "Joint Photographic Experts Group, JPEG");
         //addMagic("00", "PIC", "IBM Storyboard bitmap file");
         addMagic("00 00 00 0C 6A 50 20 20", "JP2", "Various JPEG-2000 image file formats");
         addMagic("00 00 00 14 66 74 79 70", "MP4", "ISO Base Media file (MPEG-4) v1");
@@ -69,7 +68,7 @@ public class MagicTask extends Task
         addMagic("00 00 1A 00 02 10 04 00", "WK4, WK5", "Lotus 1-2-3 spreadsheet (v4, v5) file");
         addMagic("123", "00 00 49 49 58 50 52", "..IIXPR");
         addMagic("00 00 4D 4D 58 50 52", "QXD", "Quark Express document (Intel & Motorola, respectively)");
-        addMagic("00 00 FE FF", "n/a", "Byte-order mark for 32-bit Unicode Transformation Format/");
+        addMagic("00 00 FE FF", "", "Byte-order mark for 32-bit Unicode Transformation Format/");
         addMagic("00 01 00 00 4D 53 49 53", "MNY", "Microsoft Money file");
         addMagic("00 01 00 00 53 74 61 6E", "ACCDB", "Microsoft Access 2007 file");
         addMagic("00 01 00 00 53 74 61 6E", "MDB", "Microsoft Access file");
@@ -139,9 +138,9 @@ public class MagicTask extends Task
         addMagic("30 26 B2 75 8E 66 CF 11", "ASF, WMA, WMV", "Microsoft Windows Media Audio/Video File");
         addMagic("30 31 4F 52 44 4E 41 4E", "NTF", "National Transfer Format Map File");
         addMagic("31 BE", "32 BE", "2&#xBE;");
-        addMagic("34 CD B2 A1", "n/a", "Extended tcpdump (libpcap) capture file (Linux/Unix)");
+        addMagic("34 CD B2 A1", "", "Extended tcpdump (libpcap) capture file (Linux/Unix)");
         addMagic("37 7A BC AF 27 1C", "7Z", "7-Zip compressed file");
-        addMagic("37 E4 53 96 C9 DB D6 07", "n/a", "zisofs compression format, recognized by some Linux kernels. See the");
+        addMagic("37 E4 53 96 C9 DB D6 07", "", "zisofs compression format, recognized by some Linux kernels. See the");
         addMagic("38 42 50 53", "PSD", "Photoshop image file");
         addMagic("3A 56 45 52 53 49 4F 4E", "SLE", "Surfplan kite project file");
         addMagic("3C", "ASX", "Advanced Stream redirector file");
@@ -153,7 +152,7 @@ public class MagicTask extends Task
         addMagic("3F 5F 03 00", "GID", "Windows Help index file");
         addMagic("41 43 31 30", "DWG", "Generic AutoCAD drawing");
         addMagic("41 43 76", "SLE", "Steganos Security Suite virtual secure drive");
-        addMagic("41 43 53 44", "n/a", "Miscellaneous AOL parameter and information files");
+        addMagic("41 43 53 44", "", "Miscellaneous AOL parameter and information files");
         addMagic("41 45 53", "AES", "AES Crypt");
         addMagic("41 4D 59 4F", "SYW", "Harvard Graphics symbol graphic");
         addMagic("41 4F 4C 20 46 65 65 64", "BAG", "AOL and AIM buddy list file");
@@ -163,7 +162,7 @@ public class MagicTask extends Task
         addMagic("41 4F 4C 56 4D 31 30 30", "ORG, PFC", "AOL personal file cabinet (PFC) file");
         addMagic("41 56 47 36 5F 49 6E 74", "DAT", "AVG6 Integrity database file");
         addMagic("41 72 43 01", "ARC", "FreeArc compressed file");
-        addMagic("42 41 41 44", "n/a", "NTFS Master File Table (MFT) entry (1,024 bytes)");
+        addMagic("42 41 41 44", "", "NTFS Master File Table (MFT) entry (1,024 bytes)");
         addMagic("42 45 47 49 4E 3A 56 43", "VCF", "vCard file");
         addMagic("42 4C 49 32 32 33 51", "BIN", "Thomson Speedtouch series WLAN router firmware");
         addMagic("42 4D", "BMP, DIB", "Windows (or device-independent) bitmap image");
@@ -199,7 +198,7 @@ public class MagicTask extends Task
         addMagic("46 41 58 43 4F 56 45 52", "CPE", "Microsoft Fax Cover Sheet");
         addMagic("46 44 42 48 00", "FDB", "Fiasco database definition file");
         addMagic("46 45 44 46", "SBV", "(Unknown file type)");
-        addMagic("46 49 4C 45", "n/a", "NTFS Master File Table (MFT) entry (1,024 bytes)");
+        addMagic("46 49 4C 45", "", "NTFS Master File Table (MFT) entry (1,024 bytes)");
         addMagic("46 4C 56 01", "FLV", "Flash video file");
         addMagic("46 4F 52 4D 00", "AIFF", "Audio Interchange File");
         addMagic("46 57 53", "SWF", "Macromedia Shockwave Flash player file");
@@ -229,7 +228,7 @@ public class MagicTask extends Task
         addMagic("4B 44 4D 56", "VMDK", "VMware 4 Virtual Disk (monolitic disk) file");
         addMagic("4B 47 42 5F 61 72 63 68", "KGB", "KGB archive");
         addMagic("4B 49 00 00", "SHD", "Windows 9x printer spool file");
-        addMagic("4B 57 41 4A 88 F0 27 D1", "n/a", "KWAJ file format used by DOS ");
+        addMagic("4B 57 41 4A 88 F0 27 D1", "", "KWAJ file format used by DOS ");
         addMagic("4C 00 00 00 01 14 02 00", "LNK", "Windows shortcut file. See also ");
         addMagic("4C 01", "OBJ", "Microsoft ");
         addMagic("4C 4E 02 00", "GID", "Windows Help index file");
@@ -254,7 +253,7 @@ public class MagicTask extends Task
         addMagic("4D 56 32 43", "MLS", "Milestones v2.1a project management and scheduling software");
         addMagic("4D 5A", "COM, DLL, DRV, EXE, PIF, QTS, QTX, SYS", "Windows/DOS executable file");
         addMagic("4D 5A 90 00 03 00 00 00", "API", "Acrobat plug-in");
-        addMagic("4D 5A 90 00 03 00 00 00", "ZAP", "ZoneAlam data file");
+        //addMagic("4D 5A 90 00 03 00 00 00", "ZAP", "ZoneAlam data file");
         addMagic("4D 69 63 72 6F 73 6F 66", "PDB", "Microsoft C++ debugging symbols file");
         addMagic("4D 69 63 72 6F 73 6F 66", "SLN", "Visual Studio .NET Solution file");
         addMagic("4D 73 52 63 66", "GDB", "VMapSource GPS Waypoint Database");
@@ -301,8 +300,8 @@ public class MagicTask extends Task
         addMagic("53 50 46 49 00", "SPF", "StorageCraft ShadownProtect backup file");
         addMagic("53 51 4C 4F 43 4F 4E 56", "CNV", "DB2 conversion file");
         addMagic("53 51 4C 69 74 65 20 66", "DB", "SQLite database file");
-        addMagic("53 5A 20 88 F0 27 33 D1", "n/a", "QBASIC SZDD file header variant. (See the SZDD or KWAJ format entries");
-        addMagic("53 5A 44 44 88 F0 27 33", "n/a", "SZDD file format used by DOS ");
+        addMagic("53 5A 20 88 F0 27 33 D1", "", "QBASIC SZDD file header variant. (See the SZDD or KWAJ format entries");
+        addMagic("53 5A 44 44 88 F0 27 33", "", "SZDD file format used by DOS ");
         addMagic("53 6D 62 6C", "SYM", "(Unconfirmed file type. Likely type is Harvard Graphics");
         addMagic("53 74 75 66 66 49 74 20", "SIT", "StuffIt compressed archive");
         addMagic("53 75 70 65 72 43 61 6C", "CAL", "SuperCalc worksheet");
@@ -331,7 +330,7 @@ public class MagicTask extends Task
         addMagic("5F 27 A8 89", "JAR", "Jar archive");
         addMagic("5F 43 41 53 45 5F", "CAS, CBK", "EnCase case file (and backup)");
         addMagic("60 EA", "ARJ", "Compressed archive file");
-        addMagic("62 65 67 69 6E", "n/a", "UUencoded files start with a string:");
+        addMagic("62 65 67 69 6E", "", "UUencoded files start with a string:");
         addMagic("62 70 6C 69 73 74", "plist", "Binary property list (plist)");
         addMagic("63 75 73 68 00 00 00 02", "CSH", "Photoshop Custom Shape");
         addMagic("64 00 00 00", "P10", "Intel PROset/Wireless Profile");
@@ -343,7 +342,7 @@ public class MagicTask extends Task
         addMagic("67 49 00 00", "SHD", "Windows 2000/XP printer spool file");
         addMagic("68 49 00 00", "SHD", "Windows Server 2003 printer spool file");
         addMagic("6C 33 33 6C", "DBB", "Skype user data file (profile and contacts)");
-        addMagic("6F 3C", "n/a", "Short Message Service (SMS), or text, message stored on a");
+        addMagic("6F 3C", "", "Short Message Service (SMS), or text, message stored on a");
         addMagic("72 65 67 66", "DAT", "Windows NT registry hive file");
         addMagic("72 69 66 66", "ACD", "Sonic Foundry Acid Music File (Sony)");
         addMagic("72 74 73 70 3A 2F 2F", "RAM", "RealMedia metafile");
@@ -358,7 +357,7 @@ public class MagicTask extends Task
         addMagic("7B 5C 70 77 69", "PWI", "Microsoft Windows Mobile personal note file");
         addMagic("7B 5C 72 74 66 31", "RTF", "Rich text format word processing file");
         addMagic("7E 42 4B 00", "PSP", "Corel Paint Shop Pro image file");
-        addMagic("7F 45 4C 46", "n/a", "Executable and Linking Format executable file (Linux/Unix)");
+        addMagic("7F 45 4C 46", "", "Executable and Linking Format executable file (Linux/Unix)");
         addMagic("80", "OBJ", "Relocatable object code");
         addMagic("80 00 00 20 03 12 04", "ADX", "Dreamcast audio file");
         addMagic("81 32 84 C1 85 05 D0 11", "WAB", "Outlook Express address book (Win95)");
@@ -370,11 +369,11 @@ public class MagicTask extends Task
         addMagic("99", "GPG", "GNU Privacy Guard (GPG) public keyring");
         addMagic("99 01", "PKR", "PGP public keyring file");
         addMagic("9C CB CB 8D 13 75 D2 11", "WAB", "Outlook address file");
-        addMagic("A1 B2 C3 D4", "n/a", "tcpdump (libpcap) capture file (Linux/Unix)");
-        addMagic("A1 B2 CD 34", "n/a", "Extended tcpdump (libpcap) capture file (Linux/Unix)");
+        addMagic("A1 B2 C3 D4", "", "tcpdump (libpcap) capture file (Linux/Unix)");
+        addMagic("A1 B2 CD 34", "", "Extended tcpdump (libpcap) capture file (Linux/Unix)");
         addMagic("A9 0D 00 00 00 00 00 00", "DAT", "Access Data FTK evidence file");
         addMagic("AC 9E BD 8F 00 00", "QDF", "Quicken data file");
-        addMagic("AC ED", "n/a", "Java serialization data (see ");
+        addMagic("AC ED", "SER", "Java serialization data");
         addMagic("AC ED 00 05 73 72 00 12", "PDB", "BGBlitz (professional Backgammon software) position database file");
         addMagic("B0 4D 46 43", "PWL", "Windows 95 password file");
         addMagic("B1 68 DE 3A", "DCX", "Graphics Multipage PCX bitmap file");
@@ -386,14 +385,14 @@ public class MagicTask extends Task
         addMagic("C8 00 79 00", "LBK", "Jeppesen FliteLog file");
         addMagic("CA FE BA BE", "CLASS", "Java bytecode file");
         addMagic("CA FE D0 0D", "CLASS", "Java bytecode file");
-        addMagic("CD 20 AA AA 02 00 00 00", "n/a", "Norton Anti-Virus quarantined virus file");
+        addMagic("CD 20 AA AA 02 00 00 00", "", "Norton Anti-Virus quarantined virus file");
         addMagic("CF 11 E0 A1 B1 1A E1 00", "DOC", "Perfect Office document");
         addMagic("CF AD 12 FE", "DBX", "Outlook Express e-mail folder");
         addMagic("D0 CF 11 E0 A1 B1 1A E1", "DOC, DOT, PPS, PPT, XLA, XLS, WIZ", "Microsoft Office applications (Word, Powerpoint, Excel, Wizard)");
         addMagic("DB", "MSC", "Microsoft Common Console Document");
         addMagic("D2 0A 00 00", "FTR", "GN Nettest WinPharoah filter file");
         addMagic("D4 2A", "ARL, AUT", "AOL history (ARL) and typed URL (AUT) files");
-        addMagic("D4 C3 B2 A1", "n/a", "WinDump (winpcap) capture file (Windows)");
+        addMagic("D4 C3 B2 A1", "", "WinDump (winpcap) capture file (Windows)");
         addMagic("D7 CD C6 9A", "WMF", "Windows graphics metafile");
         addMagic("DB A5 2D 00", "DOC", "Word 2.0 file");
         addMagic("DC DC", "CPL", "Corel color palette file");
@@ -405,16 +404,16 @@ public class MagicTask extends Task
         addMagic("EB", "COM, SYS", "Windows executable file");
         addMagic("EB 3C 90 2A", "IMG", "GEM Raster file");
         addMagic("ED AB EE DB", "RPM", "RedHat Package Manager file");
-        addMagic("EF BB BF", "n/a", "Byte-order mark for 8-bit Unicode Transformation Format");
-        addMagic("DB", "FE EF", "&#xFE;&#xEF;");
-        addMagic("FE FF", "n/a", "Byte-order mark for 16-bit Unicode Transformation Format/");
+        addMagic("EF BB BF", "", "Byte-order mark for 8-bit Unicode Transformation Format");
+        //addMagic("DB", "FE EF", "&#xFE;&#xEF;");
+        addMagic("FE FF", "", "Byte-order mark for 16-bit Unicode Transformation Format/");
         addMagic("FF", "SYS", "Windows executable (SYS) file");
         addMagic("FF 00 02 00 04 04 05 54", "WKS", "Works for Windows spreadsheet file");
         addMagic("FF 46 4F 4E 54", "CPI", "Windows international code page");
         addMagic("FF 4B 45 59 42 20 20 20", "SYS", "Keyboard driver file");
         addMagic("FF 57 50 43", "WP, WPD, WPG, WPP, WP5, WP6", "WordPerfect text and graphics file");
         addMagic("FF FE", "REG", "Windows Registry file");
-        addMagic("FF FE 00 00", "n/a", "Byte-order mark for 32-bit Unicode Transformation Format/");
+        addMagic("FF FE 00 00", "", "Byte-order mark for 32-bit Unicode Transformation Format/");
         addMagic("FF FE 23 00 6C 00 69 00", "MOF", "Windows MSinfo file");
         addMagic("FF FF FF FF", "SYS", "DOS system driver");
     }
@@ -440,7 +439,11 @@ public class MagicTask extends Task
             sb.append("\\x");
             sb.append(s);
         }
-        map.put(sb.toString(), ext + ":" + description);
+        String old = map.put(sb.toString(), ext + ":" + description);
+        if (old != null)
+        {
+            System.err.println(old+" duplicate with "+description);
+        }
     }
 
     @Override

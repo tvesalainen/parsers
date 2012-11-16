@@ -34,15 +34,23 @@ public abstract class Magic
 {
     static final String ERROR = "Error";
     static final String EOF = "Eof";
+    private static final String UNKNOWN = ":???";
     
-    public MagicResult quess(byte[] bytes)
+    public MagicResult guess(byte[] bytes)
     {
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        InputReader reader = new InputReader(bais, 64, "US-ASCII");
-        String result = input(reader);
-        return getResult(result);
+        if (bytes != null && bytes.length > 0)
+        {
+            ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+            InputReader reader = new InputReader(bais, 64, "US-ASCII");
+            String result = input(reader);
+            return getResult(result);
+        }
+        else
+        {
+            return getResult(UNKNOWN);
+        }
     }
-    public MagicResult quess(InputStream is) throws IOException
+    public MagicResult guess(InputStream is) throws IOException
     {
         try (InputReader reader = new InputReader(is, 64, "US-ASCII"))
         {
@@ -50,7 +58,7 @@ public abstract class Magic
             return getResult(result);
         }
     }
-    public MagicResult quess(File file) throws IOException
+    public MagicResult guess(File file) throws IOException
     {
         try (InputReader reader = new InputReader(file, 64, "US-ASCII"))
         {
@@ -62,7 +70,12 @@ public abstract class Magic
     
     public static Magic newInstance()
     {
-        return (Magic) ParserFactory.loadParserInstance(Magic.class);
+        Magic magic = (Magic) ParserFactory.loadParserInstance(Magic.class);
+        if (magic == null)
+        {
+            throw new NullPointerException();
+        }
+        return magic;
     }
 
     private MagicResult getResult(String result)
@@ -71,7 +84,7 @@ public abstract class Magic
         {
             case "Error":
             case "Eof":
-                return null;
+                return new MagicResult(UNKNOWN);
             default:
                 return new MagicResult(result);
         }

@@ -72,7 +72,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         FetchResult fr = new FetchResult<>(this, "Tablename");
         for (TableMetadata tm : getTables())
         {
-            fr.addRow(tm.getName());
+            fr.addRowArray(tm.getName());
         }
         return fr;
     }
@@ -83,7 +83,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         TableMetadata tm = getTableMetadata(tablename);
         for (ColumnMetadata cm : tm.getColumns())
         {
-            fr.addRow(cm.getName(), cm.getCount(), cm.isIndexed(), cm.isUnique());
+            fr.addRowArray(cm.getName(), cm.getCount(), cm.isIndexed(), cm.isUnique());
         }
         return fr;
     }
@@ -122,7 +122,19 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         Statement prepared = prepare(is);
         return prepared.execute();
     }
+    public UpdateableFetchResult<R,C> selectForUpdate(SelectStatement<R,C> select)
+    {
+        UpdateableFetchResult<R,C> result = new UpdateableFetchResult<>(this, select);
+        select(select, result);
+        return result;
+    }
     public OrderedFetchResult<R,C> select(SelectStatement<R,C> select)
+    {
+        OrderedFetchResult<R,C> result = new OrderedFetchResult<>(this, select);
+        select(select, result);
+        return result;
+    }
+    private void select(SelectStatement<R,C> select, OrderedFetchResult<R,C> result)
     {
         others = new ArrayMap<>(select.getTables());
         TableContextComparator tableContextComparator = getTableContextComparator();
@@ -136,7 +148,6 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
             tableList.add(tc);
         }
         Condition condition = select.getCondition();
-        OrderedFetchResult<R,C> result = new OrderedFetchResult<>(this, select);
         if (condition == null && select.getTableCount() > 1)
         {
             throw new IllegalArgumentException("no conditions");
@@ -156,7 +167,6 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         }
         ArrayMap<Table,R> rowCandidate = new ArrayMap<>(select.getTables());
         cartesian(condition, result, resultArray, rowCandidate);
-        return result;
     }
     
     private void cartesian(
@@ -235,18 +245,12 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
 
     public abstract Collection<R> fetch(TableContext<R, C> tableRange);
 
-    @Override
-    public abstract TableMetadata getTableMetadata(String tablename);
-
-    @Override
-    public abstract Iterable<TableMetadata> getTables();
-
     public abstract void insert(InsertStatement<R, C> insertStatement);
 
     public abstract void rollbackTransaction();
 
     public abstract void update(Collection<R> rows);
-
+    
     public abstract void exit();
 
     public abstract Class<? extends C> getDefaultPlaceholderType();
