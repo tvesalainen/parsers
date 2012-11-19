@@ -125,16 +125,16 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
     public UpdateableFetchResult<R,C> selectForUpdate(SelectStatement<R,C> select)
     {
         UpdateableFetchResult<R,C> result = new UpdateableFetchResult<>(this, select);
-        select(select, result);
+        select(select, result, true);
         return result;
     }
     public OrderedFetchResult<R,C> select(SelectStatement<R,C> select)
     {
         OrderedFetchResult<R,C> result = new OrderedFetchResult<>(this, select);
-        select(select, result);
+        select(select, result, false);
         return result;
     }
-    private void select(SelectStatement<R,C> select, OrderedFetchResult<R,C> result)
+    private void select(SelectStatement<R,C> select, OrderedFetchResult<R,C> result, boolean update)
     {
         others = new ArrayMap<>(select.getTables());
         TableContextComparator tableContextComparator = getTableContextComparator();
@@ -159,7 +159,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
             index--;
             Collections.sort(tableList, tableContextComparator);
             TableContext<R,C> currentTable = tableList.get(0);
-            Collection<R> rows = fetch(currentTable);
+            Collection<R> rows = fetch(currentTable, update);
             resultArray[index] = currentTable;
             currentTable.setData(rows);
             tableList.remove(currentTable);
@@ -243,7 +243,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
 
     public abstract Collection<R> fetch(Table<R, C> table);
 
-    public abstract Collection<R> fetch(TableContext<R, C> tableRange);
+    public abstract Collection<R> fetch(TableContext<R, C> tableRange, boolean update);
 
     public abstract void insert(InsertStatement<R, C> insertStatement);
 
