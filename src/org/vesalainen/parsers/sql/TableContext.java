@@ -88,7 +88,7 @@ public class TableContext<R,C>
     {
         assert all == null;
         all = new FastSet<>(rows, true);
-        for (String column : table.getIndexedColumns())
+        for (String column : table.getAndColumns())
         {
             NavigableMap<C,Set<R>> map = new TreeMap<>(selector.getComparator());
             indexes.put(column, map);
