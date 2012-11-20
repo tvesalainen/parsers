@@ -251,23 +251,6 @@ public abstract class SqlParser<R, C>
     {
         return new UpdateStatement<>(engine, placeholderMap, table, setClauseList, condition);
     }
-/*
-    @Rule("setClause")
-    protected List<SetClause<R, C>> setClauseList(SetClause<R, C> setClause)
-    {
-        List<SetClause<R, C>> list = new ArrayList<>();
-        list.add(setClause);
-        return list;
-    }
-
-    @Rule("setClauseList '\\,' setClause")
-    protected List<SetClause<R, C>> setClauseList(List<SetClause<R, C>> list, SetClause<R, C> setClause)
-    {
-        list.add(setClause);
-        return list;
-    }
-    * 
-    */
 
     @Rule("identifier '=' literal")
     protected SetClause<R, C> setClause(String identifier, Literal<R, C> literal)
@@ -395,23 +378,25 @@ public abstract class SqlParser<R, C>
 
     @Rule("identifier")
     protected ColumnReference selectSublist(
-            String identifier,
+            String column,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("correlationMap") Map<String, Table> correlationMap)
     {
         Table table = getTableForCorrelation(null, engine, correlationMap);
-        return new ColumnReferenceImpl(table, identifier);
+        table.addSelectListColumn(column);
+        return new ColumnReferenceImpl(table, column);
     }
 
     @Rule("identifier '\\.' identifier")
     protected ColumnReference selectSublist(
             String correlationName,
-            String identifier,
+            String column,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("correlationMap") Map<String, Table> correlationMap)
     {
         Table table = getTableForCorrelation(correlationName, engine, correlationMap);
-        return new ColumnReferenceImpl(table, correlationName, identifier);
+        table.addSelectListColumn(column);
+        return new ColumnReferenceImpl(table, correlationName, column);
     }
 
     @Rule("fromClause whereClause? orderByClause?")
@@ -655,13 +640,13 @@ public abstract class SqlParser<R, C>
 
     @Rule(left = "rowValuePredicant", value = "identifier")
     protected RowValue rowValuePredicant1(
-            String id1,
+            String column,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("correlationMap") Map<String, Table> correlationMap)
     {
         Table table = getTableForCorrelation(null, engine, correlationMap);
-        table.addColumn(id1);
-        return new ColumnReferenceImpl<>(table, id1);
+        table.addConditionColumn(column);
+        return new ColumnReferenceImpl<>(table, column);
     }
 
     @Rule(left = "rowValuePredicant", value = "identifier '\\.' identifier")
@@ -672,7 +657,7 @@ public abstract class SqlParser<R, C>
             @ParserContext("correlationMap") Map<String, Table> correlationMap)
     {
         Table table = getTableForCorrelation(correlationName, engine, correlationMap);
-        table.addColumn(column);
+        table.addConditionColumn(column);
         return new ColumnReferenceImpl<>(table, correlationName, column);
     }
 

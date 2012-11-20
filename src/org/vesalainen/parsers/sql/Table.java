@@ -27,8 +27,9 @@ public class Table<R,C> extends ParserLocator2Impl
 {
     protected Engine<R,C> selector;
     protected String name;
-    protected Set<String> columns = new HashSet<>();
-    protected Set<String> indexedColumns = new HashSet<>();
+    protected Set<String> selectListColumns = new HashSet<>();
+    protected Set<String> conditionColumns = new HashSet<>();
+    protected Set<String> andColumns = new HashSet<>();
     protected Set<ColumnCondition<R,C>> andConditions = new HashSet<>();
     protected Set<ColumnCondition<R,C>> conditions = new HashSet<>();
 
@@ -52,10 +53,21 @@ public class Table<R,C> extends ParserLocator2Impl
     {
         return name;
     }
-
-    public void addColumn(String identifier)
+    /**
+     * Add column found in select list
+     * @param column 
+     */
+    public void addSelectListColumn(String column)
     {
-        columns.add(identifier);
+        selectListColumns.add(column);
+    }
+    /**
+     * Add column found in condition
+     * @param column 
+     */
+    public void addConditionColumn(String column)
+    {
+        conditionColumns.add(column);
     }
 
     public void associateCondition(ColumnCondition<R,C> condition, boolean andPath)
@@ -64,23 +76,40 @@ public class Table<R,C> extends ParserLocator2Impl
         if (andPath)
         {
             andConditions.add(condition);
-            indexedColumns.add(condition.getColumn());
+            andColumns.add(condition.getColumn());
         }
     }
-
-    public Set<String> getColumns()
+    /**
+     * Return select list columns
+     * @return 
+     */
+    public Set<String> getSelectListColumns()
     {
-        return columns;
+        return selectListColumns;
     }
-
-    public void addIndexedColumn(String column)
+    /**
+     * Return condition columns
+     * @return 
+     */
+    public Set<String> getConditionColumns()
     {
-        indexedColumns.add(column);
+        return conditionColumns;
     }
-    
-    public Set<String> getIndexedColumns()
+    /**
+     * Add condition column in and path. 
+     * @param column 
+     */
+    public void addAndColumn(String column)
     {
-        return indexedColumns;
+        andColumns.add(column);
+    }
+    /**
+     * Return condition columns in and path
+     * @return 
+     */
+    public Set<String> getAndColumns()
+    {
+        return andColumns;
     }
 
     public Set<ColumnCondition<R,C>> getConditions()
