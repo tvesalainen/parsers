@@ -18,7 +18,6 @@ package org.vesalainen.parsers.sql;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -109,7 +108,7 @@ public abstract class SqlParser<R, C>
             String sql,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("correlationMap") Map<String, Table> correlationMap,
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("locator") SQLLocator locator
             );
     /**
@@ -129,7 +128,7 @@ public abstract class SqlParser<R, C>
             InputStream is,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("correlationMap") Map<String, Table> correlationMap,
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("locator") SQLLocator locator
             );
     /**
@@ -150,7 +149,7 @@ public abstract class SqlParser<R, C>
             String sql,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("correlationMap") Map<String, Table> correlationMap,
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("locator") SQLLocator locator
             );
     /**
@@ -171,7 +170,7 @@ public abstract class SqlParser<R, C>
             InputStream is,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("correlationMap") Map<String, Table> correlationMap,
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("locator") SQLLocator locator
             );
 
@@ -792,6 +791,18 @@ public abstract class SqlParser<R, C>
             )
     {
         Placeholder placeholder = new PlaceholderImpl<>(identifier, type);
+        placeholderMap.put(identifier, placeholder);
+        return placeholder;
+    }
+
+    @Rule("':' identifier literal")
+    protected Literal<R, C> literal(
+            String identifier, 
+            Literal<R, C> lit,
+            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap
+            )
+    {
+        Placeholder placeholder = new PlaceholderImpl<>(identifier, lit);
         placeholderMap.put(identifier, placeholder);
         return placeholder;
     }

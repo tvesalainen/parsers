@@ -55,14 +55,14 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
     public Statement prepare(String sql)
     {
         Map<String,Table> correlationMap = new HashMap<>();
-        Map<String,Placeholder> placeholderMap = new LinkedHashMap<>();
+        LinkedHashMap<String,Placeholder> placeholderMap = new LinkedHashMap<>();
         return parser.parse(sql, this, correlationMap, placeholderMap, null);
     }
     
     public Statement prepare(InputStream is)
     {
         Map<String,Table> correlationMap = new HashMap<>();
-        Map<String,Placeholder> placeholderMap = new HashMap<>();
+        LinkedHashMap<String,Placeholder> placeholderMap = new LinkedHashMap<>();
         return parser.parse(is, this, correlationMap, placeholderMap, null);
     }
     

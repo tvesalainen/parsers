@@ -32,6 +32,19 @@ public class PlaceholderImpl<R,C> extends LiteralImpl<R,C> implements Placeholde
         this.type = type;
     }
 
+    public PlaceholderImpl(String name, Literal<R,C> defaultValue)
+    {
+        super(null);
+        this.name = name;
+        C val = defaultValue.getValue();
+        if (val == null)
+        {
+            throw new IllegalArgumentException("Placeholder :"+name+" default value = null! Nested placeholders not supported!");
+        }
+        this.value = val;
+        this.type = (Class<? extends C>) val.getClass();
+    }
+
     @Override
     public void bindValue(C value)
     {
