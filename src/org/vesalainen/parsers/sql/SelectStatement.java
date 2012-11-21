@@ -19,6 +19,7 @@ package org.vesalainen.parsers.sql;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
     private Metadata metadata;
     private ErrorReporter reporter;
 
-    public SelectStatement(Engine<R, C> engine, Map<String, Placeholder> placeholderMap, List<ColumnReference> selectList, TableExpression tableExpression, Map<String,Table> correlationMap)
+    public SelectStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, List<ColumnReference> selectList, TableExpression tableExpression, Map<String,Table> correlationMap)
     {
         super(engine, placeholderMap);
         this.subList = selectList;

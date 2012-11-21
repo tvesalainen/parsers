@@ -17,7 +17,7 @@
 
 package org.vesalainen.parsers.sql;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * @author Timo Vesalainen
@@ -25,7 +25,7 @@ import java.util.Map;
 public class ShowStatement<R,C> extends Statement<R,C>
 {
     private String identifier;
-    public ShowStatement(Engine<R,C> engine, Map<String, Placeholder> placeholderMap, String identifier)
+    public ShowStatement(Engine<R,C> engine, LinkedHashMap<String, Placeholder> placeholderMap, String identifier)
     {
         super(engine, placeholderMap);
         this.identifier = identifier;

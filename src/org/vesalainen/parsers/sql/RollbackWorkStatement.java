@@ -17,7 +17,7 @@
 
 package org.vesalainen.parsers.sql;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * @author Timo Vesalainen
@@ -25,7 +25,7 @@ import java.util.Map;
 public class RollbackWorkStatement<R,C,T> extends Statement<R,C>
 {
 
-    public RollbackWorkStatement(Engine<R, C> engine, Map<String, Placeholder> placeholderMap)
+    public RollbackWorkStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap)
     {
         super(engine, placeholderMap);
     }

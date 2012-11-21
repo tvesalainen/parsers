@@ -18,19 +18,19 @@
 package org.vesalainen.parsers.sql;
 
 import java.util.Collection;
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * @author Timo Vesalainen
  */
 public class DeleteStatement<R,C> extends WhereStatement<R,C>
 {
-    public DeleteStatement(Engine<R,C> engine, Map<String, Placeholder> placeholderMap, Table<R,C> table, Condition<R,C> condition)
+    public DeleteStatement(Engine<R,C> engine, LinkedHashMap<String, Placeholder> placeholderMap, Table<R,C> table, Condition<R,C> condition)
     {
         super(engine, placeholderMap, table, condition);
     }
     
-    public DeleteStatement(Engine<R,C> engine, Map<String, Placeholder> placeholderMap, Table<R,C> table)
+    public DeleteStatement(Engine<R,C> engine, LinkedHashMap<String, Placeholder> placeholderMap, Table<R,C> table)
     {
         super(engine, placeholderMap, table);
     }

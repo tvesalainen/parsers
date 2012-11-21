@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.vesalainen.parser.ParserConstants;
@@ -205,7 +206,7 @@ public abstract class SqlParser<R, C>
         @Rule("begin work?")
     })
     protected Statement<R, C> beginWork(
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -214,7 +215,7 @@ public abstract class SqlParser<R, C>
 
     @Rule("commit work?")
     protected Statement<R, C> commitWork(
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -223,7 +224,7 @@ public abstract class SqlParser<R, C>
 
     @Rule("rollback work?")
     protected Statement<R, C> rollbackWork(
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -234,7 +235,7 @@ public abstract class SqlParser<R, C>
     protected Statement<R, C> updateStatementSearched(
             Table<R, C> table, 
             List<SetClause<R, C>> setClauseList, 
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -246,7 +247,7 @@ public abstract class SqlParser<R, C>
             Table<R, C> table, 
             List<SetClause<R, C>> setClauseList, 
             Condition<R, C> condition, 
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine)
     {
         return new UpdateStatement<>(engine, placeholderMap, table, setClauseList, condition);
@@ -261,7 +262,7 @@ public abstract class SqlParser<R, C>
     @Rule("delete from targetTable")
     protected Statement<R, C> deleteStatementSearched(
             Table<R, C> table, 
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -272,7 +273,7 @@ public abstract class SqlParser<R, C>
     protected Statement<R, C> deleteStatementSearched(
             Table<R, C> table, 
             Condition<R, C> condition, 
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -283,7 +284,7 @@ public abstract class SqlParser<R, C>
     protected Statement<R, C> insertStatement(
             Table<R, C> table, 
             InsertColumnsAndSource<R, C> insertColumnsAndSource, 
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -327,7 +328,7 @@ public abstract class SqlParser<R, C>
     @Rule("show identifier")
     protected Statement showSpecification(
             String identifier, 
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -337,7 +338,7 @@ public abstract class SqlParser<R, C>
     @Rule("describe identifier")
     protected Statement describeSpecification(
             String identifier, 
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -348,7 +349,7 @@ public abstract class SqlParser<R, C>
     protected Statement querySpecification(
             List<ColumnReference> selectList,
             TableExpression tableExpression,
-            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("correlationMap") Map<String, Table> correlationMap)
     {

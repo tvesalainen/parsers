@@ -16,7 +16,7 @@
  */
 package org.vesalainen.parsers.sql;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -25,15 +25,15 @@ import java.util.Map;
 public abstract class Statement<R,C>
 {
     protected Engine<R,C> engine;
-    protected Map<String,Placeholder> placeholderMap;
+    protected LinkedHashMap<String,Placeholder> placeholderMap;
 
-    public Statement(Engine<R, C> engine, Map<String, Placeholder> placeholderMap)
+    public Statement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap)
     {
         this.engine = engine;
         this.placeholderMap = placeholderMap;
     }
 
-    public Map<String, Placeholder> getPlaceholderMap()
+    public LinkedHashMap<String, Placeholder> getPlaceholderMap()
     {
         return placeholderMap;
     }

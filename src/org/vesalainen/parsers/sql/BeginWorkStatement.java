@@ -17,6 +17,7 @@
 
 package org.vesalainen.parsers.sql;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -25,7 +26,7 @@ import java.util.Map;
 public class BeginWorkStatement<R,C,T> extends Statement<R,C>
 {
 
-    public BeginWorkStatement(Engine<R, C> engine, Map<String, Placeholder> placeholderMap)
+    public BeginWorkStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap)
     {
         super(engine, placeholderMap);
     }

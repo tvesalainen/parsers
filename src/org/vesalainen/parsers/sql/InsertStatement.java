@@ -19,6 +19,7 @@ package org.vesalainen.parsers.sql;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -29,7 +30,7 @@ public class InsertStatement<R,C> extends Statement<R,C>
     private Table<R, C> table;
     private Map<String,Literal<R,C>> valueMap = new HashMap<>();
 
-    public InsertStatement(Engine<R, C> engine, Map<String, Placeholder> placeholderMap, Table<R, C> table, InsertColumnsAndSource<R,C> insertColumnsAndSource)
+    public InsertStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, Table<R, C> table, InsertColumnsAndSource<R,C> insertColumnsAndSource)
     {
         super(engine, placeholderMap);
         this.table = table;
