@@ -218,40 +218,80 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
             level--;
         }
     }
-    
+    /**
+     * Factory method for creating TableContextComparator
+     * @return 
+     */
     protected TableContextComparator getTableContextComparator()
     {
         return new TableContextComparator(this);
     }
-
+    /**
+     * Factory method for creating Table
+     * @return 
+     */
     protected Table<R,C> createTable()
     {
         return new Table<>(this);
     }
-
+    /**
+     * Factory method for creating TableContext
+     * @param table Current table
+     * @param others Connection map to other joining tables
+     * @return 
+     */
     protected TableContext<R,C> createTableContext(Table table, ArrayMap<Table, TableContext<R, C>> others)
     {
         return new TableContext<>(this, table, others);
     }
-
+    /**
+     * Begin transaction
+     */
     public abstract void beginTransaction();
-
+    /**
+     * Commit transaction
+     */
     public abstract void commitTransaction();
-
+    /**
+     * Delete collection of rows
+     * @param rows 
+     */
     public abstract void delete(Collection<R> rows);
-
+    /**
+     * Non joined fetch
+     * @param table Fetched table
+     * @return 
+     */
     public abstract Collection<R> fetch(Table<R, C> table);
-
-    public abstract Collection<R> fetch(TableContext<R, C> tableRange, boolean update);
-
+    /**
+     * Joined fetch
+     * @param tableContext 
+     * @param update If true the resulting rows will be updated.
+     * @return 
+     */
+    public abstract Collection<R> fetch(TableContext<R, C> tableContext, boolean update);
+    /**
+     * Execute insert statement
+     * @param insertStatement 
+     */
     public abstract void insert(InsertStatement<R, C> insertStatement);
-
+    /**
+     * Rolls back trancation
+     */
     public abstract void rollbackTransaction();
-
+    /**
+     * Update rows.
+     * @param rows 
+     */
     public abstract void update(Collection<R> rows);
-    
+    /**
+     * Application is about to exit
+     */
     public abstract void exit();
-
+    /**
+     * Returns the default placeholder type.
+     * @return 
+     */
     public abstract Class<? extends C> getDefaultPlaceholderType();
     
 }

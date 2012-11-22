@@ -38,7 +38,6 @@ public class ParserLocator2Impl implements ParserLocator2
     @Override
     public void setLocation(String source, int start, int end)
     {
-        System.err.println(this+" "+start+" - "+end);
         this.source = source;
         this.start = start;
         this.end = end;

@@ -17,13 +17,33 @@
 package org.vesalainen.parsers.sql;
 
 /**
- *
+ * ColumnCondition implements a condition related to tables column. Example is 
+ * emp.name = 'John' or emp.name like 'J%'
  * @author Timo Vesalainen
  */
 public interface ColumnCondition<R,C> extends Condition<R,C>
 {
+    /**
+     * Returns the column name
+     * @return 
+     */
     String getColumn();
-    TruthValue matches(SQLConverter<R,C> selector, R row);
-    void narrow(SQLConverter<R,C> selector, Range<C> range);
+    /**
+     * Tests the condition against one table row.
+     * @param converter SQLCOnverter
+     * @param row Tested row
+     * @return 
+     */
+    TruthValue matches(SQLConverter<R,C> converter, R row);
+    /**
+     * Possibility to narrow columns value range
+     * @param converter
+     * @param range 
+     */
+    void narrow(SQLConverter<R,C> converter, Range<C> range);
+    /**
+     * Return the column reference
+     * @return 
+     */
     ColumnReference<R,C> getColumnReference();
 }
