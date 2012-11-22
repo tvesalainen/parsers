@@ -410,10 +410,16 @@ public abstract class SqlParser<R, C>
     }
 
     @Rule("from tableReference ('\\,' tableReference)*")
-    protected void fromClause(Table table, List<Table> list)
+    protected void fromClause(
+            Table table, 
+            List<Table> list,
+            @ParserContext("correlationMap") Map<String, Table> correlationMap
+            )
     {
-        // tables are put in correlationMap in this point already.
-        // tableReference returns table object just to have them located.
+        if (correlationMap.size() == 1)
+        {
+            correlationMap.put(null, table);
+        }
     }
 
     @Rule("identifier")

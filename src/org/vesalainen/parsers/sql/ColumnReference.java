@@ -24,10 +24,11 @@ import org.vesalainen.parsers.sql.util.ArrayMap;
  */
 public interface ColumnReference<R,C> extends RowValue<R, C>
 {
-    void associateCondition(Condition condition, boolean andPath);
+    void associateCondition(Condition<R, C> condition, boolean andPath);
     String getColumn();
     String getCorrelation();
-    Table getTable();
+    Table<R, C> getTable();
+    void setTable(Table<R, C> table);
     C getValue(SQLConverter<R,C> selector, R row);
     C getValue(SQLConverter<R,C> selector, ArrayMap<Table<R,C>,R> rowCandidate);
 

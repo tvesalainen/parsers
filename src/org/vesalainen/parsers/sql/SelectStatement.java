@@ -42,19 +42,6 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         this.correlationMap = correlationMap;
         this.condition = tableExpression.getCondition();
         this.sortSpecification = tableExpression.getSortSpecificationList();
-        if (correlationMap.containsKey(null))
-        {
-            if (correlationMap.size() == 2) // Eg. select t.a, b from t
-            {
-                correlationMap.remove(null);
-                correlationMap.put(null, correlationMap.values().iterator().next());
-            }
-            else
-            {
-                Table nullTable = correlationMap.get(null);
-                nullTable.throwException("ambiguous table");
-            }
-        }
         if (condition != null)
         {
             condition.associateCondition(this, true);
@@ -151,33 +138,29 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         }
         else
         {
-            if (table.getName().equalsIgnoreCase(cf.getCorrelation()))
+            TableMetadata tm = metadata.getTableMetadata(table.getName());
+            if (tm != null)
             {
-                TableMetadata tm = metadata.getTableMetadata(cf.getCorrelation());
-                if (tm != null)
+                if (!table.getName().equals(tm.getName()))
                 {
-                    if (!cf.getCorrelation().equals(tm.getName()))
+                    reporter.replace(tm.getName(), cf.getStart(), cf.getStart()+tm.getName().length());
+                }
+                ColumnMetadata cm = tm.getColumnMetadata(cf.getColumn());
+                if (cm != null)
+                {
+                    if (!cf.getColumn().equals(cm.getName()))
                     {
-                        reporter.replace(tm.getName(), cf.getStart(), cf.getStart()+tm.getName().length());
-                    }
-                    ColumnMetadata cm = tm.getColumnMetadata(cf.getColumn());
-                    if (cm != null)
-                    {
-                        if (!cf.getColumn().equals(cm.getName()))
-                        {
-                            reporter.replace(cm.getName(), cf.getEnd()-cf.getColumn().length(), cf.getEnd());
-                        }
-
-                    }
-                    else
-                    {
-                        reporter.report("column "+cf.getColumn()+" not defined", ErrorReporter.Level.Hint, cf.getSource(), cf.getEnd()-cf.getColumn().length(), cf.getEnd());
+                        reporter.replace(cm.getName(), cf.getEnd()-cf.getColumn().length(), cf.getEnd());
                     }
                 }
                 else
                 {
-                    reporter.report("table "+cf.getCorrelation()+" not defined", ErrorReporter.Level.Hint, cf.getSource(), cf.getStart(), cf.getEnd());
+                    reporter.report("column "+cf.getColumn()+" not defined", ErrorReporter.Level.Hint, cf.getSource(), cf.getEnd()-cf.getColumn().length(), cf.getEnd());
                 }
+            }
+            else
+            {
+                reporter.report("table "+table.getName()+" not defined", ErrorReporter.Level.Hint, cf.getSource(), cf.getStart(), cf.getEnd());
             }
         }
     }

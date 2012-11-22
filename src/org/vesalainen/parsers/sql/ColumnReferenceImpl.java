@@ -25,24 +25,24 @@ import java.util.Objects;
  */
 public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements ColumnReference<R,C>
 {
-    protected Table table;
+    protected Table<R, C> table;
     protected String correlation;
     protected String column;
 
-    public ColumnReferenceImpl(Table table, String column)
+    public ColumnReferenceImpl(Table<R, C> table, String column)
     {
         this.table = table;
         this.column = column;
     }
 
-    public ColumnReferenceImpl(Table table, String correlation, String column)
+    public ColumnReferenceImpl(Table<R, C> table, String correlation, String column)
     {
         this.table = table;
         this.correlation = correlation;
         this.column = column;
     }
 
-    public Table getTable()
+    public Table<R, C> getTable()
     {
         return table;
     }
@@ -90,11 +90,11 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
     }
 
     @Override
-    public void associateCondition(Condition condition, boolean andPath)
+    public void associateCondition(Condition<R, C> condition, boolean andPath)
     {
         if (condition instanceof ColumnCondition)
         {
-            ColumnCondition tc = (ColumnCondition) condition;
+            ColumnCondition<R, C> tc = (ColumnCondition) condition;
             table.associateCondition(tc, andPath);
         }
     }
@@ -122,6 +122,26 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
     public String toString()
     {
         return table + "." + column;
+    }
+
+    @Override
+    public void setTable(Table<R, C> table)
+    {
+        this.table = table;
+    }
+
+    @Override
+    public int getEnd()
+    {
+        int start = getStart();
+        if (correlation != null)
+        {
+            return start+correlation.length()+1+column.length();
+        }
+        else
+        {
+            return start+column.length();
+        }
     }
 
 }
