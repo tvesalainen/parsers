@@ -116,10 +116,20 @@
             destdir="${build.classes.dir}"
             debug="false"
             />
+        <!--
         <parsercomp
             src="org.vesalainen.parsers.sql.SqlParser"
             destdir="${build.classes.dir}"
             srcdir="${src.dir}"
+            />
+            -->
+        <taskdef
+            name="magictask"
+            classname="org.vesalainen.parsers.magic.MagicTask"
+            classpath="${run.classpath}"
+            />
+        <magictask
+            destdir="${build.classes.dir}"
             />
     </target>
     <target name="-post-jar">
