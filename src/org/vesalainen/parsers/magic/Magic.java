@@ -34,7 +34,7 @@ public abstract class Magic
 {
     static final String ERROR = "Error";
     static final String EOF = "Eof";
-    private static final String UNKNOWN = ":???";
+    private static final String UNKNOWN = ":unknown";
     
     public MagicResult guess(byte[] bytes)
     {
