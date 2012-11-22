@@ -22,7 +22,7 @@ package org.vesalainen.parsers.sql;
  */
 public interface ErrorReporter
 {
-    enum Level {Hint, Fatal};
+    enum Level {Ok, Hint, Fatal};
     void report(String message, Level level, String source, int start, int end);
     void replace(String newText, int start, int end);
 }

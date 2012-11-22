@@ -17,6 +17,7 @@
 package org.vesalainen.parsers.sql;
 
 import java.util.LinkedHashMap;
+import org.vesalainen.parsers.sql.ErrorReporter.Level;
 
 /**
  *
@@ -49,13 +50,6 @@ public abstract class Statement<R,C>
     }
     public void check(Metadata metadata, ErrorReporter reporter)
     {
-        for (Placeholder ph : placeholderMap.values())
-        {
-            if (!ph.isBound())
-            {
-                reporter.report("Unbound placeholder "+ph.getName(), ErrorReporter.Level.Fatal, ph.getSource(), ph.getStart(), ph.getEnd());
-            }
-        }
     }
     public abstract FetchResult<R,C> execute();
     

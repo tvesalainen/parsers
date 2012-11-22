@@ -230,25 +230,29 @@ public abstract class SqlParser<R, C>
         return new RollbackWorkStatement<>(engine, placeholderMap);
     }
 
-    @Rule("update targetTable set setClause+")
+    @Rule("update targetTable set setClause ( '\\,' setClause)*")
     protected Statement<R, C> updateStatementSearched(
             Table<R, C> table, 
+            SetClause<R, C> setClause, 
             List<SetClause<R, C>> setClauseList, 
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
+        setClauseList.add(0, setClause);
         return new UpdateStatement<>(engine, placeholderMap, table, setClauseList);
     }
 
-    @Rule("update targetTable set setClause+ where searchCondition")
+    @Rule("update targetTable set setClause ( '\\,' setClause)* where searchCondition")
     protected Statement<R, C> updateStatementSearched(
             Table<R, C> table, 
+            SetClause<R, C> setClause, 
             List<SetClause<R, C>> setClauseList, 
             Condition<R, C> condition, 
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine)
     {
+        setClauseList.add(0, setClause);
         return new UpdateStatement<>(engine, placeholderMap, table, setClauseList, condition);
     }
 
@@ -783,8 +787,11 @@ public abstract class SqlParser<R, C>
         return new NotCondition(nullPredicate1(rv));
     }
 
+    @Rule("placeholder")
+    protected abstract Literal<R, C> literal(Literal<R, C> placeholder);
+
     @Rule("':' identifier placeholderType")
-    protected Literal<R, C> literal(
+    protected Literal<R, C> placeholder(
             String identifier, 
             Class<? extends C> type,
             @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap
@@ -796,7 +803,7 @@ public abstract class SqlParser<R, C>
     }
 
     @Rule("':' identifier literal")
-    protected Literal<R, C> literal(
+    protected Literal<R, C> placeholder(
             String identifier, 
             Literal<R, C> lit,
             @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap
@@ -930,7 +937,7 @@ public abstract class SqlParser<R, C>
         "time",
         "timestamp",
         "show",
-        "tables",
+        "tables"
     },
     options =
     {

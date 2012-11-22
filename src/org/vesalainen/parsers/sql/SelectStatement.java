@@ -42,6 +42,19 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         this.correlationMap = correlationMap;
         this.condition = tableExpression.getCondition();
         this.sortSpecification = tableExpression.getSortSpecificationList();
+        if (correlationMap.containsKey(null))
+        {
+            if (correlationMap.size() == 2) // Eg. select t.a, b from t
+            {
+                correlationMap.remove(null);
+                correlationMap.put(null, correlationMap.values().iterator().next());
+            }
+            else
+            {
+                Table nullTable = correlationMap.get(null);
+                nullTable.throwException("ambiguous table");
+            }
+        }
         if (condition != null)
         {
             condition.associateCondition(this, true);
