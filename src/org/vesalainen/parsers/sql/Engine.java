@@ -139,7 +139,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         TableContextComparator tableContextComparator = getTableContextComparator();
         ArrayMap<Table,TableContext<R,C>> tableResults = new ArrayMap<>(select.getTables());
         List<TableContext<R,C>> tableList = new ArrayList<>();
-        for (Table table : select.getCorrelationMap().values())
+        for (Table table : select.getTables())
         {
             TableContext<R, C> tc = createTableContext(table, others);
             others.put(table, tc);
@@ -266,7 +266,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
     /**
      * Joined fetch
      * @param tableContext 
-     * @param update If true the resulting rows will be updated.
+     * @param updateAndCommit If true the resulting rows will be updated.
      * @return 
      */
     public abstract Collection<R> fetch(TableContext<R, C> tableContext, boolean update);

@@ -108,10 +108,16 @@ public class UpdateableFetchResult<R,C> extends OrderedFetchResult<R,C>
         
     }
 
-    public void update()
+    public void rollback()
+    {
+        engine.rollbackTransaction();
+    }
+    
+    public void updateAndCommit()
     {
         engine.delete(deleted);
         engine.update(updated);
+        engine.commitTransaction();
     }
     
     public class DataIterator implements Iterator<C[]>

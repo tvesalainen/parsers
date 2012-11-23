@@ -19,9 +19,11 @@ package org.vesalainen.parsers.sql;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Timo Vesalainen
@@ -29,6 +31,7 @@ import java.util.Map;
 public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVisitor
 {
     private List<ColumnReference> subList;
+    private Set<Table> tableSet = new HashSet<>();
     private Map<String,Table> correlationMap;
     private Condition<R,C> condition;
     private List<SortSpecification> sortSpecification;
@@ -40,6 +43,7 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         super(engine, placeholderMap);
         this.subList = selectList;
         this.correlationMap = correlationMap;
+        tableSet.addAll(correlationMap.values());
         this.condition = tableExpression.getCondition();
         this.sortSpecification = tableExpression.getSortSpecificationList();
         if (condition != null)
@@ -173,12 +177,13 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
     
     public UpdateableFetchResult selectForUpdate()
     {
+        engine.beginTransaction();
         return engine.selectForUpdate(this);
     }
     
     public Collection<Table> getTables()
     {
-        return correlationMap.values();
+        return tableSet;
     }
 
     void setTableReference(String table)
@@ -209,11 +214,6 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
     public Condition getCondition()
     {
         return condition;
-    }
-
-    public Map<String, Table> getCorrelationMap()
-    {
-        return correlationMap;
     }
 
     public List<SortSpecification> getSortSpecification()
@@ -249,7 +249,7 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
 
     public int getTableCount()
     {
-        return correlationMap.values().size();
+        return tableSet.size();
     }
 
     public String[] getHeader()
