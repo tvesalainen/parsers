@@ -36,7 +36,7 @@ public class OrderedFetchResult<R,C> extends FetchResult<R,C>
 
     public OrderedFetchResult(Engine<R,C> engine, SelectStatement<R,C> select)
     {
-        super(engine, select.getHeader());
+        super(engine, select.getSelectList());
         data = new ArrayList<>();
         this.columnReferences = select.getReferencedColumns();
         length = columnReferences.size();

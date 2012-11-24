@@ -221,7 +221,7 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         return sortSpecification;
     }
 
-    public List<ColumnReference> getSubList()
+    public List<ColumnReference> getSelectList()
     {
         return subList;
     }
@@ -250,17 +250,6 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
     public int getTableCount()
     {
         return tableSet.size();
-    }
-
-    public String[] getHeader()
-    {
-        String[] hdr = new String[subList.size()];
-        int index = 0;
-        for (ColumnReference cf : subList)
-        {
-            hdr[index++] = cf.getColumn();
-        }
-        return hdr;
     }
 
 }

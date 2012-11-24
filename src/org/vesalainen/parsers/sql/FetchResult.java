@@ -18,10 +18,8 @@ package org.vesalainen.parsers.sql;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import org.vesalainen.parsers.sql.util.ArrayMap;
 
 /**
  * @author Timo Vesalainen
@@ -30,15 +28,34 @@ public class FetchResult<R, C> implements Iterable<C[]>
 {
 
     protected Engine<R, C> engine;
+    protected List<ColumnReference<R,C>> subList;
     protected String[] header;
     protected int[] columnLength;
     protected List<C[]> data;
     protected int length;
 
-    public FetchResult(Engine<R, C> selector, String... header)
+    public FetchResult(Engine<R, C> engine, List<ColumnReference<R,C>> subList)
     {
-        this.engine = selector;
+        this.engine = engine;
+        this.subList = subList;
+        String[] hdr = new String[subList.size()];
+        int index = 0;
+        for (ColumnReference cf : subList)
+        {
+            hdr[index++] = cf.getColumn();
+        }
+        header = hdr;
+        init();
+    }
+
+    public FetchResult(Engine<R, C> engine, String... header)
+    {
+        this.engine = engine;
         this.header = header;
+        init();
+    }
+    private void init()
+    {
         data = new ArrayList<>();
         columnLength = new int[header.length];
         int index = 0;
@@ -48,6 +65,15 @@ public class FetchResult<R, C> implements Iterable<C[]>
         }
     }
 
+    public List<ColumnReference<R,C>> getSelectList()
+    {
+        return subList;
+    }
+    
+    /**
+     * Returns column headers
+     * @return 
+     */
     public String[] getHeader()
     {
         return header;
