@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+import org.vesalainen.bcc.BulkCompiler;
 import org.vesalainen.bcc.SubClass;
 import org.vesalainen.bcc.type.ClassWrapper;
 import org.vesalainen.bcc.type.MethodWrapper;
@@ -440,41 +441,56 @@ public class MagicTask extends Task
     {
         try
         {
-            RegexParser<String> regexParser = (RegexParser<String>) RegexParser.newInstance();
-            Scope<NFAState<String>> nfaScope = new Scope<>("magic");
-            Scope<DFAState<String>> dfaScope = new Scope<>("magic");
-            NFA<String> nfa = null;
-            for (Entry<String, String> entry : map.entrySet())
-            {
-                String expression = entry.getKey();
-                String token = entry.getValue();
-                if (nfa == null)
-                {
-                    nfa = regexParser.createNFA(nfaScope, expression, token);
-                }
-                else
-                {
-                    NFA<String> nfa2 = regexParser.createNFA(nfaScope, expression, token);
-                    nfa = new NFA(nfaScope, nfa, nfa2);
-                }
-            }
             Class<?> superClass = Magic.class;
             ClassWrapper thisClass = ClassWrapper.wrap(superClass.getName() + "Impl", superClass);
-            SubClass subClass = new SubClass(thisClass);
-            subClass.codeDefaultConstructor();
-            log("constructing magic DFA");
-            DFA dfa = nfa.constructDFA(dfaScope);
-            MethodWrapper mw = MethodWrapper.wrap(Magic.class.getDeclaredMethod("input", InputReader.class));
-            MatchCompiler<String> ic = new MatchCompiler<>(dfa, Magic.ERROR, Magic.EOF);
-            mw.setImplementor(ic);
-            log("implementing " + mw);
-            subClass.implement(mw);
-            log("saving " + thisClass + " to " + destdir);
-            subClass.save(destdir);
+            if (needsCompiling(superClass, thisClass))
+            {
+                RegexParser<String> regexParser = (RegexParser<String>) RegexParser.newInstance();
+                Scope<NFAState<String>> nfaScope = new Scope<>("magic");
+                Scope<DFAState<String>> dfaScope = new Scope<>("magic");
+                NFA<String> nfa = null;
+                for (Entry<String, String> entry : map.entrySet())
+                {
+                    String expression = entry.getKey();
+                    String token = entry.getValue();
+                    if (nfa == null)
+                    {
+                        nfa = regexParser.createNFA(nfaScope, expression, token);
+                    }
+                    else
+                    {
+                        NFA<String> nfa2 = regexParser.createNFA(nfaScope, expression, token);
+                        nfa = new NFA(nfaScope, nfa, nfa2);
+                    }
+                }
+                SubClass subClass = new SubClass(thisClass);
+                subClass.codeDefaultConstructor();
+                log("constructing magic DFA");
+                DFA dfa = nfa.constructDFA(dfaScope);
+                MethodWrapper mw = MethodWrapper.wrap(Magic.class.getDeclaredMethod("input", InputReader.class));
+                MatchCompiler<String> ic = new MatchCompiler<>(dfa, Magic.ERROR, Magic.EOF);
+                mw.setImplementor(ic);
+                log("implementing " + mw);
+                subClass.implement(mw);
+                log("saving " + thisClass + " to " + destdir);
+                subClass.save(destdir);
+            }
+            else
+            {
+                log(thisClass.getName()+" is uptodate");
+            }
         }
         catch (NoSuchMethodException | SecurityException | IOException ex)
         {
             throw new BuildException("magic fails", ex, getLocation());
         }
+    }
+    private boolean needsCompiling(Class<?> superClass, ClassWrapper dstClass)
+    {
+        String superClassname = superClass.getName().replace('.', '/')+".class";
+        String dstClassname = dstClass.getName().replace('.', '/')+".class";
+        File superFile = new File(destdir, superClassname);
+        File dstFile = new File(destdir, dstClassname);
+        return !superFile.exists() || !dstFile.exists() || dstFile.lastModified() < superFile.lastModified();
     }
 }

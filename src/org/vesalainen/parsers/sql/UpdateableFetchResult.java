@@ -47,7 +47,7 @@ public class UpdateableFetchResult<R,C> extends OrderedFetchResult<R,C>
         Updateable<R,C>[] row = (Updateable<R,C>[]) new Updateable[length];
         updateable.add(row);
         int index = 0;
-        for (ColumnReference cf : columnReferences)
+        for (ColumnReference<R,C> cf : columnReferences)
         {
             Updateable<R,C> col = engine.getUpdateable(rowCandidate.get(cf.getTable()), cf.getColumn());
             if (col != null && col.getValue() != null)
@@ -155,7 +155,7 @@ public class UpdateableFetchResult<R,C> extends OrderedFetchResult<R,C>
         private int[] cols;
         private int[] signs;
 
-        public ArrayComparator(Comparator<C> comp, List<ColumnReference> columnReferences, List<SortSpecification> sortSpecification)
+        public ArrayComparator(Comparator<C> comp, List<ColumnReference<R,C>> columnReferences, List<SortSpecification> sortSpecification)
         {
             this.comp = comp;
             cols = new int[sortSpecification.size()];

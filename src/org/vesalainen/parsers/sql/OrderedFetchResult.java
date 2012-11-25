@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class OrderedFetchResult<R,C> extends FetchResult<R,C>
 {
-    protected List<ColumnReference> columnReferences;
+    protected List<ColumnReference<R,C>> columnReferences;
     protected boolean sorted;
     protected final List<SortSpecification> sortSpecification;
 
@@ -77,7 +77,7 @@ public class OrderedFetchResult<R,C> extends FetchResult<R,C>
         private int[] cols;
         private int[] signs;
 
-        public ArrayComparator(Comparator<C> comp, List<ColumnReference> columnReferences, List<SortSpecification> sortSpecification)
+        public ArrayComparator(Comparator<C> comp, List<ColumnReference<R,C>> columnReferences, List<SortSpecification> sortSpecification)
         {
             this.comp = comp;
             cols = new int[sortSpecification.size()];

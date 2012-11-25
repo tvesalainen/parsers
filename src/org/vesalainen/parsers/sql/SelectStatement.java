@@ -30,7 +30,7 @@ import java.util.Set;
  */
 public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVisitor
 {
-    private List<ColumnReference> subList;
+    private List<ColumnReference<R,C>> subList;
     private Set<Table> tableSet = new HashSet<>();
     private Map<String,Table> correlationMap;
     private Condition<R,C> condition;
@@ -38,7 +38,7 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
     private Metadata metadata;
     private ErrorReporter reporter;
 
-    public SelectStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, List<ColumnReference> selectList, TableExpression tableExpression, Map<String,Table> correlationMap)
+    public SelectStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, List<ColumnReference<R,C>> selectList, TableExpression tableExpression, Map<String,Table> correlationMap)
     {
         super(engine, placeholderMap);
         this.subList = selectList;
@@ -132,7 +132,7 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         }
     }
 
-    private void checkColumnReference(ColumnReference cf, Metadata metadata, ErrorReporter reporter)
+    private void checkColumnReference(ColumnReference<R,C> cf, Metadata metadata, ErrorReporter reporter)
     {
         Table table = cf.getTable();
         if (table.getName() == null)
@@ -221,12 +221,12 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         return sortSpecification;
     }
 
-    public List<ColumnReference> getSelectList()
+    public List<ColumnReference<R,C>> getSelectList()
     {
         return subList;
     }
 
-    public List<ColumnReference> getReferencedColumns()
+    public List<ColumnReference<R,C>> getReferencedColumns()
     {
         if (sortSpecification == null || sortSpecification.isEmpty())
         {
@@ -234,7 +234,7 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         }
         else
         {
-            List<ColumnReference> list = new ArrayList<>();
+            List<ColumnReference<R,C>> list = new ArrayList<>();
             list.addAll(subList);
             for (SortSpecification ss : sortSpecification)
             {
