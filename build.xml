@@ -124,12 +124,17 @@
             />
             -->
         <taskdef
-            name="magictask"
-            classname="org.vesalainen.parsers.magic.MagicTask"
+            name="maptask"
+            classname="org.vesalainen.regex.ant.MapTask"
             classpath="${run.classpath}"
             />
-        <magictask
+        <maptask
             destdir="${build.classes.dir}"
+            map="org.vesalainen.parsers.magic.MagicMap"
+            />
+        <maptask
+            destdir="${build.classes.dir}"
+            map="org.vesalainen.parsers.magic.MimeMap"
             />
     </target>
     <target name="-post-jar">
