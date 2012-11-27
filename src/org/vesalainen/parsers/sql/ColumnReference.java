@@ -31,5 +31,4 @@ public interface ColumnReference<R,C> extends RowValue<R, C>
     void setTable(Table<R, C> table);
     C getValue(SQLConverter<R,C> selector, R row);
     C getValue(SQLConverter<R,C> selector, ArrayMap<Table<R,C>,R> rowCandidate);
-
 }

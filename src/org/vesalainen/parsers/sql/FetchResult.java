@@ -18,8 +18,10 @@ package org.vesalainen.parsers.sql;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Timo Vesalainen
@@ -29,6 +31,7 @@ public class FetchResult<R, C> implements Iterable<C[]>
 
     protected Engine<R, C> engine;
     protected List<ColumnReference<R,C>> subList;
+    protected Map<String,Integer> columnMap = new HashMap<>();
     protected String[] header;
     protected int[] columnLength;
     protected List<C[]> data;
@@ -42,6 +45,7 @@ public class FetchResult<R, C> implements Iterable<C[]>
         int index = 0;
         for (ColumnReference cf : subList)
         {
+            columnMap.put(cf.toString(), index);
             hdr[index++] = cf.getColumn();
         }
         header = hdr;
@@ -127,6 +131,16 @@ public class FetchResult<R, C> implements Iterable<C[]>
     public C getValueAt(int row, int column)
     {
         return data.get(row)[column];
+    }
+    
+    public C getValueAt(int row, String column)
+    {
+        Integer col = columnMap.get(column);
+        if (col == null)
+        {
+            throw new IllegalArgumentException(column+" not found");
+        }
+        return data.get(row)[col];
     }
     
     public String getColumnName(int columnIndex)

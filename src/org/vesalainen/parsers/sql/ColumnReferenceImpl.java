@@ -117,11 +117,21 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
         }
         return null;
     }
-
+    /**
+     * Returns column reference as in select list.
+     * @return 
+     */
     @Override
     public String toString()
     {
-        return table + "." + column;
+        if (correlation != null)
+        {
+            return correlation + "." + column;
+        }
+        else
+        {
+            return column;
+        }
     }
 
     @Override

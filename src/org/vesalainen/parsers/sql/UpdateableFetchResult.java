@@ -82,6 +82,17 @@ public class UpdateableFetchResult<R,C> extends OrderedFetchResult<R,C>
         return updateable.get(row)[column].getValue();
     }
 
+    @Override
+    public C getValueAt(int row, String column)
+    {
+        Integer col = columnMap.get(column);
+        if (col == null)
+        {
+            throw new IllegalArgumentException(column+" not found");
+        }
+        return updateable.get(row)[col].getValue();
+    }
+    
     public void setValueAt(C value, int row, int column)
     {
         Updateable<R,C> u = updateable.get(row)[column];

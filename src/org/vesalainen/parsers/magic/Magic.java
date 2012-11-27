@@ -17,9 +17,9 @@
 
 package org.vesalainen.parsers.magic;
 
+import org.vesalainen.regex.ant.MapParser;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import org.vesalainen.parser.ParserFactory;
@@ -30,7 +30,7 @@ import org.vesalainen.parser.util.InputReader;
  * @author Timo Vesalainen
  */
 @GenClassname("org.vesalainen.parsers.magic.MagicImpl")
-public abstract class Magic 
+public abstract class Magic implements MapParser
 {
     static final String ERROR = "Error";
     static final String EOF = "Eof";
@@ -66,9 +66,8 @@ public abstract class Magic
             return getResult(result);
         }
     }
-    protected abstract String input(InputReader reader);
     
-    public static Magic newInstance()
+    public static Magic getInstance()
     {
         Magic magic = (Magic) ParserFactory.loadParserInstance(Magic.class);
         if (magic == null)
