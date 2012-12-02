@@ -37,8 +37,15 @@ public interface SQLConverter<R, C>
     C convertTimestamp(Date date);
 
     C get(R r, String column);
-
-    Updateable<R, C> getUpdateable(R r, String column);
+    /**
+     * Returns Updateable instance.
+     * @param r Row
+     * @param column Column name
+     * @param value Current value. If column is referenced inside function the
+     * value might differ
+     * @return 
+     */
+    Updateable<R, C> getUpdateable(R r, String column, C value);
 
     void set(R r, String column, C value);
     

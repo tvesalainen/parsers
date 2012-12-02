@@ -29,6 +29,6 @@ public interface ColumnReference<R,C> extends RowValue<R, C>
     String getCorrelation();
     Table<R, C> getTable();
     void setTable(Table<R, C> table);
-    C getValue(SQLConverter<R,C> selector, R row);
-    C getValue(SQLConverter<R,C> selector, ArrayMap<Table<R,C>,R> rowCandidate);
+    C getValue(SQLConverter<R,C> engine, R row);
+    C getValue(SQLConverter<R,C> engine, ArrayMap<Table<R,C>,R> rowCandidate);
 }

@@ -43,7 +43,7 @@ public class OrderedFetchResult<R,C> extends FetchResult<R,C>
         sortSpecification = select.getSortSpecification();
     }
     
-    public void addRow(ArrayMap<Table, R> rowCandidate)
+    public void addRow(ArrayMap<Table<R, C>, R> rowCandidate)
     {
         C[] row = (C[]) new Object[length];
         data.add(row);

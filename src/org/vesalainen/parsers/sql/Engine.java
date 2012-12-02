@@ -293,5 +293,70 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
      * @return 
      */
     public abstract Class<? extends C> getDefaultPlaceholderType();
-    
+    /**
+     * Returns a created function
+     * @param funcName
+     * @param inner
+     * @return 
+     */
+    public ColumnReference createFunction(ColumnReference inner, String funcName, String... args)
+    {
+        switch (funcName.toLowerCase())
+        {
+            case "upper":
+                check(funcName, args.length, 0, 0);
+                return new AbstractFunction(inner) 
+                {
+                    @Override
+                    public Object function(Object value)
+                    {
+                        return value != null ? value.toString().toUpperCase() : null;
+                    }
+                };
+            case "lower":
+                check(funcName, args.length, 0, 0);
+                return new AbstractFunction(inner) 
+                {
+                    @Override
+                    public Object function(Object value)
+                    {
+                        return value != null ? value.toString().toLowerCase() : null;
+                    }
+                };
+            case "toint":
+                check(funcName, args.length, 0, 0);
+                return new ToFunction(inner, Integer.class);
+            case "todouble":
+                check(funcName, args.length, 0, 0);
+                return new ToFunction(inner, Double.class);
+            case "tochar":
+            case "tostring":
+                check(funcName, args.length, 0, 1);
+                return new ToStringFunction(inner, args);
+            case "todate":
+                check(funcName, args.length, 1, 1);
+                return new ToDateFunction(inner, args);
+            default:
+                throw new IllegalArgumentException("expected upper, lower, toint, todouble, tochar, tostring got"+funcName);
+        }
+    }
+    public ColumnReference createFunction(ColumnReference inner, String funcName, Number number, Number... args)
+    {
+        switch (funcName.toLowerCase())
+        {
+            case "substr":
+            case "substring":
+                check(funcName, args.length, 0, 1);
+                return new SubStringFunction(inner, number, args);
+            default:
+                throw new IllegalArgumentException("expected substr, substring got"+funcName);
+        }
+    }
+    protected void check(String funcName, int len, int min, int max)
+    {
+        if (len < min || len > max)
+        {
+            throw new IllegalArgumentException("wrong number of string arguments for function "+funcName);
+        }
+    }
 }

@@ -42,14 +42,14 @@ public class UpdateableFetchResult<R,C> extends OrderedFetchResult<R,C>
         updateable = new ArrayList<>();
     }
     
-    public void addRow(ArrayMap<Table, R> rowCandidate)
+    public void addRow(ArrayMap<Table<R, C>, R> rowCandidate)
     {
         Updateable<R,C>[] row = (Updateable<R,C>[]) new Updateable[length];
         updateable.add(row);
         int index = 0;
         for (ColumnReference<R,C> cf : columnReferences)
         {
-            Updateable<R,C> col = engine.getUpdateable(rowCandidate.get(cf.getTable()), cf.getColumn());
+            Updateable<R,C> col = engine.getUpdateable(rowCandidate.get(cf.getTable()), cf.getColumn(), cf.getValue(engine, rowCandidate));
             if (col != null && col.getValue() != null)
             {
                 columnLength[index] = Math.max(columnLength[index], col.getValue().toString().length());

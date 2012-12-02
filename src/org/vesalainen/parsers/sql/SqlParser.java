@@ -403,6 +403,29 @@ public abstract class SqlParser<R, C>
         return new ColumnReferenceImpl(table, correlationName, column);
     }
 
+    @Rule("identifier '\\(' selectSublist ('\\,' string)* '\\)'")
+    protected ColumnReference selectSublist(
+            String funcName,
+            ColumnReference inner,
+            List<String> args,
+            @ParserContext("engine") Engine<R, C> engine
+            )
+    {
+        return engine.createFunction(inner, funcName, args.toArray(new String[args.size()]));
+    }
+
+    @Rule("identifier '\\(' selectSublist integer ('\\,' integer)* '\\)'")
+    protected ColumnReference selectSublist(
+            String funcName,
+            ColumnReference inner,
+            Number number,
+            List<Number> args,
+            @ParserContext("engine") Engine<R, C> engine
+            )
+    {
+        return engine.createFunction(inner, funcName, number, args.toArray(new Number[args.size()]));
+    }
+
     @Rule("fromClause whereClause? orderByClause?")
     protected TableExpression tableExpression(Condition condition, List<SortSpecification> sortSpecificationList)
     {
