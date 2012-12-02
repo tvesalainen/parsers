@@ -73,10 +73,17 @@ public abstract class AbstractFunction<R,C> extends ParserLocator2Impl implement
         return function(inner.getValue(selector, rowCandidate));
     }
     /**
-     * Implements the specfied function
+     * Implements the specified function
      * @param value
      * @return Returns the modified value 
      */
     public abstract Object function(Object value);
+
+    @Override
+    public String toString()
+    {
+        return inner.toString();
+    }
+    
     
 }

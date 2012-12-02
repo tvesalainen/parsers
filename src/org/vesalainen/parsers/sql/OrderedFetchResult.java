@@ -48,9 +48,9 @@ public class OrderedFetchResult<R,C> extends FetchResult<R,C>
         C[] row = (C[]) new Object[length];
         data.add(row);
         int index = 0;
-        for (ColumnReference cf : columnReferences)
+        for (ColumnReference<R, C> cf : columnReferences)
         {
-            C col = engine.get(rowCandidate.get(cf.getTable()), cf.getColumn());
+            C col = cf.getValue(engine, rowCandidate);
             if (col != null)
             {
                 columnLength[index] = Math.max(columnLength[index], col.toString().length());
