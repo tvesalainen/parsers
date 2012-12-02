@@ -24,6 +24,9 @@ import org.vesalainen.parser.util.InputReader;
 import org.vesalainen.regex.ant.MapParser;
 
 /**
+ * Note! This MimeTypes class is just an example of using DFAMaps. Using 
+ * HashMap implementation is faster.
+ * kind of 
  * @author Timo Vesalainen
  */
 @GenClassname("org.vesalainen.parsers.magic.MimeTypesImpl")

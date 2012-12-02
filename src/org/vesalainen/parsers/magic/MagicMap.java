@@ -377,7 +377,7 @@ public class MagicMap extends AbstractDFAMap<String>
         addMagic("FF 46 4F 4E 54", " cpi", "Windows international code page");
         addMagic("FF 4B 45 59 42 20 20 20", " sys", "DOS system driver");
         addMagic("FF 57 50 43", " wpg wpd wpp wp wp5 wp6", "WordPerfect text and graphics file");
-        addMagic("FF D8", " jpeg", "Joint Photographic Experts Group, JPEG");
+        addMagic("FF D8", " jpg jpeg", "Joint Photographic Experts Group, JPEG");
         addMagic("FF FE", " reg", "Windows Registry file");
         addMagic("FF FE 00 00", " ", "Byte-order mark for 32-bit Unicode Transformation Format/");
         addMagic("FF FE 23 00 6C 00 69 00", " mof", "Windows MSinfo file");
@@ -392,7 +392,7 @@ public class MagicMap extends AbstractDFAMap<String>
             sb.append("\\x");
             sb.append(s);
         }
-        String old = put(sb.toString(), ext + ":" + description);
+        String old = put(sb.toString(), ext.trim() + ":" + description);
         if (old != null)
         {
             System.err.println(old + " duplicate with " + description);

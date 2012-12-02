@@ -34,7 +34,8 @@ public abstract class Magic implements MapParser
 {
     static final String ERROR = "Error";
     static final String EOF = "Eof";
-    private static final String UNKNOWN = ":unknown";
+    static final String UNKNOWN = ":unknown";
+    private static final MimeMap mimeMap = new MimeMap();
     
     public MagicResult guess(byte[] bytes)
     {
@@ -66,6 +67,15 @@ public abstract class Magic implements MapParser
             return getResult(result);
         }
     }
+    /**
+     * Returns mime type for extension or null if no match
+     * @param extension
+     * @return 
+     */
+    public static String getMimeType(String extension)
+    {
+        return mimeMap.get(extension);
+    }
     
     public static Magic getInstance()
     {
@@ -90,13 +100,16 @@ public abstract class Magic implements MapParser
     }
     public class MagicResult
     {
-        private String[] extensions;
+        private String[] extensions = new String[]{};
         private String description;
 
         private MagicResult(String str)
         {
             int idx = str.indexOf(':');
-            extensions = str.substring(0, idx).split("[ ,]+");
+            if (idx > 0)
+            {
+                extensions = str.substring(0, idx).split("[ ,]+");
+            }
             description = str.substring(idx+1);
         }
 
