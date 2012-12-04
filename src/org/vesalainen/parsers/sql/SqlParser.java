@@ -408,10 +408,19 @@ public abstract class SqlParser<R, C>
             String funcName,
             ColumnReference inner,
             List<String> args,
+            @ParserContext(ParserConstants.INPUTREADER) InputReader reader,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
-        return engine.createFunction(inner, funcName, args.toArray(new String[args.size()]));
+        try
+        {
+            return engine.createFunction(inner, funcName, args.toArray(new String[args.size()]));
+        }
+        catch (IllegalArgumentException ex)
+        {
+            reader.throwSyntaxErrorException(ex.getMessage(), "");
+            return null;
+        }
     }
 
     @Rule("identifier '\\(' selectSublist integer ('\\,' integer)* '\\)'")
@@ -420,10 +429,19 @@ public abstract class SqlParser<R, C>
             ColumnReference inner,
             Number number,
             List<Number> args,
+            @ParserContext(ParserConstants.INPUTREADER) InputReader reader,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
-        return engine.createFunction(inner, funcName, number, args.toArray(new Number[args.size()]));
+        try
+        {
+            return engine.createFunction(inner, funcName, number, args.toArray(new Number[args.size()]));
+        }
+        catch (IllegalArgumentException ex)
+        {
+            reader.throwSyntaxErrorException(ex.getMessage(), "");
+            return null;
+        }
     }
 
     @Rule("fromClause whereClause? orderByClause?")

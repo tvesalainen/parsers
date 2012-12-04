@@ -329,6 +329,9 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
             case "todouble":
                 check(funcName, args.length, 0, 0);
                 return new ToFunction(inner, Double.class);
+            case "toboolean":
+                check(funcName, args.length, 0, 0);
+                return new ToFunction(inner, Boolean.class);
             case "tochar":
             case "tostring":
                 check(funcName, args.length, 0, 1);
@@ -337,7 +340,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
                 check(funcName, args.length, 1, 1);
                 return new ToDateFunction(inner, args);
             default:
-                throw new IllegalArgumentException("expected upper, lower, toint, todouble, tochar, tostring got"+funcName);
+                throw new IllegalArgumentException("expected upper, lower, toint, todouble, tochar, tostring got "+funcName);
         }
     }
     public ColumnReference createFunction(ColumnReference inner, String funcName, Number number, Number... args)
@@ -349,7 +352,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
                 check(funcName, args.length, 0, 1);
                 return new SubStringFunction(inner, number, args);
             default:
-                throw new IllegalArgumentException("expected substr, substring got"+funcName);
+                throw new IllegalArgumentException("expected substr, substring got "+funcName);
         }
     }
     protected void check(String funcName, int len, int min, int max)
