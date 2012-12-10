@@ -18,6 +18,7 @@ package org.vesalainen.parsers.sql;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -26,7 +27,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.vesalainen.parser.ParserConstants;
-import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
 import org.vesalainen.parser.annotation.ParserContext;
@@ -45,7 +45,7 @@ import org.vesalainen.regex.Regex;
  * @see <a href="doc-files/SqlParser-statements.html#BNF">BNF Syntax for SQL-statements</a>
  * @see <a href="http://savage.net.au/SQL/sql-2003-2.bnf.html">BNF Grammar for ISO/IEC 9075-2:2003 - Database Language SQL (SQL-2003) SQL/Foundation</a>
  */
-@GenClassname("org.vesalainen.parsers.sql.SqlParserImpl")
+//@GenClassname("org.vesalainen.parsers.sql.SqlParserImpl")
 @GrammarDef()
 public abstract class SqlParser<R, C>
 {
@@ -69,7 +69,7 @@ public abstract class SqlParser<R, C>
      * @param locator 
      * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
      */
-    @ParseMethod(start = "statement", syntaxOnly = true, useOffsetLocatorException = true, whiteSpace =
+    @ParseMethod(start = "batchStatement", syntaxOnly = true, useOffsetLocatorException = true, whiteSpace =
     {
         "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
     })
@@ -83,7 +83,7 @@ public abstract class SqlParser<R, C>
      * @param locator 
      * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
      */
-    @ParseMethod(start = "statement", syntaxOnly = true, useOffsetLocatorException = true, size = 1024, whiteSpace =
+    @ParseMethod(start = "batchStatement", syntaxOnly = true, useOffsetLocatorException = true, size = 1024, whiteSpace =
     {
         "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
     })
@@ -97,51 +97,11 @@ public abstract class SqlParser<R, C>
      * @param engine
      * @param correlationMap
      * @param placeholderMap
-     * @param locator 
-     * @see <a href="doc-files/SqlParser-statements.html#BNF">BNF Syntax for SQL-statements</a>
-     */
-    @ParseMethod(start = "statements", useOffsetLocatorException = true, whiteSpace =
-    {
-        "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
-    })
-    protected abstract void execute(
-            String sql,
-            @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap,
-            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
-            @ParserContext("locator") SQLLocator locator
-            );
-    /**
-     * 
-     * @param is
-     * @param engine
-     * @param correlationMap
-     * @param placeholderMap
-     * @param locator 
-     * @see <a href="doc-files/SqlParser-statements.html#BNF">BNF Syntax for SQL-statements</a>
-     */
-    @ParseMethod(start = "statements", useOffsetLocatorException = true, size = 1024, whiteSpace =
-    {
-        "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
-    })
-    protected abstract void execute(
-            InputStream is,
-            @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap,
-            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
-            @ParserContext("locator") SQLLocator locator
-            );
-    /**
-     * 
-     * @param sql
-     * @param engine
-     * @param correlationMap
-     * @param placeholderMap
      * @param locator
      * @return 
      * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
      */
-    @ParseMethod(start = "statement", useOffsetLocatorException = true, whiteSpace =
+    @ParseMethod(start = "batchStatement", useOffsetLocatorException = true, whiteSpace =
     {
         "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
     })
@@ -162,7 +122,7 @@ public abstract class SqlParser<R, C>
      * @return 
      * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
      */
-    @ParseMethod(start = "statement", useOffsetLocatorException = true, size = 1024, whiteSpace =
+    @ParseMethod(start = "batchStatement", useOffsetLocatorException = true, size = 1024, whiteSpace =
     {
         "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
     })
@@ -173,17 +133,6 @@ public abstract class SqlParser<R, C>
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("locator") SQLLocator locator
             );
-
-    @Rules(
-    {
-        @Rule("statement ';'"),
-        @Rule("statements statement ';'")
-    })
-    protected void statements(Statement<R, C> statement, @ParserContext("correlationMap") Map<String, Table> correlationMap)
-    {
-        statement.execute();
-        correlationMap.clear();
-    }
 
     @Rules(
     {
@@ -198,6 +147,33 @@ public abstract class SqlParser<R, C>
         @Rule("describeSpecification")
     })
     protected abstract Statement<R, C> statement(Statement statement);
+
+    @Rule("statementList")
+    protected Statement<R, C> batchStatement(
+            List<Statement<R, C>> list, 
+            @ParserContext("correlationMap") Map<String, Table> correlationMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
+            @ParserContext("engine") Engine<R, C> engine
+            )
+    {
+        return new BatchStatement(engine, placeholderMap, list);
+    }
+    @Rule("statement ';'")
+    protected List<Statement<R, C>> statementList(Statement<R, C> statement, @ParserContext("correlationMap") Map<String, Table> correlationMap)
+    {
+        List<Statement<R, C>> list = new ArrayList<>();
+        list.add(statement);
+        correlationMap.clear();
+        return list;
+    }
+
+    @Rule("statementList statement ';'")
+    protected List<Statement<R, C>> statementList(List<Statement<R, C>> list, Statement<R, C> statement, @ParserContext("correlationMap") Map<String, Table> correlationMap)
+    {
+        list.add(statement);
+        correlationMap.clear();
+        return list;
+    }
 
     @Rules(
     {

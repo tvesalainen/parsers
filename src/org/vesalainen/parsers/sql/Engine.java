@@ -87,15 +87,6 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         return fr;
     }
 
-    public void batch(String sql)
-    {
-        parser.execute(sql, this, new HashMap<>(), new LinkedHashMap<>(), null);
-    }
-    public void batch(InputStream is)
-    {
-        parser.execute(is, this, new HashMap<>(), new LinkedHashMap<>(), null);
-    }
-
     public void check(String sql)
     {
         parser.check(sql, null);
