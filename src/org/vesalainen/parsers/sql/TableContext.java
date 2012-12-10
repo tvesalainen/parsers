@@ -44,11 +44,11 @@ public class TableContext<R,C>
     private Map<String,Range<C>> columnRanges = new HashMap<>();
     private Map<String,NavigableMap<C,Set<R>>> indexes = new HashMap<>();
     private FastSet<R> all;
-    private ArrayMap<Table,TableContext<R,C>> others;
+    private ArrayMap<Table<R,C>,TableContext<R,C>> others;
     private Map<Table,Map<R, Set<R>>> joinMaps = new HashMap<>();   // TODO use ArrayMap!!!
     private TableMetadata metadata;
 
-    public TableContext(Engine<R,C> selector, Table<R,C> table, ArrayMap<Table, TableContext<R, C>> others)
+    public TableContext(Engine<R,C> selector, Table<R,C> table, ArrayMap<Table<R,C>, TableContext<R, C>> others)
     {
         this.selector = selector;
         this.table = table;
@@ -339,7 +339,7 @@ public class TableContext<R,C>
         return indexes;
     }
 
-    public ArrayMap<Table, TableContext<R, C>> getOthers()
+    public ArrayMap<Table<R,C>, TableContext<R, C>> getOthers()
     {
         return others;
     }

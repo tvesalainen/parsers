@@ -25,34 +25,44 @@ import java.util.Set;
  */
 public class Table<R,C> extends ParserLocator2Impl
 {
-    protected Engine<R,C> selector;
+    protected Engine<R,C> engine;
     protected String name;
+    private final String schema;
+    private final String correlationName;
     protected Set<String> selectListColumns = new HashSet<>();
     protected Set<String> conditionColumns = new HashSet<>();
     protected Set<String> andColumns = new HashSet<>();
     protected Set<ColumnCondition<R,C>> andConditions = new HashSet<>();
     protected Set<ColumnCondition<R,C>> conditions = new HashSet<>();
 
-    protected Table(Engine<R, C> selector)
+    protected Table(Engine<R,C> engine, String schema, String tablename, String correlationName)
     {
-        this.selector = selector;
+        this.engine = engine;
+        this.schema = schema;
+        this.name = tablename;
+        this.correlationName = correlationName;
     }
 
-    public Table(Engine<R, C> selector, String name)
+    public boolean nameMatches(String str)
     {
-        this.selector = selector;
-        this.name = name;
+        // TODO schema
+        return str.equalsIgnoreCase(name) || str.equalsIgnoreCase(correlationName);
     }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
     public String getName()
     {
         return name;
     }
+
+    public String getSchema()
+    {
+        return schema;
+    }
+
+    public String getCorrelationName()
+    {
+        return correlationName;
+    }
+    
     /**
      * Add column found in select list
      * @param column 

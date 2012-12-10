@@ -17,6 +17,8 @@
 
 package org.vesalainen.parsers.sql;
 
+import java.util.Collection;
+import java.util.List;
 import org.vesalainen.parsers.sql.util.ArrayMap;
 import java.util.Objects;
 
@@ -26,22 +28,88 @@ import java.util.Objects;
 public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements ColumnReference<R,C>
 {
     protected Table<R, C> table;
-    protected String correlation;
+    protected String tablePart;
     protected String column;
+    protected List<String> raw;
 
-    public ColumnReferenceImpl(Table<R, C> table, String column)
+    public ColumnReferenceImpl(List<String> raw)
     {
-        this.table = table;
-        this.column = column;
+        this.raw = raw;
     }
 
-    public ColumnReferenceImpl(Table<R, C> table, String correlation, String column)
+    ColumnReferenceImpl(Table<R, C> table, String name)
     {
         this.table = table;
-        this.correlation = correlation;
-        this.column = column;
+        this.tablePart = table.getName();
+        this.column = name;
     }
 
+    @Override
+    public boolean resolvTable(Collection<Table<R, C>> tables)
+    {
+        for (Table<R, C> table : tables)
+        {
+            if (this.table != null)
+            {
+                return true;
+            }
+            String first = raw.get(0);
+            if (first.equals(table.getCorrelationName()))
+            {
+                this.table = table;
+                this.tablePart = first;
+                this.column = toString(raw.subList(1, raw.size()));
+                raw = null;
+                return true;
+            }
+            else
+            {
+                if (first.equals(table.getSchema()))
+                {
+                    this.table = table;
+                    this.tablePart = toString(raw.subList(1, 2));
+                    this.column = toString(raw.subList(2, raw.size()));
+                    raw = null;
+                    return true;
+                }
+                else
+                {
+                    if (first.equals(table.getName()))
+                    {
+                        this.table = table;
+                        this.tablePart = first;
+                        this.column = toString(raw.subList(1, raw.size()));
+                        raw = null;
+                        return true;
+                    }
+                }
+            }
+        }
+        if (tables.size() == 1 && raw.size() == 1)
+        {
+            this.table = tables.iterator().next();
+            this.tablePart = table.getName();
+            this.column = raw.get(0);
+            raw = null;
+            return true;
+        }
+        throwException("table not found");
+        return false;
+    }
+
+    private String toString(List<String> sub)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (String str : sub)
+        {
+            if (sb.length() > 0)
+            {
+                sb.append('.');
+            }
+            sb.append(str);
+        }
+        return sb.toString();
+    }
     public Table<R, C> getTable()
     {
         return table;
@@ -54,7 +122,7 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
 
     public String getCorrelation()
     {
-        return correlation;
+        return tablePart;
     }
 
     @Override
@@ -69,7 +137,7 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
             return false;
         }
         final ColumnReferenceImpl other = (ColumnReferenceImpl) obj;
-        if (!Objects.equals(this.correlation, other.correlation))
+        if (!Objects.equals(this.tablePart, other.tablePart))
         {
             return false;
         }
@@ -84,7 +152,7 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
     public int hashCode()
     {
         int hash = 5;
-        hash = 67 * hash + Objects.hashCode(this.correlation);
+        hash = 67 * hash + Objects.hashCode(this.tablePart);
         hash = 67 * hash + Objects.hashCode(this.column);
         return hash;
     }
@@ -124,9 +192,9 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
     @Override
     public String toString()
     {
-        if (correlation != null)
+        if (tablePart != null)
         {
-            return correlation + "." + column;
+            return tablePart + "." + column;
         }
         else
         {
@@ -144,9 +212,9 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
     public int getEnd()
     {
         int start = getStart();
-        if (correlation != null)
+        if (tablePart != null)
         {
-            return start+correlation.length()+1+column.length();
+            return start+tablePart.length()+1+column.length();
         }
         else
         {

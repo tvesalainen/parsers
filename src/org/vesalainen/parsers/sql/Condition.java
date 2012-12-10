@@ -24,7 +24,7 @@ import org.vesalainen.parsers.sql.util.ArrayMap;
  */
 public interface Condition<R,C> extends ParserLocator2
 {
-    void associateCondition(SelectStatement select, boolean andPath);
+    void associateCondition(SelectStatement<R,C> select, boolean andPath);
     TruthValue matches(SQLConverter<R,C> selector, ArrayMap<Table<R,C>,R> rowCandidate);
     void walk(ConditionVisitor visitor, boolean andPath);
 }

@@ -18,16 +18,14 @@
 package org.vesalainen.parsers.sql;
 
 import org.vesalainen.parsers.sql.util.ArrayMap;
-import java.util.Collection;
-import org.vesalainen.parsers.sql.util.FastSet;
 
 /**
  * @author Timo Vesalainen
  */
 public class JoinComparison<R,C> extends BaseComparison<R, C> implements JoinCondition<R,C>
 {
-    private JoinComparison<R,C> pair;
-    private ColumnReference<R,C> columnReference2;
+    protected JoinComparison<R,C> pair;
+    protected ColumnReference<R,C> columnReference2;
 
     public JoinComparison(ColumnReference<R, C> columnReference, Relation relation, ColumnReference<R, C> columnReference2)
     {

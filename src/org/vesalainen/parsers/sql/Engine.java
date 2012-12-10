@@ -40,7 +40,7 @@ import org.vesalainen.parser.util.InputReader;
 public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
 {
     private SqlParser parser;
-    private ArrayMap<Table,TableContext<R,C>> others;
+    private ArrayMap<Table<R,C>,TableContext<R,C>> others;
     
     public Engine()
     {
@@ -54,16 +54,16 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
 
     public Statement prepare(String sql)
     {
-        Map<String,Table> correlationMap = new HashMap<>();
+        List<Table<R,C>> tableList = new ArrayList<>();
         LinkedHashMap<String,Placeholder> placeholderMap = new LinkedHashMap<>();
-        return parser.parse(sql, this, correlationMap, placeholderMap, null);
+        return parser.parse(sql, this, tableList, placeholderMap, null);
     }
     
     public Statement prepare(InputStream is)
     {
-        Map<String,Table> correlationMap = new HashMap<>();
+        List<Table<R,C>> tableList = new ArrayList<>();
         LinkedHashMap<String,Placeholder> placeholderMap = new LinkedHashMap<>();
-        return parser.parse(is, this, correlationMap, placeholderMap, null);
+        return parser.parse(is, this, tableList, placeholderMap, null);
     }
     
     public FetchResult<R,C> show(String identifier)
@@ -128,9 +128,9 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
     {
         others = new ArrayMap<>(select.getTables());
         TableContextComparator tableContextComparator = getTableContextComparator();
-        ArrayMap<Table,TableContext<R,C>> tableResults = new ArrayMap<>(select.getTables());
+        ArrayMap<Table<R,C>,TableContext<R,C>> tableResults = new ArrayMap<>(select.getTables());
         List<TableContext<R,C>> tableList = new ArrayList<>();
-        for (Table table : select.getTables())
+        for (Table<R,C> table : select.getTables())
         {
             TableContext<R, C> tc = createTableContext(table, others);
             others.put(table, tc);
@@ -155,7 +155,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
             tableList.remove(currentTable);
             currentTable.updateHints(tableList);
         }
-        ArrayMap<Table,R> rowCandidate = new ArrayMap<>(select.getTables());
+        ArrayMap<Table<R,C>,R> rowCandidate = new ArrayMap<>(select.getTables());
         cartesian(condition, result, resultArray, rowCandidate);
     }
     
@@ -163,7 +163,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
             Condition condition, 
             OrderedFetchResult results,
             TableContext[] resultArray,
-            ArrayMap<Table,R> rowCandidate
+            ArrayMap<Table<R,C>,R> rowCandidate
             )
     {
         int level = 0;
@@ -221,9 +221,9 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
      * Factory method for creating Table
      * @return 
      */
-    protected Table<R,C> createTable()
+    protected Table<R,C> createTable(String schema, String tablename, String correlationName)
     {
-        return new Table<>(this);
+        return new Table<>(this, schema, tablename, correlationName);
     }
     /**
      * Factory method for creating TableContext
@@ -231,7 +231,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
      * @param others Connection map to other joining tables
      * @return 
      */
-    protected TableContext<R,C> createTableContext(Table table, ArrayMap<Table, TableContext<R, C>> others)
+    protected TableContext<R,C> createTableContext(Table<R,C> table, ArrayMap<Table<R,C>, TableContext<R, C>> others)
     {
         return new TableContext<>(this, table, others);
     }

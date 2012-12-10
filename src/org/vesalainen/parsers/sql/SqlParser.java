@@ -95,7 +95,6 @@ public abstract class SqlParser<R, C>
      * 
      * @param sql
      * @param engine
-     * @param correlationMap
      * @param placeholderMap
      * @param locator
      * @return 
@@ -108,7 +107,7 @@ public abstract class SqlParser<R, C>
     protected abstract Statement parse(
             String sql,
             @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap,
+            @ParserContext("tableList") List<Table<R, C>> tableList,
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("locator") SQLLocator locator
             );
@@ -116,7 +115,6 @@ public abstract class SqlParser<R, C>
      * 
      * @param is
      * @param engine
-     * @param correlationMap
      * @param placeholderMap
      * @param locator
      * @return 
@@ -129,7 +127,7 @@ public abstract class SqlParser<R, C>
     protected abstract Statement parse(
             InputStream is,
             @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap,
+            @ParserContext("tableList") List<Table<R, C>> tableList,
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("locator") SQLLocator locator
             );
@@ -151,7 +149,7 @@ public abstract class SqlParser<R, C>
     @Rule("statementList")
     protected Statement<R, C> batchStatement(
             List<Statement<R, C>> list, 
-            @ParserContext("correlationMap") Map<String, Table> correlationMap,
+            @ParserContext("tableList") List<Table<R, C>> tableList,
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
@@ -159,19 +157,17 @@ public abstract class SqlParser<R, C>
         return new BatchStatement(engine, placeholderMap, list);
     }
     @Rule("statement ';'")
-    protected List<Statement<R, C>> statementList(Statement<R, C> statement, @ParserContext("correlationMap") Map<String, Table> correlationMap)
+    protected List<Statement<R, C>> statementList(Statement<R, C> statement)
     {
         List<Statement<R, C>> list = new ArrayList<>();
         list.add(statement);
-        correlationMap.clear();
         return list;
     }
 
     @Rule("statementList statement ';'")
-    protected List<Statement<R, C>> statementList(List<Statement<R, C>> list, Statement<R, C> statement, @ParserContext("correlationMap") Map<String, Table> correlationMap)
+    protected List<Statement<R, C>> statementList(List<Statement<R, C>> list, Statement<R, C> statement)
     {
         list.add(statement);
-        correlationMap.clear();
         return list;
     }
 
@@ -206,7 +202,7 @@ public abstract class SqlParser<R, C>
         return new RollbackWorkStatement<>(engine, placeholderMap);
     }
 
-    @Rule("update targetTable set setClause ( '\\,' setClause)*")
+    @Rule("update tableReference set setClause ( '\\,' setClause)*")
     protected Statement<R, C> updateStatementSearched(
             Table<R, C> table, 
             SetClause<R, C> setClause, 
@@ -219,7 +215,7 @@ public abstract class SqlParser<R, C>
         return new UpdateStatement<>(engine, placeholderMap, table, setClauseList);
     }
 
-    @Rule("update targetTable set setClause ( '\\,' setClause)* where searchCondition")
+    @Rule("update tableReference set setClause ( '\\,' setClause)* where searchCondition")
     protected Statement<R, C> updateStatementSearched(
             Table<R, C> table, 
             SetClause<R, C> setClause, 
@@ -238,7 +234,7 @@ public abstract class SqlParser<R, C>
         return new SetClause<>(identifier, literal);
     }
 
-    @Rule("delete from targetTable")
+    @Rule("delete from tableReference")
     protected Statement<R, C> deleteStatementSearched(
             Table<R, C> table, 
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
@@ -248,7 +244,7 @@ public abstract class SqlParser<R, C>
         return new DeleteStatement<>(engine, placeholderMap, table);
     }
 
-    @Rule("delete from targetTable where searchCondition")
+    @Rule("delete from tableReference where searchCondition")
     protected Statement<R, C> deleteStatementSearched(
             Table<R, C> table, 
             Condition<R, C> condition, 
@@ -259,7 +255,7 @@ public abstract class SqlParser<R, C>
         return new DeleteStatement<>(engine, placeholderMap, table, condition);
     }
 
-    @Rule("insert into targetTable insertColumnsAndSource")
+    @Rule("insert into tableReference insertColumnsAndSource")
     protected Statement<R, C> insertStatement(
             Table<R, C> table, 
             InsertColumnsAndSource<R, C> insertColumnsAndSource, 
@@ -268,17 +264,6 @@ public abstract class SqlParser<R, C>
             )
     {
         return new InsertStatement<>(engine, placeholderMap, table, insertColumnsAndSource);
-    }
-
-    @Rule("identifier")
-    protected Table<R, C> targetTable(
-            String tablename,
-            @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap)
-    {
-        Table table = getTableForCorrelation(null, engine, correlationMap);
-        table.setName(tablename);
-        return table;
     }
 
     @Rules(
@@ -329,18 +314,17 @@ public abstract class SqlParser<R, C>
             List<ColumnReference> selectList,
             TableExpression tableExpression,
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
-            @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap)
+            @ParserContext("engine") Engine<R, C> engine
+            )
     {
-        return new SelectStatement(engine, placeholderMap, selectList, tableExpression, correlationMap);
+        return new SelectStatement(engine, placeholderMap, selectList, tableExpression);
     }
 
     @Rule("asterisk")
     protected List<ColumnReference> selectList(
-            @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap)
+            @ParserContext("engine") Engine<R, C> engine
+            )
     {
-        getTableForCorrelation(null, engine, correlationMap);
         return null;
     }
 
@@ -356,27 +340,14 @@ public abstract class SqlParser<R, C>
     {
     }
 
-    @Rule("identifier")
-    protected ColumnReference selectSublist(
-            String column,
-            @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap)
-    {
-        Table table = getTableForCorrelation(null, engine, correlationMap);
-        table.addSelectListColumn(column);
-        return new ColumnReferenceImpl(table, column);
-    }
+    @Rule("columnReference")
+    protected abstract ColumnReference selectSublist(ColumnReference columnReference);
 
-    @Rule("identifier '\\.' identifier")
-    protected ColumnReference selectSublist(
-            String correlationName,
-            String column,
-            @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap)
+    @Rule("identifier ('\\.' identifier)*")
+    protected ColumnReference columnReference(String part, List<String> list)
     {
-        Table table = getTableForCorrelation(correlationName, engine, correlationMap);
-        table.addSelectListColumn(column);
-        return new ColumnReferenceImpl(table, correlationName, column);
+        list.add(0, part);
+        return new ColumnReferenceImpl(list);
     }
 
     @Rule("identifier '\\(' selectSublist ('\\,' string)* '\\)'")
@@ -421,69 +392,32 @@ public abstract class SqlParser<R, C>
     }
 
     @Rule("fromClause whereClause? orderByClause?")
-    protected TableExpression tableExpression(Condition condition, List<SortSpecification> sortSpecificationList)
+    protected TableExpression tableExpression(List<Table> tableList, Condition condition, List<SortSpecification> sortSpecificationList)
     {
-        return new TableExpression(condition, sortSpecificationList);
+        return new TableExpression(tableList, condition, sortSpecificationList);
     }
 
     @Rule("from tableReference ('\\,' tableReference)*")
-    protected void fromClause(
-            Table table, 
-            List<Table> list,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap
+    protected List<Table<R, C>> fromClause(
+            Table<R, C> table, 
+            List<Table<R, C>> list,
+            @ParserContext("tableList") List<Table<R, C>> tableList
             )
     {
-        if (correlationMap.size() == 1)
-        {
-            correlationMap.put(null, table);
-        }
+        list.add(0, table);
+        tableList.addAll(list);
+        return list;
     }
 
-    @Rule("identifier")
-    protected Table tableReference(
-            String tablename,
-            @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap)
-    {
-        if (correlationMap.size() == 1 && correlationMap.containsKey(null))
-        {
-            Table table = getTableForCorrelation(null, engine, correlationMap);
-            table.setName(tablename);
-            return table;
-        }
-        else
-        {
-            Table table = getTableForCorrelation(tablename, engine, correlationMap);
-            table.setName(tablename);
-            return table;
-        }
-    }
-
-    @Rule("identifier as? identifier")
-    protected Table tableReference(
+    @Rule("(identifier '\\.')? identifier (as? identifier)?")
+    protected Table<R, C> tableReference(
+            String schema, 
             String tablename,
             String correlationName,
-            @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap)
+            @ParserContext("engine") Engine<R, C> engine
+            )
     {
-        Table table = getTableForCorrelation(correlationName, engine, correlationMap);
-        table.setName(tablename);
-        return table;
-    }
-
-    protected Table getTableForCorrelation(String correlationName, Engine engine, Map<String, Table> correlationMap)
-    {
-        if (correlationName != null)
-        {
-            correlationName = correlationName.toUpperCase();
-        }
-        Table table = correlationMap.get(correlationName);
-        if (table == null)
-        {
-            table = engine.createTable();
-            correlationMap.put(correlationName, table);
-        }
-        return table;
+        return engine.createTable(schema, tablename, correlationName);
     }
 
     @Rule("where searchCondition")
@@ -596,42 +530,47 @@ public abstract class SqlParser<R, C>
     protected abstract Condition predicate(Condition predicate);
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '=' rowValuePredicant")
-    protected Condition comparisonPredicate1(RowValue rv1, RowValue rv2)
+    protected Condition comparisonPredicate1(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
     {
-        return newComparisonCondition(rv1, Relation.EQ, rv2);
+        return newComparisonCondition(rv1, Relation.EQ, rv2, tableList);
     }
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '<>' rowValuePredicant")
-    protected Condition comparisonPredicate2(RowValue rv1, RowValue rv2)
+    protected Condition comparisonPredicate2(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
     {
-        return newComparisonCondition(rv1, Relation.NE, rv2);
+        return newComparisonCondition(rv1, Relation.NE, rv2, tableList);
     }
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '<' rowValuePredicant")
-    protected Condition comparisonPredicate3(RowValue rv1, RowValue rv2)
+    protected Condition comparisonPredicate3(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
     {
-        return newComparisonCondition(rv1, Relation.LT, rv2);
+        return newComparisonCondition(rv1, Relation.LT, rv2, tableList);
     }
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '>' rowValuePredicant")
-    protected Condition comparisonPredicate4(RowValue rv1, RowValue rv2)
+    protected Condition comparisonPredicate4(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
     {
-        return newComparisonCondition(rv1, Relation.GT, rv2);
+        return newComparisonCondition(rv1, Relation.GT, rv2, tableList);
     }
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '<=' rowValuePredicant")
-    protected Condition comparisonPredicate5(RowValue rv1, RowValue rv2)
+    protected Condition comparisonPredicate5(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
     {
-        return newComparisonCondition(rv1, Relation.LE, rv2);
+        return newComparisonCondition(rv1, Relation.LE, rv2, tableList);
     }
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '>=' rowValuePredicant")
-    protected Condition comparisonPredicate6(RowValue rv1, RowValue rv2)
+    protected Condition comparisonPredicate6(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
     {
-        return newComparisonCondition(rv1, Relation.GE, rv2);
+        return newComparisonCondition(rv1, Relation.GE, rv2, tableList);
     }
 
-    protected Condition newComparisonCondition(RowValue rv1, Relation relation, RowValue rv2)
+    protected Condition newComparisonCondition(
+            RowValue rv1, 
+            Relation relation, 
+            RowValue rv2,
+            List<Table<R, C>> tableList
+            )
     {
         if ((rv1 instanceof Literal) && (rv2 instanceof Literal))
         {
@@ -641,6 +580,8 @@ public abstract class SqlParser<R, C>
         {
             ColumnReference cf1 = (ColumnReference) rv1;
             ColumnReference cf2 = (ColumnReference) rv2;
+            cf1.resolvTable(tableList);
+            cf2.resolvTable(tableList);
             if (cf1.getTable().equals(cf2.getTable()))
             {
                 return new ColumnComparisonInOneTable<>(cf1, relation, cf2);
@@ -653,6 +594,7 @@ public abstract class SqlParser<R, C>
         if ((rv1 instanceof ColumnReference) && (rv2 instanceof Literal))
         {
             ColumnReference cf1 = (ColumnReference) rv1;
+            cf1.resolvTable(tableList);
             Literal cf2 = (Literal) rv2;
             return new LiteralComparison<>(cf1, relation, cf2);
         }
@@ -660,32 +602,16 @@ public abstract class SqlParser<R, C>
         {
             Literal cf1 = (Literal) rv1;
             ColumnReference cf2 = (ColumnReference) rv2;
+            cf2.resolvTable(tableList);
             return new LiteralComparison<>(cf2, relation, cf1);
         }
         throw new UnsupportedOperationException("unsupported comparison???");
     }
 
-    @Rule(left = "rowValuePredicant", value = "identifier")
-    protected RowValue rowValuePredicant1(
-            String column,
-            @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap)
+    @Rule(left = "rowValuePredicant", value = "columnReference")
+    protected RowValue rowValuePredicant1(ColumnReference columnReference)
     {
-        Table table = getTableForCorrelation(null, engine, correlationMap);
-        table.addConditionColumn(column);
-        return new ColumnReferenceImpl<>(table, column);
-    }
-
-    @Rule(left = "rowValuePredicant", value = "identifier '\\.' identifier")
-    protected RowValue rowValuePredicant2(
-            String correlationName,
-            String column,
-            @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("correlationMap") Map<String, Table> correlationMap)
-    {
-        Table table = getTableForCorrelation(correlationName, engine, correlationMap);
-        table.addConditionColumn(column);
-        return new ColumnReferenceImpl<>(table, correlationName, column);
+        return columnReference;
     }
 
     @Rule(left = "rowValuePredicant", value = "literal")
@@ -695,26 +621,26 @@ public abstract class SqlParser<R, C>
     }
 
     @Rule(left = "betweenPredicate", value = "rowValuePredicant between rowValuePredicant and rowValuePredicant")
-    protected Condition betweenPredicate1(RowValue rv1, RowValue rv2, RowValue rv3)
+    protected Condition betweenPredicate1(RowValue rv1, RowValue rv2, RowValue rv3, @ParserContext("tableList") List<Table<R, C>> tableList)
     {
         return new AndCondition<>(
-                newComparisonCondition(rv1, Relation.GE, rv2),
-                newComparisonCondition(rv1, Relation.LE, rv3));
+                newComparisonCondition(rv1, Relation.GE, rv2, tableList),
+                newComparisonCondition(rv1, Relation.LE, rv3, tableList));
     }
 
     @Rule(left = "betweenPredicate", value = "rowValuePredicant not between rowValuePredicant and rowValuePredicant")
-    protected Condition betweenPredicate2(RowValue rv1, RowValue rv2, RowValue rv3)
+    protected Condition betweenPredicate2(RowValue rv1, RowValue rv2, RowValue rv3, @ParserContext("tableList") List<Table<R, C>> tableList)
     {
         return new OrCondition<>(
-                newComparisonCondition(rv1, Relation.LT, rv2),
-                newComparisonCondition(rv1, Relation.GT, rv3));
+                newComparisonCondition(rv1, Relation.LT, rv2, tableList),
+                newComparisonCondition(rv1, Relation.GT, rv3, tableList));
     }
 
     @Rule(left = "inPredicate", value = "rowValuePredicant in inPredicateValue")
-    protected Condition inPredicate1(RowValue rv, Collection<RowValue> inValues)
+    protected Condition inPredicate1(RowValue rv, Collection<RowValue> inValues, @ParserContext("tableList") List<Table<R, C>> tableList)
     {
         Iterator<RowValue> iterator = inValues.iterator();
-        Condition<R, C> comp1 = newComparisonCondition(rv, Relation.EQ, iterator.next());
+        Condition<R, C> comp1 = newComparisonCondition(rv, Relation.EQ, iterator.next(), tableList);
         if (inValues.size() == 1)
         {
             return comp1;
@@ -722,7 +648,7 @@ public abstract class SqlParser<R, C>
         OrCondition<R, C> orCond = null;
         while (iterator.hasNext())
         {
-            Condition<R, C> comp2 = newComparisonCondition(rv, Relation.EQ, iterator.next());
+            Condition<R, C> comp2 = newComparisonCondition(rv, Relation.EQ, iterator.next(), tableList);
             if (orCond == null)
             {
                 orCond = new OrCondition<>(comp1, comp2);
@@ -736,9 +662,9 @@ public abstract class SqlParser<R, C>
     }
 
     @Rule(left = "inPredicate", value = "rowValuePredicant not in inPredicateValue")
-    protected Condition inPredicate2(RowValue rv, Collection<RowValue> inValues)
+    protected Condition inPredicate2(RowValue rv, Collection<RowValue> inValues, @ParserContext("tableList") List<Table<R, C>> tableList)
     {
-        return new NotCondition(inPredicate1(rv, inValues));
+        return new NotCondition(inPredicate1(rv, inValues, tableList));
     }
 
     @Rule(left = "inPredicateValue", value = "'\\(' inValueList '\\)'")

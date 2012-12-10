@@ -36,6 +36,10 @@ public class BatchStatement<R,C> extends Statement<R,C>
     @Override
     public FetchResult execute()
     {
+        if (statementList.size() == 1)
+        {
+            return statementList.get(0).execute();
+        }
         for (Statement<R, C> statement : statementList)
         {
             statement.execute();

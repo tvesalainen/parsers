@@ -19,33 +19,34 @@ package org.vesalainen.parsers.sql;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Timo Vesalainen
  */
-public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVisitor
+public class SelectStatement<R,C> extends Statement<R,C>
 {
     private List<ColumnReference<R,C>> subList;
-    private Set<Table> tableSet = new HashSet<>();
-    private Map<String,Table> correlationMap;
+    private List<Table<R,C>> tableList;
     private Condition<R,C> condition;
     private List<SortSpecification> sortSpecification;
     private Metadata metadata;
     private ErrorReporter reporter;
 
-    public SelectStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, List<ColumnReference<R,C>> selectList, TableExpression tableExpression, Map<String,Table> correlationMap)
+    public SelectStatement(
+            Engine<R, C> engine, 
+            LinkedHashMap<String, Placeholder> placeholderMap, 
+            List<ColumnReference<R,C>> selectList, 
+            TableExpression tableExpression
+            )
     {
         super(engine, placeholderMap);
         this.subList = selectList;
-        this.correlationMap = correlationMap;
-        tableSet.addAll(correlationMap.values());
+        this.tableList = tableExpression.getTableList();
         this.condition = tableExpression.getCondition();
         this.sortSpecification = tableExpression.getSortSpecificationList();
+        resolv();
         if (condition != null)
         {
             condition.associateCondition(this, true);
@@ -54,7 +55,7 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         {
             // asterisk
             subList = new ArrayList<>();
-            for (Table table : correlationMap.values())
+            for (Table table : tableList)
             {
                 TableMetadata tm = engine.getTableMetadata(table.getName());
                 if (tm != null)
@@ -68,17 +69,48 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         }
     }
 
+    private void resolv()
+    {
+        if (subList != null)
+        {
+            for (ColumnReference<R,C> cf : subList)
+            {
+                resolvColumnReference(cf);
+            }
+        }
+        if (condition != null)
+        {
+            condition.walk(new Resolver(), true);
+        }
+        if (sortSpecification != null)
+        {
+            for (SortSpecification ss : sortSpecification)
+            {
+                RowValue rv = ss.getRv();
+                if (rv instanceof ColumnReference)
+                {
+                    ColumnReference cf = (ColumnReference) rv;
+                    resolvColumnReference(cf);
+                }
+            }
+        }
+    }
+    private void resolvColumnReference(ColumnReference<R, C> cf)
+    {
+        cf.resolvTable(tableList);
+    }
+
     @Override
     public void check(Metadata metadata, ErrorReporter reporter)
     {
         super.check(metadata, reporter);
         this.metadata = metadata;
         this.reporter = reporter;
-        for (ColumnReference cf : subList)
+        for (ColumnReference<R,C> cf : subList)
         {
             checkColumnReference(cf, metadata, reporter);
         }
-        for (Table table : correlationMap.values())
+        for (Table table : tableList)
         {
             if (table.getName() != null)
             {
@@ -98,7 +130,7 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         }
         if (condition != null)
         {
-            condition.walk(this, true);
+            condition.walk(new Checker(), true);
         }
         if (sortSpecification != null)
         {
@@ -115,23 +147,6 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         this.metadata = null;
         this.reporter = null;
     }
-    @Override
-    public void visit(Condition condition, boolean andPath)
-    {
-        if (condition instanceof ColumnCondition)
-        {
-            ColumnCondition cc = (ColumnCondition) condition;
-            ColumnReference cf = cc.getColumnReference();
-            checkColumnReference(cf, metadata, reporter);
-        }
-        if (condition instanceof JoinCondition)
-        {
-            JoinCondition jc = (JoinCondition) condition;
-            ColumnReference cf = jc.getColumnReference2();
-            checkColumnReference(cf, metadata, reporter);
-        }
-    }
-
     private void checkColumnReference(ColumnReference<R,C> cf, Metadata metadata, ErrorReporter reporter)
     {
         Table table = cf.getTable();
@@ -181,24 +196,9 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
         return engine.selectForUpdate(this);
     }
     
-    public Collection<Table> getTables()
+    public Collection<Table<R,C>> getTables()
     {
-        return tableSet;
-    }
-
-    void setTableReference(String table)
-    {
-        setTableReference(table, table);
-    }
-
-    void setTableReference(String tablename, String correlationName)
-    {
-        if (correlationName != null)
-        {
-            correlationName = correlationName.toUpperCase();
-        }
-        Table table = correlationMap.get(correlationName);
-        table.setName(tablename);
+        return tableList;
     }
 
     void setWhereClause(Condition condition)
@@ -249,7 +249,47 @@ public class SelectStatement<R,C> extends Statement<R,C> implements ConditionVis
 
     public int getTableCount()
     {
-        return tableSet.size();
+        return tableList.size();
     }
 
+    private class Resolver implements ConditionVisitor
+    {
+        @Override
+        public void visit(Condition condition, boolean andPath)
+        {
+            if (condition instanceof ColumnCondition)
+            {
+                ColumnCondition cc = (ColumnCondition) condition;
+                ColumnReference cf = cc.getColumnReference();
+                resolvColumnReference(cf);
+            }
+            if (condition instanceof JoinCondition)
+            {
+                JoinCondition jc = (JoinCondition) condition;
+                ColumnReference cf = jc.getColumnReference2();
+                resolvColumnReference(cf);
+            }
+        }
+
+    }
+    private class Checker implements ConditionVisitor
+    {
+        @Override
+        public void visit(Condition condition, boolean andPath)
+        {
+            if (condition instanceof ColumnCondition)
+            {
+                ColumnCondition cc = (ColumnCondition) condition;
+                ColumnReference cf = cc.getColumnReference();
+                checkColumnReference(cf, metadata, reporter);
+            }
+            if (condition instanceof JoinCondition)
+            {
+                JoinCondition jc = (JoinCondition) condition;
+                ColumnReference cf = jc.getColumnReference2();
+                checkColumnReference(cf, metadata, reporter);
+            }
+        }
+
+    }
 }

@@ -17,6 +17,7 @@
 
 package org.vesalainen.parsers.sql;
 
+import java.util.Collection;
 import org.vesalainen.parsers.sql.util.ArrayMap;
 
 /**
@@ -29,6 +30,12 @@ public abstract class AbstractFunction<R,C> extends ParserLocator2Impl implement
     public AbstractFunction(ColumnReference inner)
     {
         this.inner = inner;
+    }
+
+    @Override
+    public boolean resolvTable(Collection<Table<R, C>> tables)
+    {
+        return inner.resolvTable(tables);
     }
 
     @Override

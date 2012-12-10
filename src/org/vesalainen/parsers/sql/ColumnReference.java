@@ -16,6 +16,7 @@
  */
 package org.vesalainen.parsers.sql;
 
+import java.util.Collection;
 import org.vesalainen.parsers.sql.util.ArrayMap;
 
 /**
@@ -31,4 +32,6 @@ public interface ColumnReference<R,C> extends RowValue<R, C>
     void setTable(Table<R, C> table);
     C getValue(SQLConverter<R,C> engine, R row);
     C getValue(SQLConverter<R,C> engine, ArrayMap<Table<R,C>,R> rowCandidate);
+
+    boolean resolvTable(Collection<Table<R, C>> tables);
 }

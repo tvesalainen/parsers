@@ -22,15 +22,22 @@ import java.util.List;
 /**
  * @author Timo Vesalainen
  */
-public class TableExpression 
+public class TableExpression<R,C> 
 {
     private Condition condition;
     private List<SortSpecification> sortSpecificationList;
+    private final List<Table<R,C>> tableList;
 
-    public TableExpression(Condition condition, List<SortSpecification> sortSpecificationList)
+    TableExpression(List<Table<R,C>> tableList, Condition condition, List<SortSpecification> sortSpecificationList)
     {
+        this.tableList = tableList;
         this.condition = condition;
         this.sortSpecificationList = sortSpecificationList;
+    }
+
+    public List<Table<R,C>> getTableList()
+    {
+        return tableList;
     }
 
     public Condition getCondition()
