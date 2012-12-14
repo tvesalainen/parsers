@@ -47,6 +47,16 @@ public class BatchStatement<R,C> extends Statement<R,C>
         return null;
     }
 
+    @Override
+    public boolean isSelectStatement()
+    {
+        if (statementList.size() == 1)
+        {
+            return (statementList.get(0) instanceof SelectStatement);
+        }
+        return false;
+    }
+
     public List<Statement<R, C>> getStatementList()
     {
         return statementList;

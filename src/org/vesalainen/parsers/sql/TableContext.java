@@ -30,9 +30,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import org.vesalainen.parsers.sql.Relation;
 import org.vesalainen.parsers.sql.util.CartesianMap;
 import org.vesalainen.parsers.sql.util.FastSet;
+import org.vesalainen.parsers.sql.util.JoinMap;
+import org.vesalainen.parsers.sql.util.JoinMapImpl;
 
 /**
  * @author Timo Vesalainen
@@ -45,7 +46,7 @@ public class TableContext<R,C>
     private Map<String,NavigableMap<C,Set<R>>> indexes = new HashMap<>();
     private FastSet<R> all;
     private ArrayMap<Table<R,C>,TableContext<R,C>> others;
-    private Map<Table,Map<R, Set<R>>> joinMaps = new HashMap<>();   // TODO use ArrayMap!!!
+    private Map<Table,JoinMap<R>> joinMaps = new HashMap<>();   // TODO use ArrayMap!!!
     private TableMetadata metadata;
 
     public TableContext(Engine<R,C> selector, Table<R,C> table, ArrayMap<Table<R,C>, TableContext<R, C>> others)
@@ -67,9 +68,9 @@ public class TableContext<R,C>
         }
     }
 
-    public Map<R, Set<R>> getJoinMapTo(Table table)
+    public JoinMap<R> getJoinMapTo(Table table)
     {
-        Map<R, Set<R>> map = joinMaps.get(table);
+        JoinMap<R> map = joinMaps.get(table);
         if (map == null)
         {
             return new CartesianMap<>(all, others.get(table).all);
@@ -151,11 +152,16 @@ public class TableContext<R,C>
                         }
                         else
                         {
-                            Map<R, Set<R>> mergeMap = merge(thisMap, otherMap);
-                            Map<R, Set<R>> oldMap = joinMaps.get(otherTable);
-                            if (oldMap == null || oldMap.size() > mergeMap.size())
+                            JoinMap<R>[] mergeMaps = merge(thisMap, otherMap);
+                            JoinMap<R> oldMapOther = joinMaps.get(otherTable);
+                            if (oldMapOther == null || oldMapOther.size() > mergeMaps[0].size())
                             {
-                                joinMaps.put(otherTable, mergeMap);
+                                joinMaps.put(otherTable, mergeMaps[0]);
+                            }
+                            JoinMap<R> oldMapThis = joinMaps.get(table);
+                            if (oldMapThis == null || oldMapThis.size() > mergeMaps[1].size())
+                            {
+                                joinMaps.put(table, mergeMaps[1]);
                             }
                             System.err.println("merged "+table+" to "+this.all.size());
                             System.err.println("merged "+otherTable+" to "+otherCtx.all.size());
@@ -165,9 +171,10 @@ public class TableContext<R,C>
             }
         }
     }
-    private Map<R,Set<R>> merge(NavigableMap<C,Set<R>> thisMap, NavigableMap<C,Set<R>> otherMap)
+    private JoinMap<R>[] merge(NavigableMap<C,Set<R>> thisMap, NavigableMap<C,Set<R>> otherMap)
     {
-        Map<R,Set<R>> map = new HashMap<>();    // TODO make more efficient map???
+        JoinMap<R> mapThis = new JoinMapImpl<>();
+        JoinMap<R> mapOther = new JoinMapImpl<>();
         Comparator<? super C> comparator = thisMap.comparator();
         Iterator<C> thisIterator = thisMap.keySet().iterator();
         Iterator<C> otherIterator = otherMap.keySet().iterator();
@@ -207,7 +214,11 @@ public class TableContext<R,C>
                     Set<R> otherSet = otherMap.get(thisValue);
                     for (R row : thisSet)
                     {
-                        map.put(row, otherSet);
+                        mapThis.put(row, otherSet);
+                    }
+                    for (R row : otherSet)
+                    {
+                        mapOther.put(row, thisSet);
                     }
                     if (!thisIterator.hasNext() || !otherIterator.hasNext())
                     {
@@ -236,7 +247,7 @@ public class TableContext<R,C>
                 otherSet.clear();
             }
         }
-        return map;
+        return new JoinMap[] {mapThis, mapOther};
     }
 
     public NavigableSet<C> getColumnValues(String column)

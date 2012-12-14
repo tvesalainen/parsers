@@ -20,9 +20,10 @@ package org.vesalainen.parsers.sql;
 import org.vesalainen.parsers.sql.util.ArrayMap;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.util.InputReader;
+import org.vesalainen.parsers.sql.util.JoinMap;
 
 /**
  * 
@@ -155,6 +157,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
             tableList.remove(currentTable);
             currentTable.updateHints(tableList);
         }
+        sort(resultArray);
         ArrayMap<Table<R,C>,R> rowCandidate = new ArrayMap<>(select.getTables());
         cartesian(condition, result, resultArray, rowCandidate);
     }
@@ -169,7 +172,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         int level = 0;
         Iterator[] iterator = new Iterator[resultArray.length];
         iterator[0] = resultArray[0].getAll().iterator();
-        Map[] joinMap = new Map[resultArray.length-1];
+        JoinMap<R>[] joinMap = new JoinMap[resultArray.length-1];
         for (int ii=0;ii<joinMap.length;ii++)
         {
             joinMap[ii] = resultArray[ii].getJoinMapTo(resultArray[ii+1].getTable());
@@ -351,6 +354,66 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         if (len < min || len > max)
         {
             throw new IllegalArgumentException("wrong number of string arguments for function "+funcName);
+        }
+    }
+
+    private void sort(TableContext[] resultArray)
+    {
+        if (resultArray.length == 1)
+        {
+            return;
+        }
+        Set<TableContext> rest = new HashSet<>();
+        for (TableContext tc : resultArray)
+        {
+            rest.add(tc);
+        }
+        Arrays.fill(resultArray, null);
+        int index = 0;
+        // choose biggest
+        for (TableContext tc : rest)
+        {
+            if (resultArray[index] == null)
+            {
+                resultArray[index] = tc;
+            }
+            else
+            {
+                if (tc.getAll().size() > resultArray[index].getAll().size())
+                {
+                    resultArray[index] = tc;
+                }
+            }
+        }
+        rest.remove(resultArray[index]);
+        while (!rest.isEmpty())
+        {
+            TableContext next = null;
+            float nextRatio = Float.MAX_VALUE;
+            for (TableContext tc : rest)
+            {
+                if (next == null)
+                {
+                    next = tc;
+                    JoinMap<R> joinMapTo = resultArray[index].getJoinMapTo(next.getTable());
+                    if (joinMapTo != null)
+                    {
+                        nextRatio = joinMapTo.getRatio();
+                    }
+                }
+                else
+                {
+                    JoinMap<R> joinMapTo = resultArray[index].getJoinMapTo(tc.getTable());
+                    if (joinMapTo != null && nextRatio > joinMapTo.getRatio())
+                    {
+                        next = tc;
+                        nextRatio = joinMapTo.getRatio();
+                    }
+                }
+            }
+            index++;
+            resultArray[index] = next;
+            rest.remove(resultArray[index]);
         }
     }
 }

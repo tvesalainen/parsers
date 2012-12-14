@@ -59,7 +59,7 @@ public abstract class WhereStatement<R, C> extends Statement<R, C> implements Co
         {
             R row = iterator.next();
             rowCandidate.put(index, row);
-            if (condition.matches(engine, rowCandidate) != TruthValue.TRUE)
+            if (condition != null && condition.matches(engine, rowCandidate) != TruthValue.TRUE)
             {
                 iterator.remove();
             }

@@ -247,6 +247,12 @@ public class SelectStatement<R,C> extends Statement<R,C>
         }
     }
 
+    @Override
+    public boolean isSelectStatement()
+    {
+        return true;
+    }
+
     public int getTableCount()
     {
         return tableList.size();

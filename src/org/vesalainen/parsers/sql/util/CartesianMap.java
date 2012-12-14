@@ -24,7 +24,7 @@ import java.util.Set;
 /**
  * @author Timo Vesalainen
  */
-public class CartesianMap<T> implements Map<T,Set<T>> 
+public class CartesianMap<T> implements Map<T,Set<T>>, JoinMap<T> 
 {
     private Set<T> keys;
     private Set<T> values;
@@ -35,6 +35,12 @@ public class CartesianMap<T> implements Map<T,Set<T>>
         this.values = values;
     }
     
+    @Override
+    public float getRatio()
+    {
+        return (float)keys.size()*(float)values.size();
+    }
+
     @Override
     public int size()
     {

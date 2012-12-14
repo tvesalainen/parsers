@@ -52,5 +52,10 @@ public abstract class Statement<R,C>
     {
     }
     public abstract FetchResult<R,C> execute();
+
+    public boolean isSelectStatement()
+    {
+        return false;
+    }
     
 }
