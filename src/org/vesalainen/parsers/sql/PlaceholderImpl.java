@@ -17,13 +17,17 @@
 
 package org.vesalainen.parsers.sql;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+
 /**
  * @author Timo Vesalainen
  */
 public class PlaceholderImpl<R,C> extends LiteralImpl<R,C> implements Placeholder<R,C>
 {
     private String name;
-    private Class<? extends C> type;
+    private Class<?> type;
+    private SelectStatement<R,C> select;
     
     public PlaceholderImpl(String name, Class<? extends C> type)
     {
@@ -45,16 +49,48 @@ public class PlaceholderImpl<R,C> extends LiteralImpl<R,C> implements Placeholde
         this.type = (Class<? extends C>) val.getClass();
     }
 
+    public PlaceholderImpl(String name, SelectStatement<R,C> select)
+    {
+        super(null);
+        this.name = name;
+        this.select = select;
+        this.type = ComboBoxModel.class;
+    }
+
+    @Override
+    public Object getDefaultValue()
+    {
+        if (select != null)
+        {
+            DefaultComboBoxModel<C> model = new DefaultComboBoxModel<>();
+            FetchResult<R,C> result = select.execute();
+            for (int row=0;row<result.getRowCount();row++)
+            {
+                model.addElement(result.getValueAt(row, 0));
+            }
+            return model;
+        }
+        return super.getValue();
+    }
+
     @Override
     public void bindValue(C value)
     {
-        if (type.isAssignableFrom(value.getClass()))
+        if (value instanceof ComboBoxModel)
         {
-            this.value = value;
+            ComboBoxModel<C> model = (ComboBoxModel) value;
+            this.value = (C) model.getSelectedItem();
         }
         else
         {
-            throw new IllegalArgumentException(value+" type is not "+type);
+            if (type.isAssignableFrom(value.getClass()))
+            {
+                this.value = value;
+            }
+            else
+            {
+                throw new IllegalArgumentException(value+" type is not "+type);
+            }
         }
     }
 
@@ -77,7 +113,7 @@ public class PlaceholderImpl<R,C> extends LiteralImpl<R,C> implements Placeholde
     }
 
     @Override
-    public Class<? extends C> getType()
+    public Class<?> getType()
     {
         return type;
     }

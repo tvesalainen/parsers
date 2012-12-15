@@ -827,6 +827,23 @@ public abstract class SqlParser<R, C>
         placeholderMap.put(identifier, placeholder);
         return placeholder;
     }
+    
+    @Rule("':' stringConstant '\\(' querySpecification '\\)'")
+    protected Literal<R, C> placeholder(
+            String identifier, 
+            Statement query,
+            @ParserContext("placeholderMap") Map<String,Placeholder> placeholderMap
+            )
+    {
+        SelectStatement select = (SelectStatement) query;
+        if (select.getSelectList().size() != 1)
+        {
+            select.throwException("placeholder query must return one column");
+        }
+        Placeholder placeholder = new PlaceholderImpl<>(identifier, select);
+        placeholderMap.put(identifier, placeholder);
+        return placeholder;
+    }
 
     @Rule()
     protected Class<? extends C>  placeholderType(@ParserContext("engine") Engine<R, C> engine)

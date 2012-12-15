@@ -26,5 +26,6 @@ public interface Placeholder<R,C> extends Literal<R,C>
     void bindValue(C value);
     boolean isBound();
     void setType(Class<? extends C> type);
-    Class<? extends C>  getType();
+    Class<?>  getType();
+    Object getDefaultValue();
 }

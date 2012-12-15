@@ -364,57 +364,82 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         {
             return;
         }
-        Set<TableContext> rest = new HashSet<>();
+        HashSet<TableContext> rest = new HashSet<>();
         for (TableContext tc : resultArray)
         {
             rest.add(tc);
         }
-        Arrays.fill(resultArray, null);
-        int index = 0;
-        // choose biggest
-        for (TableContext tc : rest)
+        OptRes min = findMin(Float.MAX_VALUE, 0, rest, new ArrayDeque<TableContext>());
+        for (int ii=resultArray.length-1;ii>=0;ii--)
         {
-            if (resultArray[index] == null)
+            resultArray[ii] = min.stack.pop();
+        }
+    }
+    private OptRes findMin(
+            float lastMin,
+            float cum,
+            HashSet<TableContext> rest,
+            ArrayDeque<TableContext> stack
+            )
+    {
+        OptRes best = null;
+        if (stack.isEmpty())
+        {
+            for (TableContext tc : rest)
             {
-                resultArray[index] = tc;
+                HashSet<TableContext> clone = (HashSet<TableContext>) rest.clone();
+                clone.remove(tc);
+                stack.push(tc);
+                OptRes res = findMin(lastMin, 0, clone, stack);
+                stack.pop();
+                if (res != null && res.min < lastMin)
+                {
+                    lastMin = res.min;
+                    best = res;
+                }
+            }
+        }
+        else
+        {
+            if (!rest.isEmpty())
+            {
+                TableContext prev = stack.peek();
+                for (TableContext tc : rest)
+                {
+                    JoinMap joinMapTo = prev.getJoinMapTo(tc.getTable());
+                    float cur = cum + joinMapTo.getRatio();
+                    if (cur < lastMin)
+                    {
+                        HashSet<TableContext> clone = (HashSet<TableContext>) rest.clone();
+                        clone.remove(tc);
+                        stack.push(tc);
+                        OptRes res = findMin(lastMin, cur, clone, stack);
+                        stack.pop();
+                        if (res != null && res.min < lastMin)
+                        {
+                            lastMin = res.min;
+                            best = res;
+                        }
+                    }
+                }
             }
             else
             {
-                if (tc.getAll().size() > resultArray[index].getAll().size())
-                {
-                    resultArray[index] = tc;
-                }
+                return new OptRes(stack.clone(), cum);
             }
         }
-        rest.remove(resultArray[index]);
-        while (!rest.isEmpty())
+        return best;
+    }
+    private class OptRes
+    {
+        private ArrayDeque<TableContext> stack;
+        private float min;
+
+        public OptRes(ArrayDeque<TableContext> stack, float min)
         {
-            TableContext next = null;
-            float nextRatio = Float.MAX_VALUE;
-            for (TableContext tc : rest)
-            {
-                if (next == null)
-                {
-                    next = tc;
-                    JoinMap<R> joinMapTo = resultArray[index].getJoinMapTo(next.getTable());
-                    if (joinMapTo != null)
-                    {
-                        nextRatio = joinMapTo.getRatio();
-                    }
-                }
-                else
-                {
-                    JoinMap<R> joinMapTo = resultArray[index].getJoinMapTo(tc.getTable());
-                    if (joinMapTo != null && nextRatio > joinMapTo.getRatio())
-                    {
-                        next = tc;
-                        nextRatio = joinMapTo.getRatio();
-                    }
-                }
-            }
-            index++;
-            resultArray[index] = next;
-            rest.remove(resultArray[index]);
+            this.stack = stack;
+            this.min = min;
         }
+        
     }
 }
