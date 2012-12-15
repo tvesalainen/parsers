@@ -18,6 +18,7 @@
 package org.vesalainen.parsers.sql;
 
 import java.util.List;
+import java.util.List;
 
 /**
  * @author Timo Vesalainen
@@ -26,7 +27,7 @@ public class TableExpression<R,C>
 {
     private Condition condition;
     private List<SortSpecification> sortSpecificationList;
-    private final List<Table<R,C>> tableList;
+    private List<Table<R,C>> tableList;
 
     TableExpression(List<Table<R,C>> tableList, Condition condition, List<SortSpecification> sortSpecificationList)
     {

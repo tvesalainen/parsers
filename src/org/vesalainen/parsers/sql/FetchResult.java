@@ -45,7 +45,7 @@ public class FetchResult<R, C> implements Iterable<C[]>
         int index = 0;
         for (ColumnReference cf : subList)
         {
-            columnMap.put(cf.toString(), index);
+            columnMap.put(cf.getColumn(), index);
             hdr[index++] = cf.getColumn();
         }
         header = hdr;
@@ -56,6 +56,10 @@ public class FetchResult<R, C> implements Iterable<C[]>
     {
         this.engine = engine;
         this.header = header;
+        for (int ii=0;ii<header.length;ii++)
+        {
+            columnMap.put(header[ii], ii);
+        }
         init();
     }
     private void init()
@@ -74,6 +78,15 @@ public class FetchResult<R, C> implements Iterable<C[]>
         return subList;
     }
     
+    public int getColumnIndex(String column)
+    {
+        Integer i = columnMap.get(column);
+        if (i != null)
+        {
+            return i;
+        }
+        return -1;
+    }
     /**
      * Returns column headers
      * @return 
@@ -81,6 +94,11 @@ public class FetchResult<R, C> implements Iterable<C[]>
     public String[] getHeader()
     {
         return header;
+    }
+
+    public void setHeader(String[] header)
+    {
+        this.header = header;
     }
 
     public void addRowArray(C... row)
@@ -138,7 +156,7 @@ public class FetchResult<R, C> implements Iterable<C[]>
         Integer col = columnMap.get(column);
         if (col == null)
         {
-            throw new IllegalArgumentException(column+" not found");
+            return null;
         }
         return data.get(row)[col];
     }

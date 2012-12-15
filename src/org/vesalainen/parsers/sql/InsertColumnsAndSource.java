@@ -26,11 +26,18 @@ public class InsertColumnsAndSource<R,C>
 {
     private List<String> columnList;
     private List<Literal<R,C>> valueList;
+    private SelectStatement select;
 
     public InsertColumnsAndSource(List<String> columnList, List<Literal<R,C>> valueList)
     {
         this.columnList = columnList;
         this.valueList = valueList;
+    }
+
+    public InsertColumnsAndSource(List<String> columnList, SelectStatement select)
+    {
+        this.columnList = columnList;
+        this.select = select;
     }
 
     public List<String> getColumnList()
@@ -41,6 +48,11 @@ public class InsertColumnsAndSource<R,C>
     public List<Literal<R,C>> getValueList()
     {
         return valueList;
+    }
+
+    public SelectStatement getSelect()
+    {
+        return select;
     }
     
 }

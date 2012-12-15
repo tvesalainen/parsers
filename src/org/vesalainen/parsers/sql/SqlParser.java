@@ -21,11 +21,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 import org.vesalainen.parser.ParserConstants;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
@@ -39,11 +40,14 @@ import org.vesalainen.parsers.date.SQLDateParser;
 import org.vesalainen.regex.Regex;
 
 /**
- * This SQL parser implements a very small subset of the standard
+ * This SQL parser implements a subset of the standard
  * @author Timo Vesalainen 
- * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
- * @see <a href="doc-files/SqlParser-statements.html#BNF">BNF Syntax for SQL-statements</a>
+ * @see <a href="doc-files/SqlParser-batchStatement.html#BNF">BNF Syntax for SQL-statements</a>
  * @see <a href="http://savage.net.au/SQL/sql-2003-2.bnf.html">BNF Grammar for ISO/IEC 9075-2:2003 - Database Language SQL (SQL-2003) SQL/Foundation</a>
+ * 
+ * <p>
+ * Functions
+ * @see Engine.createFunction
  */
 //@GenClassname("org.vesalainen.parsers.sql.SqlParserImpl")
 @GrammarDef()
@@ -107,7 +111,7 @@ public abstract class SqlParser<R, C>
     protected abstract Statement parse(
             String sql,
             @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("tableList") List<Table<R, C>> tableList,
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack,
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("locator") SQLLocator locator
             );
@@ -127,7 +131,7 @@ public abstract class SqlParser<R, C>
     protected abstract Statement parse(
             InputStream is,
             @ParserContext("engine") Engine<R, C> engine,
-            @ParserContext("tableList") List<Table<R, C>> tableList,
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack,
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("locator") SQLLocator locator
             );
@@ -149,7 +153,7 @@ public abstract class SqlParser<R, C>
     @Rule("statementList")
     protected Statement<R, C> batchStatement(
             List<Statement<R, C>> list, 
-            @ParserContext("tableList") List<Table<R, C>> tableList,
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack,
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
@@ -202,7 +206,7 @@ public abstract class SqlParser<R, C>
         return new RollbackWorkStatement<>(engine, placeholderMap);
     }
 
-    @Rule("update tableReference set setClause ( '\\,' setClause)*")
+    @Rule("updateStart tableReference set setClause ( '\\,' setClause)*")
     protected Statement<R, C> updateStatementSearched(
             Table<R, C> table, 
             SetClause<R, C> setClause, 
@@ -215,17 +219,28 @@ public abstract class SqlParser<R, C>
         return new UpdateStatement<>(engine, placeholderMap, table, setClauseList);
     }
 
-    @Rule("update tableReference set setClause ( '\\,' setClause)* where searchCondition")
+    @Rule("updateStart tableReference set setClause ( '\\,' setClause)* where searchCondition")
     protected Statement<R, C> updateStatementSearched(
             Table<R, C> table, 
             SetClause<R, C> setClause, 
             List<SetClause<R, C>> setClauseList, 
             Condition<R, C> condition, 
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
-            @ParserContext("engine") Engine<R, C> engine)
+            @ParserContext("engine") Engine<R, C> engine,
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
+            )
     {
+        tableListStack.pop();
         setClauseList.add(0, setClause);
         return new UpdateStatement<>(engine, placeholderMap, table, setClauseList, condition);
+    }
+
+    @Rule("update")
+    protected void updateStart(
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
+            )
+    {
+        tableListStack.push(new ArrayList<Table<R, C>>());
     }
 
     @Rule("identifier '=' literal")
@@ -234,45 +249,79 @@ public abstract class SqlParser<R, C>
         return new SetClause<>(identifier, literal);
     }
 
-    @Rule("delete from tableReference")
+    @Rule("deleteStart from tableReference")
     protected Statement<R, C> deleteStatementSearched(
             Table<R, C> table, 
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
-            @ParserContext("engine") Engine<R, C> engine
+            @ParserContext("engine") Engine<R, C> engine,
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
             )
     {
+        tableListStack.pop();
         return new DeleteStatement<>(engine, placeholderMap, table);
     }
 
-    @Rule("delete from tableReference where searchCondition")
+    @Rule("deleteStart from tableReference where searchCondition")
     protected Statement<R, C> deleteStatementSearched(
             Table<R, C> table, 
             Condition<R, C> condition, 
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
-            @ParserContext("engine") Engine<R, C> engine
+            @ParserContext("engine") Engine<R, C> engine,
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
             )
     {
+        tableListStack.pop();
         return new DeleteStatement<>(engine, placeholderMap, table, condition);
     }
 
-    @Rule("insert into tableReference insertColumnsAndSource")
+    @Rule("delete")
+    protected void deleteStart(
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
+            )
+    {
+        tableListStack.push(new ArrayList<Table<R, C>>());
+    }
+
+    @Rule("insertStart into tableReference insertColumnsAndSource")
     protected Statement<R, C> insertStatement(
             Table<R, C> table, 
             InsertColumnsAndSource<R, C> insertColumnsAndSource, 
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
-            @ParserContext("engine") Engine<R, C> engine
+            @ParserContext("engine") Engine<R, C> engine,
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
             )
     {
+        tableListStack.pop();
         return new InsertStatement<>(engine, placeholderMap, table, insertColumnsAndSource);
+    }
+
+    @Rule("insert")
+    protected void insertStart(
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
+            )
+    {
+        tableListStack.push(new ArrayList<Table<R, C>>());
     }
 
     @Rules(
     {
-        //@Rule("fromSubQuery"),
+        @Rule("fromSubQuery"),
         @Rule("fromConstructor")
     //@Rule("fromDefault"),
     })
     protected abstract InsertColumnsAndSource insertColumnsAndSource(InsertColumnsAndSource<R, C> insertColumnsAndSource);
+
+    @Rule("'\\(' column ('\\,' column)* '\\)' querySpecification")
+    protected InsertColumnsAndSource fromSubQuery(String column, List<String> columnList, Statement subSelect)
+    {
+        SelectStatement select = (SelectStatement) subSelect;
+        columnList.add(0, column);
+        if (columnList.size() != select.getSelectList().size())
+        {
+            select.throwException("column list and value list sizes differ");
+        }
+        return new InsertColumnsAndSource(columnList, select);
+    }
 
     @Rule("'\\(' column ('\\,' column)* '\\)' values '\\(' literal ('\\,' literal)* '\\)'")
     protected InsertColumnsAndSource fromConstructor(String column, List<String> columnList, Literal<R, C> literal, List<Literal<R, C>> valueList)
@@ -281,7 +330,7 @@ public abstract class SqlParser<R, C>
         valueList.add(0, literal);
         if (columnList.size() != valueList.size())
         {
-            throw new IllegalArgumentException("column list and value list sizes differ");
+            literal.throwException("column list and value list sizes differ");
         }
         return new InsertColumnsAndSource(columnList, valueList);
     }
@@ -309,15 +358,25 @@ public abstract class SqlParser<R, C>
         return new DescribeStatement(engine, placeholderMap, identifier);
     }
 
-    @Rule("select selectList tableExpression")
+    @Rule("selectStart selectList tableExpression")
     protected Statement querySpecification(
             List<ColumnReference> selectList,
             TableExpression tableExpression,
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
-            @ParserContext("engine") Engine<R, C> engine
+            @ParserContext("engine") Engine<R, C> engine,
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
             )
     {
+        tableListStack.pop();
         return new SelectStatement(engine, placeholderMap, selectList, tableExpression);
+    }
+
+    @Rule("select")
+    protected void selectStart(
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
+            )
+    {
+        tableListStack.push(new ArrayList<Table<R, C>>());
     }
 
     @Rule("asterisk")
@@ -329,7 +388,10 @@ public abstract class SqlParser<R, C>
     }
 
     @Rule("selectSublist ('\\,' selectSublist)*")
-    protected List<ColumnReference> selectList(ColumnReference columnReference, List<ColumnReference> selectList)
+    protected List<ColumnReference> selectList(
+            ColumnReference columnReference, 
+            List<ColumnReference> selectList
+            )
     {
         selectList.add(0, columnReference);
         return selectList;
@@ -392,21 +454,21 @@ public abstract class SqlParser<R, C>
     }
 
     @Rule("fromClause whereClause? orderByClause?")
-    protected TableExpression tableExpression(List<Table> tableList, Condition condition, List<SortSpecification> sortSpecificationList)
+    protected TableExpression tableExpression(
+            Condition condition, 
+            List<SortSpecification> sortSpecificationList,
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
+            )
     {
-        return new TableExpression(tableList, condition, sortSpecificationList);
+        return new TableExpression(tableListStack.peek(), condition, sortSpecificationList);
     }
 
     @Rule("from tableReference ('\\,' tableReference)*")
-    protected List<Table<R, C>> fromClause(
+    protected void fromClause(
             Table<R, C> table, 
-            List<Table<R, C>> list,
-            @ParserContext("tableList") List<Table<R, C>> tableList
+            List<Table<R, C>> list
             )
     {
-        list.add(0, table);
-        tableList.addAll(list);
-        return list;
     }
 
     @Rule("(identifier '\\.')? identifier (as? identifier)?")
@@ -414,10 +476,13 @@ public abstract class SqlParser<R, C>
             String schema, 
             String tablename,
             String correlationName,
-            @ParserContext("engine") Engine<R, C> engine
+            @ParserContext("engine") Engine<R, C> engine,
+            @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
             )
     {
-        return engine.createTable(schema, tablename, correlationName);
+        Table<R, C> table = engine.createTable(schema, tablename, correlationName);
+        tableListStack.peek().add(table);
+        return table;
     }
 
     @Rule("where searchCondition")
@@ -530,39 +595,39 @@ public abstract class SqlParser<R, C>
     protected abstract Condition predicate(Condition predicate);
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '=' rowValuePredicant")
-    protected Condition comparisonPredicate1(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
+    protected Condition comparisonPredicate1(RowValue rv1, RowValue rv2, @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack)
     {
-        return newComparisonCondition(rv1, Relation.EQ, rv2, tableList);
+        return newComparisonCondition(rv1, Relation.EQ, rv2, tableListStack.peek());
     }
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '<>' rowValuePredicant")
-    protected Condition comparisonPredicate2(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
+    protected Condition comparisonPredicate2(RowValue rv1, RowValue rv2, @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack)
     {
-        return newComparisonCondition(rv1, Relation.NE, rv2, tableList);
+        return newComparisonCondition(rv1, Relation.NE, rv2, tableListStack.peek());
     }
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '<' rowValuePredicant")
-    protected Condition comparisonPredicate3(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
+    protected Condition comparisonPredicate3(RowValue rv1, RowValue rv2, @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack)
     {
-        return newComparisonCondition(rv1, Relation.LT, rv2, tableList);
+        return newComparisonCondition(rv1, Relation.LT, rv2, tableListStack.peek());
     }
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '>' rowValuePredicant")
-    protected Condition comparisonPredicate4(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
+    protected Condition comparisonPredicate4(RowValue rv1, RowValue rv2, @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack)
     {
-        return newComparisonCondition(rv1, Relation.GT, rv2, tableList);
+        return newComparisonCondition(rv1, Relation.GT, rv2, tableListStack.peek());
     }
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '<=' rowValuePredicant")
-    protected Condition comparisonPredicate5(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
+    protected Condition comparisonPredicate5(RowValue rv1, RowValue rv2, @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack)
     {
-        return newComparisonCondition(rv1, Relation.LE, rv2, tableList);
+        return newComparisonCondition(rv1, Relation.LE, rv2, tableListStack.peek());
     }
 
     @Rule(left = "comparisonPredicate", value = "rowValuePredicant '>=' rowValuePredicant")
-    protected Condition comparisonPredicate6(RowValue rv1, RowValue rv2, @ParserContext("tableList") List<Table<R, C>> tableList)
+    protected Condition comparisonPredicate6(RowValue rv1, RowValue rv2, @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack)
     {
-        return newComparisonCondition(rv1, Relation.GE, rv2, tableList);
+        return newComparisonCondition(rv1, Relation.GE, rv2, tableListStack.peek());
     }
 
     protected Condition newComparisonCondition(
@@ -621,26 +686,26 @@ public abstract class SqlParser<R, C>
     }
 
     @Rule(left = "betweenPredicate", value = "rowValuePredicant between rowValuePredicant and rowValuePredicant")
-    protected Condition betweenPredicate1(RowValue rv1, RowValue rv2, RowValue rv3, @ParserContext("tableList") List<Table<R, C>> tableList)
+    protected Condition betweenPredicate1(RowValue rv1, RowValue rv2, RowValue rv3, @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack)
     {
         return new AndCondition<>(
-                newComparisonCondition(rv1, Relation.GE, rv2, tableList),
-                newComparisonCondition(rv1, Relation.LE, rv3, tableList));
+                newComparisonCondition(rv1, Relation.GE, rv2, tableListStack.peek()),
+                newComparisonCondition(rv1, Relation.LE, rv3, tableListStack.peek()));
     }
 
     @Rule(left = "betweenPredicate", value = "rowValuePredicant not between rowValuePredicant and rowValuePredicant")
-    protected Condition betweenPredicate2(RowValue rv1, RowValue rv2, RowValue rv3, @ParserContext("tableList") List<Table<R, C>> tableList)
+    protected Condition betweenPredicate2(RowValue rv1, RowValue rv2, RowValue rv3, @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack)
     {
         return new OrCondition<>(
-                newComparisonCondition(rv1, Relation.LT, rv2, tableList),
-                newComparisonCondition(rv1, Relation.GT, rv3, tableList));
+                newComparisonCondition(rv1, Relation.LT, rv2, tableListStack.peek()),
+                newComparisonCondition(rv1, Relation.GT, rv3, tableListStack.peek()));
     }
 
     @Rule(left = "inPredicate", value = "rowValuePredicant in inPredicateValue")
-    protected Condition inPredicate1(RowValue rv, Collection<RowValue> inValues, @ParserContext("tableList") List<Table<R, C>> tableList)
+    protected Condition inPredicate1(RowValue rv, Collection<RowValue> inValues, @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack)
     {
         Iterator<RowValue> iterator = inValues.iterator();
-        Condition<R, C> comp1 = newComparisonCondition(rv, Relation.EQ, iterator.next(), tableList);
+        Condition<R, C> comp1 = newComparisonCondition(rv, Relation.EQ, iterator.next(), tableListStack.peek());
         if (inValues.size() == 1)
         {
             return comp1;
@@ -648,7 +713,7 @@ public abstract class SqlParser<R, C>
         OrCondition<R, C> orCond = null;
         while (iterator.hasNext())
         {
-            Condition<R, C> comp2 = newComparisonCondition(rv, Relation.EQ, iterator.next(), tableList);
+            Condition<R, C> comp2 = newComparisonCondition(rv, Relation.EQ, iterator.next(), tableListStack.peek());
             if (orCond == null)
             {
                 orCond = new OrCondition<>(comp1, comp2);
@@ -662,9 +727,9 @@ public abstract class SqlParser<R, C>
     }
 
     @Rule(left = "inPredicate", value = "rowValuePredicant not in inPredicateValue")
-    protected Condition inPredicate2(RowValue rv, Collection<RowValue> inValues, @ParserContext("tableList") List<Table<R, C>> tableList)
+    protected Condition inPredicate2(RowValue rv, Collection<RowValue> inValues, @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack)
     {
-        return new NotCondition(inPredicate1(rv, inValues, tableList));
+        return new NotCondition(inPredicate1(rv, inValues, tableListStack));
     }
 
     @Rule(left = "inPredicateValue", value = "'\\(' inValueList '\\)'")
@@ -739,7 +804,7 @@ public abstract class SqlParser<R, C>
     @Rule("placeholder")
     protected abstract Literal<R, C> literal(Literal<R, C> placeholder);
 
-    @Rule("':' identifier placeholderType")
+    @Rule("':' stringConstant placeholderType")
     protected Literal<R, C> placeholder(
             String identifier, 
             Class<? extends C> type,
@@ -751,7 +816,7 @@ public abstract class SqlParser<R, C>
         return placeholder;
     }
 
-    @Rule("':' identifier literal")
+    @Rule("':' stringConstant literal")
     protected Literal<R, C> placeholder(
             String identifier, 
             Literal<R, C> lit,
@@ -949,10 +1014,16 @@ public abstract class SqlParser<R, C>
         return TruthValue.UNKNOWN;
     }
 
+    @Rule(left="stringConstant", value="identifier")
+    protected abstract String stringConstant1(String str);
+    
+    @Rule(left="stringConstant", value="string")
+    protected abstract String stringConstant2(String str);
+    
     @Terminal(expression = "[a-zA-z][a-zA-z0-9_]*")
     protected abstract String identifier(String value);
 
-    @Terminal(expression = "'[^']*'|\"[^\"]*\"")
+    @Terminal(expression = "'[^']*'|\"[^\"]*\"|`[^´]´")
     protected String string(String value)
     {
         return value.substring(1, value.length() - 1);

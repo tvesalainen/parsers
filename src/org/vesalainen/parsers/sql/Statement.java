@@ -23,7 +23,7 @@ import org.vesalainen.parsers.sql.ErrorReporter.Level;
  *
  * @author Timo Vesalainen
  */
-public abstract class Statement<R,C>
+public abstract class Statement<R,C> extends ParserLocator2Impl
 {
     protected Engine<R,C> engine;
     protected LinkedHashMap<String,Placeholder> placeholderMap;

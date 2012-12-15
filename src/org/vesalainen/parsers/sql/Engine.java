@@ -19,15 +19,16 @@ package org.vesalainen.parsers.sql;
 
 import org.vesalainen.parsers.sql.util.ArrayMap;
 import java.io.InputStream;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.util.InputReader;
@@ -56,16 +57,16 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
 
     public Statement prepare(String sql)
     {
-        List<Table<R,C>> tableList = new ArrayList<>();
+        Deque<List<Table<R,C>>> tableListStack = new ArrayDeque<>();
         LinkedHashMap<String,Placeholder> placeholderMap = new LinkedHashMap<>();
-        return parser.parse(sql, this, tableList, placeholderMap, null);
+        return parser.parse(sql, this, tableListStack, placeholderMap, null);
     }
     
     public Statement prepare(InputStream is)
     {
-        List<Table<R,C>> tableList = new ArrayList<>();
+        Deque<List<Table<R,C>>> tableListStack = new ArrayDeque<>();
         LinkedHashMap<String,Placeholder> placeholderMap = new LinkedHashMap<>();
-        return parser.parse(is, this, tableList, placeholderMap, null);
+        return parser.parse(is, this, tableListStack, placeholderMap, null);
     }
     
     public FetchResult<R,C> show(String identifier)
@@ -260,7 +261,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
     /**
      * Joined fetch
      * @param tableContext 
-     * @param updateAndCommit If true the resulting rows will be updated.
+     * @param update If true the resulting rows will be updated.
      * @return 
      */
     public abstract Collection<R> fetch(TableContext<R, C> tableContext, boolean update);
@@ -270,7 +271,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
      */
     public abstract void insert(InsertStatement<R, C> insertStatement);
     /**
-     * Rolls back trancation
+     * Rolls back transaction
      */
     public abstract void rollbackTransaction();
     /**

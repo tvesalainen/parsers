@@ -20,6 +20,7 @@ package org.vesalainen.parsers.sql;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,30 +29,44 @@ import java.util.Map;
 public class InsertStatement<R,C> extends Statement<R,C> 
 {
     private Table<R, C> table;
-    private Map<String,Literal<R,C>> valueMap = new HashMap<>();
+    private InsertColumnsAndSource<R,C> insertColumnsAndSource;
+    private FetchResult<R, C> result;
 
     public InsertStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, Table<R, C> table, InsertColumnsAndSource<R,C> insertColumnsAndSource)
     {
         super(engine, placeholderMap);
         this.table = table;
-        Iterator<String> columns = insertColumnsAndSource.getColumnList().iterator();
-        Iterator<Literal<R,C>> values = insertColumnsAndSource.getValueList().iterator();
-        while (columns.hasNext())
-        {
-            valueMap.put(columns.next(), values.next());
-        }
-        
+        this.insertColumnsAndSource = insertColumnsAndSource;
     }
     @Override
     public FetchResult<R, C> execute()
     {
+        List<String> columnList = insertColumnsAndSource.getColumnList();
+        List<Literal<R, C>> valueList = insertColumnsAndSource.getValueList();
+        if (valueList != null)
+        {
+            result = new FetchResult<R, C>(engine, columnList.toArray(new String[columnList.size()]));
+            C[] row = (C[]) new Object[valueList.size()];
+            int index = 0;
+            for (Literal<R, C> lit : valueList)
+            {
+                row[index++] = lit.getValue();
+            }
+            result.addRowArray(row);
+        }
+        else
+        {
+            SelectStatement select = insertColumnsAndSource.getSelect();
+            result = select.execute();
+            result.setHeader(columnList.toArray(new String[columnList.size()]));
+        }
         engine.insert(this);
         return null;
     }
 
-    public Map<String, Literal<R, C>> getValueMap()
+    public FetchResult<R, C> getFetchResult()
     {
-        return valueMap;
+        return result;
     }
 
     public Table<R, C> getTable()
