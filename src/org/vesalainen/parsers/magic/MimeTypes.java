@@ -17,10 +17,13 @@
 
 package org.vesalainen.parsers.magic;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.locks.ReentrantLock;
 import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.util.InputReader;
+import org.vesalainen.parsers.magic.Magic.MagicResult;
 import org.vesalainen.regex.ant.MapParser;
 
 /**
@@ -35,21 +38,54 @@ public abstract class MimeTypes implements MapParser
     static final String ERROR = "Error";
     static final String EOF = "Eof";
     
+    private static Magic magic;
     private InputReader reader = new InputReader("");
     private ReentrantLock lock = new ReentrantLock();
+
+    public MimeTypes()
+    {
+        magic = Magic.getInstance();
+    }
     
     public String getType(String extension)
     {
         lock.lock();
         try
         {
-            reader.reuse(extension);
+            reader.reuse(extension.toLowerCase());
             return input(reader);
         }
         finally
         {
             lock.unlock();
         }
+    }
+    public String getType(File file) throws IOException
+    {
+        String filename = file.getName();
+        int idx = filename.lastIndexOf('.');
+        if (idx != -1)
+        {
+            String ext = filename.substring(idx+1);
+            String mimeType = getType(ext);
+            if (mimeType != null)
+            {
+                return mimeType;
+            }
+            else
+            {
+                MagicResult guess = magic.guess(file);
+                for (String extension : guess.getExtensions())
+                {
+                    mimeType = getType(extension);
+                    if (mimeType != null)
+                    {
+                        return mimeType;
+                    }
+                }
+            }
+        }
+        return "application/octet-stream";
     }
     public static MimeTypes getInstance()
     {

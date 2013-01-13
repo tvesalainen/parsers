@@ -198,7 +198,7 @@ public class TableContext<R,C>
             {
                 if (compare > 0)
                 {
-                    Set<R> otherSet = otherMap.get(thisValue);
+                    Set<R> otherSet = otherMap.get(otherValue);
                     otherSet.clear();
                     otherIterator.remove();
                     if (!otherIterator.hasNext())
@@ -211,7 +211,7 @@ public class TableContext<R,C>
                 {
                     // accept the pair
                     Set<R> thisSet = thisMap.get(thisValue);
-                    Set<R> otherSet = otherMap.get(thisValue);
+                    Set<R> otherSet = otherMap.get(otherValue);
                     for (R row : thisSet)
                     {
                         mapThis.put(row, otherSet);

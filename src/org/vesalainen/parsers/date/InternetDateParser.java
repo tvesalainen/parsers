@@ -78,6 +78,11 @@ public abstract class InternetDateParser extends DateReducers
     {
         return parseCalendar(text).getTime();
     }
+    public String formatRFC1123(Date date)
+    {
+        SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+        return format.format(date);
+    }
     /**
      * Parses date in RFC1123 format EEE, dd MMM yyyy HH:mm:ss z
      * @param text
@@ -102,6 +107,11 @@ public abstract class InternetDateParser extends DateReducers
     {
         return parseCalendar(text).getTime();
     }
+    public String formatRFC850(Date date)
+    {
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss z");
+        return format.format(date);
+    }
     /**
      * Parses date in RFC850 format EEEE, dd-MMM-yy HH:mm:ss z
      * @param text
@@ -125,6 +135,11 @@ public abstract class InternetDateParser extends DateReducers
     public Date parseAscTime(String text) throws IOException
     {
         return parseCalendar(text).getTime();
+    }
+    public String formatAscTime(Date date)
+    {
+        SimpleDateFormat format = new SimpleDateFormat("EEE, MMM dd HH:mm:ss yyyy");
+        return format.format(date);
     }
     /**
      * Parses date in asc time format EEE, MMM dd HH:mm:ss yyyy
@@ -160,6 +175,11 @@ public abstract class InternetDateParser extends DateReducers
     public Date parseISO8601(String text) throws IOException
     {
         return parseCalendar(text).getTime();
+    }
+    public String formatISO8601(Date date)
+    {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz");
+        return format.format(date);
     }
     /**
      * Parses date in ISO8601 format.
