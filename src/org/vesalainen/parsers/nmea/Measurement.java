@@ -128,4 +128,30 @@ public interface Measurement
 
     public void setWaypointList(List<String> list);
 
+    public void setDistanceToWaypoint(float distanceToWaypoint, char units);
+
+    public void setDepthBelowKeel(float depth, char unit);
+
+    public void setDepthBelowSurface(float depth, char unit);
+
+    public void setDepthBelowTransducer(float depth, char unit);
+
+    public void setBearing(float bearing, char unit);
+
+    public void setDepthOfWater(float depth, float offset);
+
+    public void setMagneticDeviation(float magneticDeviation);
+
+    public void setMagneticSensorHeading(float magneticSensorHeading);
+
+    public void setMagneticHeading(float magneticHeading);
+
+    public void setHeading(float heading, char unit);
+
+    public void setWaterTemperature(float waterTemperature, char unit);
+
+    public void setWindAngle(float windAngle, char unit);
+
+    public void setWindSpeed(float windSpeed, char unit);
+
 }

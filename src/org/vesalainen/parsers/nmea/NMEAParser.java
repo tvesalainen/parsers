@@ -52,17 +52,120 @@ import org.vesalainen.parser.util.InputReader;
     @Rule(left="nmeaSentence", value="'ALM' c totalNumberOfMessages c messageNumber c satellitePRNNumber c gpsWeekNumber c svHealth c eccentricity c almanacReferenceTime c inclinationAngle c rateOfRightAscension c rootOfSemiMajorAxis c argumentOfPerigee c longitudeOfAscensionNode c meanAnomaly c f0ClockParameter c f1ClockParameter"),
     @Rule(left="nmeaSentence", value="'APA' c status c status2 c crossTrackError c arrivalStatus c waypointStatus c bearingOriginToDestination c waypoint"),
     @Rule(left="nmeaSentence", value="'APB' c status c status2 c crossTrackError c arrivalStatus c waypointStatus c bearingOriginToDestination c waypoint c bearingPresentPositionToDestination c headingToSteerToDestination"),
-    @Rule(left="nmeaSentence", value="'BOD' c bearingTrue c bearingMagnetic c waypointToWaypoint"),
+    @Rule(left="nmeaSentence", value="'BOD' c bearing c bearing c waypointToWaypoint"),
+    @Rule(left="nmeaSentence", value="'BWC' c utc c location c bearing c bearing c distanceToWaypoint c waypoint faaModeIndicator"),
+    @Rule(left="nmeaSentence", value="'BWR' c utc c location c bearing c bearing c distanceToWaypoint c waypoint"),
+    @Rule(left="nmeaSentence", value="'BWW' c bearing c bearing c waypointToWaypoint"),
+    @Rule(left="nmeaSentence", value="'DBK' c depthBelowKeel c depthBelowKeel c depthBelowKeel"),
+    @Rule(left="nmeaSentence", value="'DBS' c depthBelowSurface c depthBelowSurface c depthBelowSurface"),
+    @Rule(left="nmeaSentence", value="'DBT' c depthBelowTransducer c depthBelowTransducer c depthBelowTransducer"),
+    @Rule(left="nmeaSentence", value="'DPT' c depthOfWater"),
+    @Rule(left="nmeaSentence", value="'GGA' c utc c location c gpsQualityIndicator c numberOfSatellitesInView c horizontalDilutionOfPrecision c antennaAltitude c geoidalSeparation c ageOfDifferentialGPSData c differentialReferenceStationID"),
+    @Rule(left="nmeaSentence", value="'GLL' c location c utc c status faaModeIndicator"),
+    @Rule(left="nmeaSentence", value="'HDG' c magneticSensorHeading c magneticDeviation c magneticVariation"),
+    @Rule(left="nmeaSentence", value="'HDM' c heading"),
+    @Rule(left="nmeaSentence", value="'HDT' c heading"),
+    @Rule(left="nmeaSentence", value="'MTW' c waterTemperature"),
+    @Rule(left="nmeaSentence", value="'MWV' c windAngle c windSpeed c status"),
+    @Rule(left="nmeaSentence", value="'R00' c waypoints"),
     @Rule(left="nmeaSentence", value="'RMA' c status c location c timeDifference c speedOverGround c trackMadeGood c magneticVariation"),
     @Rule(left="nmeaSentence", value="'RMB' c status c crossTrackErrorNM c waypointToWaypoint c destinationWaypointLocation c rangeToDestination c bearingToDestination c destinationClosingVelocity c arrivalStatus"),
     @Rule(left="nmeaSentence", value="'RMC' c utc c status c location c speedOverGround c trackMadeGood c date c magneticVariation"),
-    @Rule(left="nmeaSentence", value="'GGA' c utc c location c gpsQualityIndicator c numberOfSatellitesInView c horizontalDilutionOfPrecision c antennaAltitude c geoidalSeparation c ageOfDifferentialGPSData c differentialReferenceStationID"),
-    @Rule(left="nmeaSentence", value="'GLL' c location c utc c status faaModeIndicator"),
-    @Rule(left="nmeaSentence", value="'RMM' c horizontalDatum"),
-    @Rule(left="nmeaSentence", value="'RTE' c totalNumberOfMessages c messageNumber c messageMode c waypoints")
+    @Rule(left="nmeaSentence", value="'RTE' c totalNumberOfMessages c messageNumber c messageMode c waypoints"),
+    @Rule(left="nmeaSentence", value="'RMM' c horizontalDatum")
 })
 public abstract class NMEAParser implements ParserInfo
 {
+    @Rule
+    protected void windAngle()
+    {
+    }
+    @Rule("decimal c letter")
+    protected void windAngle(
+            float windAngle,
+            char unit,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setWindAngle(windAngle, unit);
+    }
+    @Rule
+    protected void windSpeed()
+    {
+    }
+    @Rule("decimal c letter")
+    protected void windSpeed(
+            float windSpeed,
+            char unit,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setWindSpeed(windSpeed, unit);
+    }
+    @Rule
+    protected void waterTemperature()
+    {
+    }
+    @Rule("decimal c letter")
+    protected void waterTemperature(
+            float waterTemperature,
+            char unit,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setWaterTemperature(waterTemperature, unit);
+    }
+    @Rule
+    protected void heading()
+    {
+    }
+    @Rule("decimal c letter")
+    protected void heading(
+            float heading,
+            char unit,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setHeading(heading, unit);
+    }
+    @Rule
+    protected void magneticSensorHeading()
+    {
+    }
+    @Rule("decimal")
+    protected void magneticSensorHeading(
+            float magneticSensorHeading,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setMagneticSensorHeading(magneticSensorHeading);
+    }
+    @Rule
+    protected void magneticDeviation()
+    {
+    }
+    @Rule("decimal c ew")
+    protected void magneticDeviation(
+            float magneticDeviation,
+            float sign,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setMagneticDeviation(sign*magneticDeviation);
+    }
+    @Rule("c")
+    protected void depthOfWater()
+    {
+    }
+    @Rule("decimal c decimal")
+    protected void depthOfWater(
+            float depth,
+            float offset,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setDepthOfWater(depth, offset);
+    }
     @Rule("stringList")
     protected void waypoints(
             List<String> list,
@@ -119,6 +222,59 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setMessageMode(messageMode);
+    }
+    
+    @Rule
+    protected void distanceToWaypoint()
+    {
+    }
+    @Rule("decimal c letter")
+    protected void distanceToWaypoint(
+            float distanceToWaypoint,
+            char units,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setDistanceToWaypoint(distanceToWaypoint, units);
+    }
+    @Rule
+    protected void depthBelowTransducer()
+    {
+    }
+    @Rule("decimal c letter")
+    protected void depthBelowTransducer(
+            float depth,
+            char unit,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setDepthBelowTransducer(depth, unit);
+    }
+    @Rule
+    protected void depthBelowSurface()
+    {
+    }
+    @Rule("decimal c letter")
+    protected void depthBelowSurface(
+            float depth,
+            char unit,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setDepthBelowSurface(depth, unit);
+    }
+    @Rule
+    protected void depthBelowKeel()
+    {
+    }
+    @Rule("decimal c letter")
+    protected void depthBelowKeel(
+            float depth,
+            char unit,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setDepthBelowKeel(depth, unit);
     }
     @Rule
     protected void f1ClockParameter()
@@ -509,30 +665,17 @@ public abstract class NMEAParser implements ParserInfo
         measurement.setDestinationClosingVelocity(destinationClosingVelocity);
     }
     @Rule("c")
-    protected void bearingTrue()
+    protected void bearing()
     {
     }
     @Rule("decimal c letter")
-    protected void bearingTrue(
-            float bearingTrue,  // degrees
-            char mOrT,  // M = Magnetic, T = True
+    protected void bearing(
+            float bearing,  // degrees
+            char unit,  // M = Magnetic, T = True
             @ParserContext("measurement") Measurement measurement
             )
     {
-        measurement.setBearingTrue(bearingTrue, mOrT);
-    }
-    @Rule("c")
-    protected void bearingMagnetic()
-    {
-    }
-    @Rule("decimal c letter")
-    protected void bearingMagnetic(
-            float bearingMagnetic,  // degrees
-            char mOrT,  // M = Magnetic, T = True
-            @ParserContext("measurement") Measurement measurement
-            )
-    {
-        measurement.setBearingMagnetic(bearingMagnetic, mOrT);
+        measurement.setBearing(bearing, unit);
     }
     @Rule
     protected void bearingToDestination()

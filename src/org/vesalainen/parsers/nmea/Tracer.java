@@ -337,4 +337,82 @@ public class Tracer implements Measurement
         System.err.println("setWaypointList("+list+")");
     }
 
+    @Override
+    public void setDistanceToWaypoint(float distanceToWaypoint, char units)
+    {
+        System.err.println("setDistanceToWaypoint("+distanceToWaypoint+", "+units+")");
+    }
+
+    @Override
+    public void setDepthBelowKeel(float depth, char unit)
+    {
+        System.err.println("setDepthBelowKeel("+depth+", "+unit+")");
+    }
+
+    @Override
+    public void setDepthBelowSurface(float depth, char unit)
+    {
+        System.err.println("setDepthBelowSurface("+depth+", "+unit+")");
+    }
+
+    @Override
+    public void setDepthBelowTransducer(float depth, char unit)
+    {
+        System.err.println("setDepthBelowTransducer("+depth+", "+unit+")");
+    }
+
+    @Override
+    public void setBearing(float bearing, char unit)
+    {
+        System.err.println("setBearing("+bearing+", "+unit+")");
+    }
+
+    @Override
+    public void setDepthOfWater(float depth, float offset)
+    {
+        System.err.println("setDepthOfWater("+depth+", "+offset+")");
+    }
+
+    @Override
+    public void setMagneticDeviation(float magneticDeviation)
+    {
+        System.err.println("setMagneticDeviation("+magneticDeviation+")");
+    }
+
+    @Override
+    public void setMagneticSensorHeading(float magneticSensorHeading)
+    {
+        System.err.println("setMagneticSensorHeading("+magneticSensorHeading+")");
+    }
+
+    @Override
+    public void setMagneticHeading(float magneticHeading)
+    {
+        System.err.println("setMagneticHeading("+magneticHeading+")");
+    }
+
+    @Override
+    public void setHeading(float heading, char unit)
+    {
+        System.err.println("setHeading("+heading+", "+unit+")");
+    }
+
+    @Override
+    public void setWaterTemperature(float waterTemperature, char unit)
+    {
+        System.err.println("setWaterTemperature("+waterTemperature+", "+unit+")");
+    }
+
+    @Override
+    public void setWindAngle(float windAngle, char unit)
+    {
+        System.err.println("setWindAngle("+windAngle+", "+unit+")");
+    }
+
+    @Override
+    public void setWindSpeed(float windSpeed, char unit)
+    {
+        System.err.println("setWindSpeed("+windSpeed+", "+unit+")");
+    }
+
 }
