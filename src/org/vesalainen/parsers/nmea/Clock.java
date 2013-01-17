@@ -43,4 +43,29 @@ public interface Clock
     public void rollback();
 
     public void commit();
+    /**
+     * Day, 01 to 31
+     * @param day 
+     */
+    public void setDay(int day);
+    /**
+     * Month, 01 to 12
+     * @param month 
+     */
+    public void setMonth(int month);
+    /**
+     * Year (4 digits)
+     * @param year 
+     */
+    public void setYear(int year);
+    /**
+     * Local zone description, 00 to +- 13 hours
+     * @param localZoneHours 
+     */
+    public void setZoneHours(int localZoneHours);
+    /**
+     * Local zone minutes description, apply same sign as local hours
+     * @param localZoneMinutes 
+     */
+    public void setZoneMinutes(int localZoneMinutes);
 }

@@ -71,14 +71,227 @@ import org.vesalainen.parser.util.InputReader;
     @Rule(left="nmeaSentence", value="'RMA' c status c location c timeDifference c speedOverGround c trackMadeGood c magneticVariation"),
     @Rule(left="nmeaSentence", value="'RMB' c status c crossTrackErrorNM c waypointToWaypoint c destinationWaypointLocation c rangeToDestination c bearingToDestination c destinationClosingVelocity c arrivalStatus"),
     @Rule(left="nmeaSentence", value="'RMC' c utc c status c location c speedOverGround c trackMadeGood c date c magneticVariation"),
+    @Rule(left="nmeaSentence", value="'RMM' c horizontalDatum"),
+    @Rule(left="nmeaSentence", value="'ROT' c rateOfTurn c status"),
+    @Rule(left="nmeaSentence", value="'RPM' c rpmSource c rpmSourceNumber c rpm c propellerPitch c status"),
+    @Rule(left="nmeaSentence", value="'RSA' c starboardRudderSensor c status c portRudderSensor c status2"),
     @Rule(left="nmeaSentence", value="'RTE' c totalNumberOfMessages c messageNumber c messageMode c waypoints"),
-    @Rule(left="nmeaSentence", value="'RMM' c horizontalDatum")
+    @Rule(left="rateOfTurn"),
+    @Rule(left="waterTemperature"),
+    @Rule(left="heading"),
+    @Rule(left="magneticSensorHeading"),
+    @Rule(left="magneticDeviation"),
+    @Rule(left="horizontalDatum"),
+    @Rule(left="faaModeIndicator"),
+    @Rule(left="messageMode"),
+    @Rule(left="distanceToWaypoint"),
+    @Rule(left="depthBelowTransducer"),
+    @Rule(left="depthBelowSurface"),
+    @Rule(left="depthBelowKeel"),
+    @Rule(left="f0ClockParameter"),
+    @Rule(left="f1ClockParameter"),
+    @Rule(left="meanAnomaly"),
+    @Rule(left="longitudeOfAscensionNode"),
+    @Rule(left="argumentOfPerigee"),
+    @Rule(left="rootOfSemiMajorAxis"),
+    @Rule(left="rateOfRightAscension"),
+    @Rule(left="inclinationAngle"),
+    @Rule(left="almanacReferenceTime"),
+    @Rule(left="eccentricity"),
+    @Rule(left="svHealth"),
+    @Rule(left="gpsWeekNumber"),
+    @Rule(left="satellitePRNNumber"),
+    @Rule(left="messageNumber"),
+    @Rule(left="totalNumberOfMessages"),
+    @Rule(left="geoidalSeparation", value="c"),
+    @Rule(left="ageOfDifferentialGPSData"),
+    @Rule(left="differentialReferenceStationID"),
+    @Rule(left="status"),
+    @Rule(left="status2"),
+    @Rule(left="waypointStatus"),
+    @Rule(left="arrivalStatus"),
+    @Rule(left="date"),
+    @Rule(left="utc"),
+    @Rule(left="waypoint"),
+    @Rule(left="timeDifference", value="c"),
+    @Rule(left="arrivalCircleRadius", value="c"),
+    @Rule(left="depthOfWater", value="c"),
+    @Rule(left="windSpeed"),
+    @Rule(left=""),
+    @Rule(left=""),
+    @Rule(left="destinationWaypointLocation", value="c c c"),
+    @Rule(left="location", value="c c c"),
+    @Rule(left="trackMadeGood"),
+    @Rule(left="speedOverGround"),
+    @Rule(left="magneticVariation", value="c"),
+    @Rule(left="crossTrackErrorNM", value="c"),
+    @Rule(left="crossTrackError", value="c c"),
+    @Rule(left="waypointToWaypoint", value="c"),
+    @Rule(left="rangeToDestination"),
+    @Rule(left="headingToSteerToDestination", value="c"),
+    @Rule(left="bearingPresentPositionToDestination", value="c"),
+    @Rule(left="bearingOriginToDestination", value="c"),
+    @Rule(left="bearingToDestination"),
+    @Rule(left="bearing", value="c"),
+    @Rule(left="destinationClosingVelocity"),
+    @Rule(left="gpsQualityIndicator"),
+    @Rule(left="numberOfSatellitesInView"),
+    @Rule(left="horizontalDilutionOfPrecision"),
+    @Rule(left="antennaAltitude", value="c"),
+    @Rule(left="starboardRudderSensor"),
+    @Rule(left="portRudderSensor"),
+    @Rule(left="rpmSource"),
+    @Rule(left="rpmSourceNumber"),
+    @Rule(left="rpm"),
+    @Rule(left="propellerPitch"),
+    @Rule(left="nmeaSentence", value="'VHW' c waterHeading c waterHeading c waterSpeed c waterSpeed"),
+    @Rule(left="nmeaSentence", value="'VWR' c windDirection c windSpeed c windSpeed c windSpeed"),
+    @Rule(left="nmeaSentence", value="'WCV' c velocityToWaypoint c waypoint"),
+    @Rule(left="nmeaSentence", value="'WNC' c distanceToWaypoint c distanceToWaypoint c waypointToWaypoint"),
+    @Rule(left="nmeaSentence", value="'WPL' c destinationWaypointLocation c waypoint"),
+    @Rule(left="nmeaSentence", value="'XTE' c status c status2 c crossTrackError faaModeIndicator"),
+    @Rule(left="nmeaSentence", value="'XTR' c crossTrackError"),
+    @Rule(left="nmeaSentence", value="'ZDA' c utc c day c month c year c localZoneHours c localZoneMinutes"),
+    @Rule(left="localZoneHours", value="c"),
+    @Rule(left="localZoneMinutes", value="c"),
+    @Rule(left="windDirection", value="c"),
+    @Rule(left="waterHeading", value="c"),
+    @Rule(left="waterSpeed", value="c"),
+    @Rule(left="windAngle")
 })
 public abstract class NMEAParser implements ParserInfo
 {
-    @Rule
-    protected void windAngle()
+    @Rule("integer")
+    protected void day(
+            int day,
+            @ParserContext("clock") Clock clock
+            )
     {
+        clock.setDay(day);
+    }
+    @Rule("integer")
+    protected void month(
+            int month,
+            @ParserContext("clock") Clock clock
+            )
+    {
+        clock.setMonth(month);
+    }
+    @Rule("integer")
+    protected void year(
+            int year,
+            @ParserContext("clock") Clock clock
+            )
+    {
+        clock.setYear(year);
+    }
+    @Rule("integer")
+    protected void localZoneHours(
+            int localZoneHours,
+            @ParserContext("clock") Clock clock
+            )
+    {
+        clock.setZoneHours(localZoneHours);
+    }
+    @Rule("integer")
+    protected void localZoneMinutes(
+            int localZoneMinutes,
+            @ParserContext("clock") Clock clock
+            )
+    {
+        clock.setZoneMinutes(localZoneMinutes);
+    }
+    @Rule("decimal c letter")
+    protected void velocityToWaypoint(
+            float velocityToWaypoint,
+            char unit,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setVelocityToWaypoint(velocityToWaypoint, unit);
+    }
+    @Rule("decimal c letter")
+    protected void windDirection(
+            float windDirection,
+            char unit,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setWindDirection(windDirection, unit);
+    }
+    @Rule("decimal c letter")
+    protected void waterHeading(
+            float waterHeading,
+            char unit,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setWaterHeading(waterHeading, unit);
+    }
+    @Rule("decimal c letter")
+    protected void waterSpeed(
+            float waterSpeed,
+            char unit,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setWaterSpeed(waterSpeed, unit);
+    }
+    @Rule("decimal")
+    protected void starboardRudderSensor(
+            float starboardRudderSensor,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setStarboardRudderSensor(starboardRudderSensor);
+    }
+    @Rule("decimal")
+    protected void portRudderSensor(
+            float portRudderSensor,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setPortRudderSensor(portRudderSensor);
+    }
+    @Rule("letter")
+    protected void rpmSource(
+            char rpmSource,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setRpmSource(rpmSource);
+    }
+    @Rule("integer")
+    protected void rpmSourceNumber(
+            int rpmSourceNumber,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setRpmSourceNumber(rpmSourceNumber);
+    }
+    @Rule("integer")
+    protected void rpm(
+            int rpm,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setRpm(rpm);
+    }
+    @Rule("decimal")
+    protected void propellerPitch(
+            float propellerPitch,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setPropellerPitch(propellerPitch);
+    }
+    @Rule("decimal")
+    protected void rateOfTurn(
+            float rateOfTurn,
+            @ParserContext("measurement") Measurement measurement
+            )
+    {
+        measurement.setRateOfTurn(rateOfTurn);
     }
     @Rule("decimal c letter")
     protected void windAngle(
@@ -89,10 +302,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setWindAngle(windAngle, unit);
     }
-    @Rule
-    protected void windSpeed()
-    {
-    }
     @Rule("decimal c letter")
     protected void windSpeed(
             float windSpeed,
@@ -101,10 +310,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setWindSpeed(windSpeed, unit);
-    }
-    @Rule
-    protected void waterTemperature()
-    {
     }
     @Rule("decimal c letter")
     protected void waterTemperature(
@@ -115,10 +320,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setWaterTemperature(waterTemperature, unit);
     }
-    @Rule
-    protected void heading()
-    {
-    }
     @Rule("decimal c letter")
     protected void heading(
             float heading,
@@ -128,10 +329,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setHeading(heading, unit);
     }
-    @Rule
-    protected void magneticSensorHeading()
-    {
-    }
     @Rule("decimal")
     protected void magneticSensorHeading(
             float magneticSensorHeading,
@@ -139,10 +336,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setMagneticSensorHeading(magneticSensorHeading);
-    }
-    @Rule
-    protected void magneticDeviation()
-    {
     }
     @Rule("decimal c ew")
     protected void magneticDeviation(
@@ -152,10 +345,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setMagneticDeviation(sign*magneticDeviation);
-    }
-    @Rule("c")
-    protected void depthOfWater()
-    {
     }
     @Rule("decimal c decimal")
     protected void depthOfWater(
@@ -187,10 +376,6 @@ public abstract class NMEAParser implements ParserInfo
         list.add(str);
         return list;
     }
-    @Rule
-    protected void horizontalDatum()
-    {
-    }
     @Rule("string")
     protected void horizontalDatum(
             String horizontalDatum,
@@ -199,10 +384,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setHorizontalDatum(horizontalDatum);
     }
-    @Rule
-    protected void faaModeIndicator()
-    {
-    }
     @Rule("c letter")
     protected void faaModeIndicator(
             char faaModeIndicator,
@@ -210,10 +391,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setFAAModeIndicator(faaModeIndicator);
-    }
-    @Rule
-    protected void messageMode()
-    {
     }
     @Rule("letter")
     protected void messageMode(
@@ -224,10 +401,6 @@ public abstract class NMEAParser implements ParserInfo
         measurement.setMessageMode(messageMode);
     }
     
-    @Rule
-    protected void distanceToWaypoint()
-    {
-    }
     @Rule("decimal c letter")
     protected void distanceToWaypoint(
             float distanceToWaypoint,
@@ -236,10 +409,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setDistanceToWaypoint(distanceToWaypoint, units);
-    }
-    @Rule
-    protected void depthBelowTransducer()
-    {
     }
     @Rule("decimal c letter")
     protected void depthBelowTransducer(
@@ -250,10 +419,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setDepthBelowTransducer(depth, unit);
     }
-    @Rule
-    protected void depthBelowSurface()
-    {
-    }
     @Rule("decimal c letter")
     protected void depthBelowSurface(
             float depth,
@@ -262,10 +427,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setDepthBelowSurface(depth, unit);
-    }
-    @Rule
-    protected void depthBelowKeel()
-    {
     }
     @Rule("decimal c letter")
     protected void depthBelowKeel(
@@ -276,10 +437,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setDepthBelowKeel(depth, unit);
     }
-    @Rule
-    protected void f1ClockParameter()
-    {
-    }
     @Rule("decimal")
     protected void f1ClockParameter(
             float f1ClockParameter,
@@ -287,10 +444,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setF1ClockParameter(f1ClockParameter);
-    }
-    @Rule
-    protected void f0ClockParameter()
-    {
     }
     @Rule("decimal")
     protected void f0ClockParameter(
@@ -300,10 +453,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setF0ClockParameter(f0ClockParameter);
     }
-    @Rule
-    protected void meanAnomaly()
-    {
-    }
     @Rule("decimal")
     protected void meanAnomaly(
             float meanAnomaly,
@@ -311,10 +460,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setMeanAnomaly(meanAnomaly);
-    }
-    @Rule
-    protected void longitudeOfAscensionNode()
-    {
     }
     @Rule("decimal")
     protected void longitudeOfAscensionNode(
@@ -324,10 +469,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setLongitudeOfAscensionNode(longitudeOfAscensionNode);
     }
-    @Rule
-    protected void argumentOfPerigee()
-    {
-    }
     @Rule("decimal")
     protected void argumentOfPerigee(
             float argumentOfPerigee,
@@ -335,10 +476,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setArgumentOfPerigee(argumentOfPerigee);
-    }
-    @Rule
-    protected void rootOfSemiMajorAxis()
-    {
     }
     @Rule("decimal")
     protected void rootOfSemiMajorAxis(
@@ -348,10 +485,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setRootOfSemiMajorAxis(rootOfSemiMajorAxis);
     }
-    @Rule
-    protected void rateOfRightAscension()
-    {
-    }
     @Rule("decimal")
     protected void rateOfRightAscension(
             float rateOfRightAscension,
@@ -359,10 +492,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setRateOfRightAscension(rateOfRightAscension);
-    }
-    @Rule
-    protected void inclinationAngle()
-    {
     }
     @Rule("decimal")
     protected void inclinationAngle(
@@ -372,10 +501,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setInclinationAngle(inclinationAngle);
     }
-    @Rule
-    protected void almanacReferenceTime()
-    {
-    }
     @Rule("decimal")
     protected void almanacReferenceTime(
             float almanacReferenceTime,
@@ -383,10 +508,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setAlmanacReferenceTime(almanacReferenceTime);
-    }
-    @Rule
-    protected void eccentricity()
-    {
     }
     @Rule("decimal")
     protected void eccentricity(
@@ -396,10 +517,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setEccentricity(eccentricity);
     }
-    @Rule
-    protected void svHealth()
-    {
-    }
     @Rule("integer")
     protected void svHealth(
             int svHealth,
@@ -407,10 +524,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setSvHealth(svHealth);
-    }
-    @Rule
-    protected void gpsWeekNumber()
-    {
     }
     @Rule("integer")
     protected void gpsWeekNumber(
@@ -420,10 +533,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setGpsWeekNumber(gpsWeekNumber);
     }
-    @Rule
-    protected void satellitePRNNumber()
-    {
-    }
     @Rule("integer")
     protected void satellitePRNNumber(
             int satellitePRNNumber,
@@ -431,10 +540,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setSatellitePRNNumber(satellitePRNNumber);
-    }
-    @Rule
-    protected void messageNumber()
-    {
     }
     @Rule("integer")
     protected void messageNumber(
@@ -444,10 +549,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setMessageNumber(messageNumber);
     }
-    @Rule
-    protected void totalNumberOfMessages()
-    {
-    }
     @Rule("integer")
     protected void totalNumberOfMessages(
             int totalNumberOfMessages,
@@ -455,10 +556,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setTotalNumberOfMessages(totalNumberOfMessages);
-    }
-    @Rule("c")
-    protected void arrivalCircleRadius()
-    {
     }
     @Rule("decimal c letter")
     protected void arrivalCircleRadius(
@@ -469,10 +566,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setArrivalCircleRadius(arrivalCircleRadius, units);
     }
-    @Rule("c")
-    protected void timeDifference()
-    {
-    }
     @Rule("decimal c decimal")
     protected void timeDifference(
             float timeDifferenceA,  // uS
@@ -482,10 +575,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setTimeDifference(timeDifferenceA, timeDifferenceB);
     }
-    @Rule
-    protected void waypoint()
-    {
-    }
     @Rule("string")
     protected void waypoint(
             String waypoint,
@@ -493,10 +582,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setWaypoint(waypoint);
-    }
-    @Rule
-    protected void utc()
-    {
     }
     @Rule("decimal")
     protected void utc(
@@ -506,10 +591,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         clock.setTime(utc);
     }
-    @Rule
-    protected void date()
-    {
-    }
     @Rule("integer")
     protected void date(
             int date,               // ddmmyy
@@ -517,10 +598,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         clock.setDate(date);
-    }
-    @Rule
-    protected void arrivalStatus()
-    {
     }
     @Rule("letter")
     protected void arrivalStatus(
@@ -530,10 +607,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setArrivalStatus(arrivalStatus);
     }
-    @Rule
-    protected void waypointStatus()
-    {
-    }
     @Rule("letter")
     protected void waypointStatus(
             char waypointStatus,
@@ -541,10 +614,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setWaypointStatus(waypointStatus);
-    }
-    @Rule
-    protected void status()
-    {
     }
     @Rule("letter")
     protected void status(
@@ -554,10 +623,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setStatus(status);
     }
-    @Rule
-    protected void status2()
-    {
-    }
     @Rule("letter")
     protected void status2(
             char status,
@@ -565,10 +630,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setStatus2(status);
-    }
-    @Rule
-    protected void differentialReferenceStationID()
-    {
     }
     @Rule("integer")
     protected void differentialReferenceStationID(
@@ -578,10 +639,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setDifferentialReferenceStationID(differentialReferenceStationID);
     }
-    @Rule
-    protected void ageOfDifferentialGPSData()
-    {
-    }
     @Rule("integer")
     protected void ageOfDifferentialGPSData(
             int ageOfDifferentialGPSData,   //time in seconds since last SC104 type 1 or 9 update, null field when DGPS is not used
@@ -589,10 +646,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setAgeOfDifferentialGPSData(ageOfDifferentialGPSData);
-    }
-    @Rule("c")
-    protected void geoidalSeparation()
-    {
     }
     @Rule("decimal c letter")
     protected void geoidalSeparation(
@@ -603,10 +656,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setGeoidalSeparation(geoidalSeparation, unitsOfGeoidalSeparation);
     }
-    @Rule("c")
-    protected void antennaAltitude()
-    {
-    }
     @Rule("decimal c letter")
     protected void antennaAltitude(
             float antennaAltitude,    // above/below mean-sea-level (geoid) (in meters)
@@ -616,10 +665,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setAntennaAltitude(antennaAltitude, unitsOfAntennaAltitude);
     }
-    @Rule
-    protected void horizontalDilutionOfPrecision()
-    {
-    }
     @Rule("decimal")
     protected void horizontalDilutionOfPrecision(
             float horizontalDilutionOfPrecision,  // (meters)
@@ -627,10 +672,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setHorizontalDilutionOfPrecision(horizontalDilutionOfPrecision);
-    }
-    @Rule
-    protected void numberOfSatellitesInView()
-    {
     }
     @Rule("integer")
     protected void numberOfSatellitesInView(
@@ -640,10 +681,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setNumberOfSatellitesInView(numberOfSatellitesInView);
     }
-    @Rule
-    protected void gpsQualityIndicator()
-    {
-    }
     @Rule("integer")
     protected void gpsQualityIndicator(
             int gpsQualityIndicator,
@@ -652,10 +689,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setGpsQualityIndicator(gpsQualityIndicator);
     }
-    @Rule
-    protected void destinationClosingVelocity()
-    {
-    }
     @Rule("decimal")
     protected void destinationClosingVelocity(
             float destinationClosingVelocity,  // knots
@@ -663,10 +696,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setDestinationClosingVelocity(destinationClosingVelocity);
-    }
-    @Rule("c")
-    protected void bearing()
-    {
     }
     @Rule("decimal c letter")
     protected void bearing(
@@ -677,10 +706,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setBearing(bearing, unit);
     }
-    @Rule
-    protected void bearingToDestination()
-    {
-    }
     @Rule("decimal")
     protected void bearingToDestination(
             float bearingToDestination,  // degrees
@@ -688,10 +713,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setBearingToDestination(bearingToDestination);
-    }
-    @Rule("c")
-    protected void bearingOriginToDestination()
-    {
     }
     @Rule("decimal c letter")
     protected void bearingOriginToDestination(
@@ -702,10 +723,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setBearingOriginToDestination(bearingOriginToDestination, mOrT);
     }
-    @Rule("c")
-    protected void bearingPresentPositionToDestination()
-    {
-    }
     @Rule("decimal c letter")
     protected void bearingPresentPositionToDestination(
             float bearingPresentPositionToDestination,  // degrees
@@ -714,10 +731,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setBearingPresentPositionToDestination(bearingPresentPositionToDestination, mOrT);
-    }
-    @Rule("c")
-    protected void headingToSteerToDestination()
-    {
     }
     @Rule("decimal c letter")
     protected void headingToSteerToDestination(
@@ -728,10 +741,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setHeadingToSteerToDestination(headingToSteerToDestination, mOrT);
     }
-    @Rule
-    protected void rangeToDestination()
-    {
-    }
     @Rule("decimal")
     protected void rangeToDestination(
             float rangeToDestination,  // NM
@@ -740,22 +749,14 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setRangeToDestination(rangeToDestination);
     }
-    @Rule("c")
-    protected void waypointToWaypoint()
-    {
-    }
     @Rule("string c string")
-    protected void fromWaypoint(
+    protected void waypointToWaypoint(
             String toWaypoint,
             String fromWaypoint,
             @ParserContext("measurement") Measurement measurement
             )
     {
         measurement.setWaypointToWaypoint(toWaypoint, fromWaypoint);
-    }
-    @Rule("c c")
-    protected void crossTrackError()
-    {
     }
     @Rule("decimal c letter c letter")
     protected void crossTrackError(
@@ -767,10 +768,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setCrossTrackError(crossTrackError, directionToSteer, units);
     }
-    @Rule("c")
-    protected void crossTrackErrorNM()
-    {
-    }
     @Rule("decimal c letter")
     protected void crossTrackErrorNM(
             float crossTrackError,  // NM
@@ -779,10 +776,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setCrossTrackError(crossTrackError, directionToSteer);
-    }
-    @Rule("c")
-    protected void magneticVariation()
-    {
     }
     @Rule("decimal c ew")
     protected void magneticVariation(
@@ -793,10 +786,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setMagneticVariation(mew*magneticVariation);
     }
-    @Rule
-    protected void speedOverGround()
-    {
-    }
     @Rule("decimal")
     protected void speedOverGround(
             float speedOverGround,  // knots
@@ -805,10 +794,6 @@ public abstract class NMEAParser implements ParserInfo
     {
         measurement.setSpeedOverGround(speedOverGround);
     }
-    @Rule
-    protected void trackMadeGood()
-    {
-    }
     @Rule("decimal")
     protected void trackMadeGood(
             float trackMadeGood,  // knots
@@ -816,10 +801,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setTrackMadeGood(trackMadeGood);
-    }
-    @Rule("c c c")
-    protected void location()
-    {
     }
     @Rule("latitude c ns c longitude c ew")
     protected void location(
@@ -831,10 +812,6 @@ public abstract class NMEAParser implements ParserInfo
             )
     {
         measurement.setLocation(ns*latitude, ew*longitude);
-    }
-    @Rule("c c c")
-    protected void destinationWaypointLocation()
-    {
     }
     @Rule("latitude c ns c longitude c ew")
     protected void destinationWaypointLocation(

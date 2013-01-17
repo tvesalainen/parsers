@@ -149,9 +149,64 @@ public interface Measurement
     public void setHeading(float heading, char unit);
 
     public void setWaterTemperature(float waterTemperature, char unit);
-
+    /**
+     * 
+     * @param windAngle Wind Angle, 0 to 360 degrees
+     * @param unit Reference, R = Relative, T = True
+     */
     public void setWindAngle(float windAngle, char unit);
-
+    /**
+     * 
+     * @param windSpeed
+     * @param unit Wind Speed Units, K/M/N
+     */
     public void setWindSpeed(float windSpeed, char unit);
+    /**
+     * Rate Of Turn, degrees per minute, "-" means bow turns to port
+     * @param rateOfTurn 
+     */
+    public void setRateOfTurn(float rateOfTurn);
+    /**
+     * Sourse, S = Shaft, E = Engine
+     * @param rpmSource 
+     */
+    public void setRpmSource(char rpmSource);
+    /**
+     * Engine or shaft number
+     * @param rpmSourceNumber 
+     */
+    public void setRpmSourceNumber(int rpmSourceNumber);
+    /**
+     * Speed, Revolutions per minute
+     * @param rpm 
+     */
+    public void setRpm(int rpm);
+    /**
+     * Propeller pitch, % of maximum, "-" means astern
+     * @param propellerPitch 
+     */
+    public void setPropellerPitch(float propellerPitch);
+    /**
+     * Starboard (or single) rudder sensor, "-" means Turn To Port
+     * @param starboardRudderSensor 
+     */
+    public void setStarboardRudderSensor(float starboardRudderSensor);
+    /**
+     * Port rudder sensor
+     * @param portRudderSensor 
+     */
+    public void setPortRudderSensor(float portRudderSensor);
+
+    public void setWaterHeading(float waterHeading, char unit);
+
+    public void setWaterSpeed(float waterSpeed, char unit);
+    /**
+     * Relative wind angle
+     * @param windDirection Wind direction magnitude in degrees
+     * @param unit Wind direction Left/Right of bow
+     */
+    public void setWindDirection(float windDirection, char unit);
+
+    public void setVelocityToWaypoint(float velocityToWaypoint, char unit);
 
 }
