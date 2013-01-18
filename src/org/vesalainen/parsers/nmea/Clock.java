@@ -39,9 +39,13 @@ public interface Clock
      * @param date ddmmyy
      */
     public void setDate(int date);
-
+    /**
+     * Read NMEA sentence was broken.
+     */
     public void rollback();
-
+    /**
+     * Read NMEA sentence was correct.
+     */
     public void commit();
     /**
      * Day, 01 to 31

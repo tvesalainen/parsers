@@ -76,6 +76,14 @@ import org.vesalainen.parser.util.InputReader;
     @Rule(left="nmeaSentence", value="'RPM' c rpmSource c rpmSourceNumber c rpm c propellerPitch c status"),
     @Rule(left="nmeaSentence", value="'RSA' c starboardRudderSensor c status c portRudderSensor c status2"),
     @Rule(left="nmeaSentence", value="'RTE' c totalNumberOfMessages c messageNumber c messageMode c waypoints"),
+    @Rule(left="nmeaSentence", value="'VHW' c waterHeading c waterHeading c waterSpeed c waterSpeed"),
+    @Rule(left="nmeaSentence", value="'VWR' c windDirection c windSpeed c windSpeed c windSpeed"),
+    @Rule(left="nmeaSentence", value="'WCV' c velocityToWaypoint c waypoint"),
+    @Rule(left="nmeaSentence", value="'WNC' c distanceToWaypoint c distanceToWaypoint c waypointToWaypoint"),
+    @Rule(left="nmeaSentence", value="'WPL' c destinationWaypointLocation c waypoint"),
+    @Rule(left="nmeaSentence", value="'XTE' c status c status2 c crossTrackError faaModeIndicator"),
+    @Rule(left="nmeaSentence", value="'XTR' c crossTrackError"),
+    @Rule(left="nmeaSentence", value="'ZDA' c utc c day c month c year c localZoneHours c localZoneMinutes"),
     @Rule(left="rateOfTurn"),
     @Rule(left="waterTemperature"),
     @Rule(left="heading"),
@@ -144,14 +152,6 @@ import org.vesalainen.parser.util.InputReader;
     @Rule(left="rpmSourceNumber"),
     @Rule(left="rpm"),
     @Rule(left="propellerPitch"),
-    @Rule(left="nmeaSentence", value="'VHW' c waterHeading c waterHeading c waterSpeed c waterSpeed"),
-    @Rule(left="nmeaSentence", value="'VWR' c windDirection c windSpeed c windSpeed c windSpeed"),
-    @Rule(left="nmeaSentence", value="'WCV' c velocityToWaypoint c waypoint"),
-    @Rule(left="nmeaSentence", value="'WNC' c distanceToWaypoint c distanceToWaypoint c waypointToWaypoint"),
-    @Rule(left="nmeaSentence", value="'WPL' c destinationWaypointLocation c waypoint"),
-    @Rule(left="nmeaSentence", value="'XTE' c status c status2 c crossTrackError faaModeIndicator"),
-    @Rule(left="nmeaSentence", value="'XTR' c crossTrackError"),
-    @Rule(left="nmeaSentence", value="'ZDA' c utc c day c month c year c localZoneHours c localZoneMinutes"),
     @Rule(left="localZoneHours", value="c"),
     @Rule(left="localZoneMinutes", value="c"),
     @Rule(left="windDirection", value="c"),
@@ -361,7 +361,7 @@ public abstract class NMEAParser implements ParserInfo
             @ParserContext("measurement") Measurement measurement
             )
     {
-        measurement.setWaypointList(list);
+        measurement.setWaypoints(list);
     }
     @Rule("string")
     protected List<String> stringList(String str)
@@ -762,11 +762,11 @@ public abstract class NMEAParser implements ParserInfo
     protected void crossTrackError(
             float crossTrackError,  // NM
             char directionToSteer,
-            char units,
+            char unit,
             @ParserContext("measurement") Measurement measurement
             )
     {
-        measurement.setCrossTrackError(crossTrackError, directionToSteer, units);
+        measurement.setCrossTrackError(crossTrackError, directionToSteer, unit);
     }
     @Rule("decimal c letter")
     protected void crossTrackErrorNM(
@@ -775,7 +775,7 @@ public abstract class NMEAParser implements ParserInfo
             @ParserContext("measurement") Measurement measurement
             )
     {
-        measurement.setCrossTrackError(crossTrackError, directionToSteer);
+        measurement.setCrossTrackError(crossTrackError, directionToSteer, 'N');
     }
     @Rule("decimal c ew")
     protected void magneticVariation(
@@ -893,10 +893,10 @@ public abstract class NMEAParser implements ParserInfo
     @Terminal(expression="[a-zA-Z0-9 \\.\\-]+")
     protected abstract String string(String s);
          
-    @Terminal(expression="[0-9]+")
+    @Terminal(expression="[\\+\\-]?[0-9]+")
     protected abstract int integer(int i);
          
-    @Terminal(expression="[0-9]+(\\.[0-9]+)*")
+    @Terminal(expression="[\\+\\-]?[0-9]+(\\.[0-9]+)*")
     protected abstract float decimal(float f);
          
     @Terminal(expression="[\\,]")

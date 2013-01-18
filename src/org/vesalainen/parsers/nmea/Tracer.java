@@ -68,12 +68,6 @@ public class Tracer implements Measurement
     }
 
     @Override
-    public void setCrossTrackError(float crossTrackError, char directionToSteer)
-    {
-        System.err.println("setCrossTrackError("+crossTrackError+", "+directionToSteer+")");
-    }
-
-    @Override
     public void setCrossTrackError(float crossTrackError, char directionToSteer, char units)
     {
         System.err.println("setCrossTrackError("+crossTrackError+", "+directionToSteer+", "+units+")");
@@ -302,18 +296,6 @@ public class Tracer implements Measurement
     }
 
     @Override
-    public void setBearingTrue(float bearingTrue, char mOrT)
-    {
-        System.err.println("setBearingTrue("+bearingTrue+", "+mOrT+")");
-    }
-
-    @Override
-    public void setBearingMagnetic(float bearingMagnetic, char mOrT)
-    {
-        System.err.println("setBearingMagnetic("+bearingMagnetic+", "+mOrT+")");
-    }
-
-    @Override
     public void setFAAModeIndicator(char setFAAModeIndicator)
     {
         System.err.println("setFAAModeIndicator("+setFAAModeIndicator+")");
@@ -332,7 +314,7 @@ public class Tracer implements Measurement
     }
 
     @Override
-    public void setWaypointList(List<String> list)
+    public void setWaypoints(List<String> list)
     {
         System.err.println("setWaypointList("+list+")");
     }
@@ -386,12 +368,6 @@ public class Tracer implements Measurement
     }
 
     @Override
-    public void setMagneticHeading(float magneticHeading)
-    {
-        System.err.println("setMagneticHeading("+magneticHeading+")");
-    }
-
-    @Override
     public void setHeading(float heading, char unit)
     {
         System.err.println("setHeading("+heading+", "+unit+")");
@@ -413,6 +389,72 @@ public class Tracer implements Measurement
     public void setWindSpeed(float windSpeed, char unit)
     {
         System.err.println("setWindSpeed("+windSpeed+", "+unit+")");
+    }
+
+    @Override
+    public void setRateOfTurn(float rateOfTurn)
+    {
+        System.err.println("setRateOfTurn("+rateOfTurn+")");
+    }
+
+    @Override
+    public void setRpmSource(char setRpmSource)
+    {
+        System.err.println("setRpmSource("+setRpmSource+")");
+    }
+
+    @Override
+    public void setRpmSourceNumber(int rpmSourceNumber)
+    {
+        System.err.println("setRpmSourceNumber("+rpmSourceNumber+")");
+    }
+
+    @Override
+    public void setRpm(int rpm)
+    {
+        System.err.println("setRpmS("+rpm+")");
+    }
+
+    @Override
+    public void setPropellerPitch(float propellerPitch)
+    {
+        System.err.println("setPropellerPitch("+propellerPitch+")");
+    }
+
+    @Override
+    public void setStarboardRudderSensor(float starboardRudderSensor)
+    {
+        System.err.println("setStarboardRudderSensor("+starboardRudderSensor+")");
+    }
+
+    @Override
+    public void setPortRudderSensor(float portRudderSensor)
+    {
+        System.err.println("setPortRudderSensor("+portRudderSensor+")");
+    }
+
+    @Override
+    public void setWaterHeading(float waterHeading, char unit)
+    {
+        System.err.println("setWaterHeading("+waterHeading+", "+unit+")");
+    }
+
+    @Override
+    public void setWaterSpeed(float waterSpeed, char unit)
+    {
+        System.err.println("setWaterSpeed("+waterSpeed+", "+unit+")");
+    }
+
+    @Override
+    public void setWindDirection(float windDirection, char unit)
+    {
+        System.err.println("setWindDirection("+windDirection+", "+unit+")");
+    }
+
+    @Override
+    public void setVelocityToWaypoint(float velocityToWaypoint, char unit)
+    {
+        System.err.println("setVelocityToWaypoint("+velocityToWaypoint+", "+unit+")");
     }
 
 }
