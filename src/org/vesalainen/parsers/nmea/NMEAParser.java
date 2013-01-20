@@ -48,6 +48,7 @@ import org.vesalainen.parser.util.InputReader;
     @Rule(left="statements", value="statement*"),
     @Rule(left="statement", value="nmeaStatement"),
     @Rule(left="nmeaStatement", value="'\\$' talkerId nmeaSentence '\\*' checksum '\r\n'"),
+    @Rule(left="nmeaStatement", value="'\\!AIVDM'  c numberOfSentences c sentenceNumber c sequentialMessageId c channel aisMessage '0\\*' checksum '\r\n'"),
     @Rule(left="nmeaSentence", value="'AAM' c arrivalStatus c waypointStatus c arrivalCircleRadius c waypoint"),
     @Rule(left="nmeaSentence", value="'ALM' c totalNumberOfMessages c messageNumber c satellitePRNNumber c gpsWeekNumber c svHealth c eccentricity c almanacReferenceTime c inclinationAngle c rateOfRightAscension c rootOfSemiMajorAxis c argumentOfPerigee c longitudeOfAscensionNode c meanAnomaly c f0ClockParameter c f1ClockParameter"),
     @Rule(left="nmeaSentence", value="'APA' c status c status2 c crossTrackError c arrivalStatus c waypointStatus c bearingOriginToDestination c waypoint"),
@@ -161,6 +162,52 @@ import org.vesalainen.parser.util.InputReader;
 })
 public abstract class NMEAParser implements ParserInfo
 {
+    protected void type(int messageType, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setMessageType(messageType);
+    }
+    protected void repeat(int repeatIndicator, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setRepeatIndicator(repeatIndicator);
+    }
+    protected void mmsi(int mmsi, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setMMSI(mmsi);
+    }
+    @Rule("letter c")
+    protected void channel(
+            char channel,
+            @ParserContext("aisData") AISData aisData,
+            @ParserContext("aisInputStream") AISInputStream aisInputStream
+            )
+    {
+        aisData.setChannel(channel);
+        aisInputStream.setDecode(true);
+    }
+    @Rule("integer")
+    protected void sentenceNumber(
+            int sentenceNumber,
+            @ParserContext("aisData") AISData aisData
+            )
+    {
+        aisData.setSentenceNumber(sentenceNumber);
+    }
+    @Rule("integer")
+    protected void numberOfSentences(
+            int numberOfSentences,
+            @ParserContext("aisData") AISData aisData
+            )
+    {
+        aisData.setNumberOfSentences(numberOfSentences);
+    }
+    @Rule("integer")
+    protected void sequentialMessageId(
+            int sequentialMessageId,
+            @ParserContext("aisData") AISData aisData
+            )
+    {
+        aisData.setSequenceMessageId(sequentialMessageId);
+    }
     @Rule("integer")
     protected void day(
             int day,
@@ -205,163 +252,163 @@ public abstract class NMEAParser implements ParserInfo
     protected void velocityToWaypoint(
             float velocityToWaypoint,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setVelocityToWaypoint(velocityToWaypoint, unit);
+        data.setVelocityToWaypoint(velocityToWaypoint, unit);
     }
     @Rule("decimal c letter")
     protected void windDirection(
             float windDirection,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setWindDirection(windDirection, unit);
+        data.setWindDirection(windDirection, unit);
     }
     @Rule("decimal c letter")
     protected void waterHeading(
             float waterHeading,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setWaterHeading(waterHeading, unit);
+        data.setWaterHeading(waterHeading, unit);
     }
     @Rule("decimal c letter")
     protected void waterSpeed(
             float waterSpeed,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setWaterSpeed(waterSpeed, unit);
+        data.setWaterSpeed(waterSpeed, unit);
     }
     @Rule("decimal")
     protected void starboardRudderSensor(
             float starboardRudderSensor,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setStarboardRudderSensor(starboardRudderSensor);
+        data.setStarboardRudderSensor(starboardRudderSensor);
     }
     @Rule("decimal")
     protected void portRudderSensor(
             float portRudderSensor,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setPortRudderSensor(portRudderSensor);
+        data.setPortRudderSensor(portRudderSensor);
     }
     @Rule("letter")
     protected void rpmSource(
             char rpmSource,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setRpmSource(rpmSource);
+        data.setRpmSource(rpmSource);
     }
     @Rule("integer")
     protected void rpmSourceNumber(
             int rpmSourceNumber,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setRpmSourceNumber(rpmSourceNumber);
+        data.setRpmSourceNumber(rpmSourceNumber);
     }
     @Rule("integer")
     protected void rpm(
             int rpm,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setRpm(rpm);
+        data.setRpm(rpm);
     }
     @Rule("decimal")
     protected void propellerPitch(
             float propellerPitch,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setPropellerPitch(propellerPitch);
+        data.setPropellerPitch(propellerPitch);
     }
     @Rule("decimal")
     protected void rateOfTurn(
             float rateOfTurn,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setRateOfTurn(rateOfTurn);
+        data.setRateOfTurn(rateOfTurn);
     }
     @Rule("decimal c letter")
     protected void windAngle(
             float windAngle,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setWindAngle(windAngle, unit);
+        data.setWindAngle(windAngle, unit);
     }
     @Rule("decimal c letter")
     protected void windSpeed(
             float windSpeed,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setWindSpeed(windSpeed, unit);
+        data.setWindSpeed(windSpeed, unit);
     }
     @Rule("decimal c letter")
     protected void waterTemperature(
             float waterTemperature,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setWaterTemperature(waterTemperature, unit);
+        data.setWaterTemperature(waterTemperature, unit);
     }
     @Rule("decimal c letter")
     protected void heading(
             float heading,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setHeading(heading, unit);
+        data.setHeading(heading, unit);
     }
     @Rule("decimal")
     protected void magneticSensorHeading(
             float magneticSensorHeading,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setMagneticSensorHeading(magneticSensorHeading);
+        data.setMagneticSensorHeading(magneticSensorHeading);
     }
     @Rule("decimal c ew")
     protected void magneticDeviation(
             float magneticDeviation,
             float sign,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setMagneticDeviation(sign*magneticDeviation);
+        data.setMagneticDeviation(sign*magneticDeviation);
     }
     @Rule("decimal c decimal")
     protected void depthOfWater(
             float depth,
             float offset,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setDepthOfWater(depth, offset);
+        data.setDepthOfWater(depth, offset);
     }
     @Rule("stringList")
     protected void waypoints(
             List<String> list,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setWaypoints(list);
+        data.setWaypoints(list);
     }
     @Rule("string")
     protected List<String> stringList(String str)
@@ -379,209 +426,209 @@ public abstract class NMEAParser implements ParserInfo
     @Rule("string")
     protected void horizontalDatum(
             String horizontalDatum,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setHorizontalDatum(horizontalDatum);
+        data.setHorizontalDatum(horizontalDatum);
     }
     @Rule("c letter")
     protected void faaModeIndicator(
             char faaModeIndicator,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setFAAModeIndicator(faaModeIndicator);
+        data.setFAAModeIndicator(faaModeIndicator);
     }
     @Rule("letter")
     protected void messageMode(
             char messageMode,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setMessageMode(messageMode);
+        data.setMessageMode(messageMode);
     }
     
     @Rule("decimal c letter")
     protected void distanceToWaypoint(
             float distanceToWaypoint,
             char units,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setDistanceToWaypoint(distanceToWaypoint, units);
+        data.setDistanceToWaypoint(distanceToWaypoint, units);
     }
     @Rule("decimal c letter")
     protected void depthBelowTransducer(
             float depth,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setDepthBelowTransducer(depth, unit);
+        data.setDepthBelowTransducer(depth, unit);
     }
     @Rule("decimal c letter")
     protected void depthBelowSurface(
             float depth,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setDepthBelowSurface(depth, unit);
+        data.setDepthBelowSurface(depth, unit);
     }
     @Rule("decimal c letter")
     protected void depthBelowKeel(
             float depth,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setDepthBelowKeel(depth, unit);
+        data.setDepthBelowKeel(depth, unit);
     }
     @Rule("decimal")
     protected void f1ClockParameter(
             float f1ClockParameter,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setF1ClockParameter(f1ClockParameter);
+        data.setF1ClockParameter(f1ClockParameter);
     }
     @Rule("decimal")
     protected void f0ClockParameter(
             float f0ClockParameter,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setF0ClockParameter(f0ClockParameter);
+        data.setF0ClockParameter(f0ClockParameter);
     }
     @Rule("decimal")
     protected void meanAnomaly(
             float meanAnomaly,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setMeanAnomaly(meanAnomaly);
+        data.setMeanAnomaly(meanAnomaly);
     }
     @Rule("decimal")
     protected void longitudeOfAscensionNode(
             float longitudeOfAscensionNode,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setLongitudeOfAscensionNode(longitudeOfAscensionNode);
+        data.setLongitudeOfAscensionNode(longitudeOfAscensionNode);
     }
     @Rule("decimal")
     protected void argumentOfPerigee(
             float argumentOfPerigee,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setArgumentOfPerigee(argumentOfPerigee);
+        data.setArgumentOfPerigee(argumentOfPerigee);
     }
     @Rule("decimal")
     protected void rootOfSemiMajorAxis(
             float rootOfSemiMajorAxis,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setRootOfSemiMajorAxis(rootOfSemiMajorAxis);
+        data.setRootOfSemiMajorAxis(rootOfSemiMajorAxis);
     }
     @Rule("decimal")
     protected void rateOfRightAscension(
             float rateOfRightAscension,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setRateOfRightAscension(rateOfRightAscension);
+        data.setRateOfRightAscension(rateOfRightAscension);
     }
     @Rule("decimal")
     protected void inclinationAngle(
             float inclinationAngle,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setInclinationAngle(inclinationAngle);
+        data.setInclinationAngle(inclinationAngle);
     }
     @Rule("decimal")
     protected void almanacReferenceTime(
             float almanacReferenceTime,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setAlmanacReferenceTime(almanacReferenceTime);
+        data.setAlmanacReferenceTime(almanacReferenceTime);
     }
     @Rule("decimal")
     protected void eccentricity(
             float eccentricity,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setEccentricity(eccentricity);
+        data.setEccentricity(eccentricity);
     }
     @Rule("integer")
     protected void svHealth(
             int svHealth,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setSvHealth(svHealth);
+        data.setSvHealth(svHealth);
     }
     @Rule("integer")
     protected void gpsWeekNumber(
             int gpsWeekNumber,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setGpsWeekNumber(gpsWeekNumber);
+        data.setGpsWeekNumber(gpsWeekNumber);
     }
     @Rule("integer")
     protected void satellitePRNNumber(
             int satellitePRNNumber,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setSatellitePRNNumber(satellitePRNNumber);
+        data.setSatellitePRNNumber(satellitePRNNumber);
     }
     @Rule("integer")
     protected void messageNumber(
             int messageNumber,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setMessageNumber(messageNumber);
+        data.setMessageNumber(messageNumber);
     }
     @Rule("integer")
     protected void totalNumberOfMessages(
             int totalNumberOfMessages,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setTotalNumberOfMessages(totalNumberOfMessages);
+        data.setTotalNumberOfMessages(totalNumberOfMessages);
     }
     @Rule("decimal c letter")
     protected void arrivalCircleRadius(
             float arrivalCircleRadius,
             char units,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setArrivalCircleRadius(arrivalCircleRadius, units);
+        data.setArrivalCircleRadius(arrivalCircleRadius, units);
     }
     @Rule("decimal c decimal")
     protected void timeDifference(
             float timeDifferenceA,  // uS
             float timeDifferenceB,  // uS
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setTimeDifference(timeDifferenceA, timeDifferenceB);
+        data.setTimeDifference(timeDifferenceA, timeDifferenceB);
     }
     @Rule("string")
     protected void waypoint(
             String waypoint,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setWaypoint(waypoint);
+        data.setWaypoint(waypoint);
     }
     @Rule("decimal")
     protected void utc(
@@ -602,205 +649,205 @@ public abstract class NMEAParser implements ParserInfo
     @Rule("letter")
     protected void arrivalStatus(
             char arrivalStatus,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setArrivalStatus(arrivalStatus);
+        data.setArrivalStatus(arrivalStatus);
     }
     @Rule("letter")
     protected void waypointStatus(
             char waypointStatus,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setWaypointStatus(waypointStatus);
+        data.setWaypointStatus(waypointStatus);
     }
     @Rule("letter")
     protected void status(
             char status,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setStatus(status);
+        data.setStatus(status);
     }
     @Rule("letter")
     protected void status2(
             char status,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setStatus2(status);
+        data.setStatus2(status);
     }
     @Rule("integer")
     protected void differentialReferenceStationID(
             int differentialReferenceStationID,     //0000-1023            
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setDifferentialReferenceStationID(differentialReferenceStationID);
+        data.setDifferentialReferenceStationID(differentialReferenceStationID);
     }
     @Rule("integer")
     protected void ageOfDifferentialGPSData(
             int ageOfDifferentialGPSData,   //time in seconds since last SC104 type 1 or 9 update, null field when DGPS is not used
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setAgeOfDifferentialGPSData(ageOfDifferentialGPSData);
+        data.setAgeOfDifferentialGPSData(ageOfDifferentialGPSData);
     }
     @Rule("decimal c letter")
     protected void geoidalSeparation(
             float geoidalSeparation,  //the difference between the WGS-84 earth ellipsoid and mean-sea-level (geoid), "-" means mean-sea-level below ellipsoid
             char unitsOfGeoidalSeparation,       // meters
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setGeoidalSeparation(geoidalSeparation, unitsOfGeoidalSeparation);
+        data.setGeoidalSeparation(geoidalSeparation, unitsOfGeoidalSeparation);
     }
     @Rule("decimal c letter")
     protected void antennaAltitude(
             float antennaAltitude,    // above/below mean-sea-level (geoid) (in meters)
             char unitsOfAntennaAltitude,        //meters
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setAntennaAltitude(antennaAltitude, unitsOfAntennaAltitude);
+        data.setAntennaAltitude(antennaAltitude, unitsOfAntennaAltitude);
     }
     @Rule("decimal")
     protected void horizontalDilutionOfPrecision(
             float horizontalDilutionOfPrecision,  // (meters)
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setHorizontalDilutionOfPrecision(horizontalDilutionOfPrecision);
+        data.setHorizontalDilutionOfPrecision(horizontalDilutionOfPrecision);
     }
     @Rule("integer")
     protected void numberOfSatellitesInView(
             int numberOfSatellitesInView,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setNumberOfSatellitesInView(numberOfSatellitesInView);
+        data.setNumberOfSatellitesInView(numberOfSatellitesInView);
     }
     @Rule("integer")
     protected void gpsQualityIndicator(
             int gpsQualityIndicator,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setGpsQualityIndicator(gpsQualityIndicator);
+        data.setGpsQualityIndicator(gpsQualityIndicator);
     }
     @Rule("decimal")
     protected void destinationClosingVelocity(
             float destinationClosingVelocity,  // knots
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setDestinationClosingVelocity(destinationClosingVelocity);
+        data.setDestinationClosingVelocity(destinationClosingVelocity);
     }
     @Rule("decimal c letter")
     protected void bearing(
             float bearing,  // degrees
             char unit,  // M = Magnetic, T = True
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setBearing(bearing, unit);
+        data.setBearing(bearing, unit);
     }
     @Rule("decimal")
     protected void bearingToDestination(
             float bearingToDestination,  // degrees
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setBearingToDestination(bearingToDestination);
+        data.setBearingToDestination(bearingToDestination);
     }
     @Rule("decimal c letter")
     protected void bearingOriginToDestination(
             float bearingOriginToDestination,  // degrees
             char mOrT,  // M = Magnetic, T = True
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setBearingOriginToDestination(bearingOriginToDestination, mOrT);
+        data.setBearingOriginToDestination(bearingOriginToDestination, mOrT);
     }
     @Rule("decimal c letter")
     protected void bearingPresentPositionToDestination(
             float bearingPresentPositionToDestination,  // degrees
             char mOrT,  // M = Magnetic, T = True
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setBearingPresentPositionToDestination(bearingPresentPositionToDestination, mOrT);
+        data.setBearingPresentPositionToDestination(bearingPresentPositionToDestination, mOrT);
     }
     @Rule("decimal c letter")
     protected void headingToSteerToDestination(
             float headingToSteerToDestination,  // degrees
             char mOrT,  // M = Magnetic, T = True
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setHeadingToSteerToDestination(headingToSteerToDestination, mOrT);
+        data.setHeadingToSteerToDestination(headingToSteerToDestination, mOrT);
     }
     @Rule("decimal")
     protected void rangeToDestination(
             float rangeToDestination,  // NM
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setRangeToDestination(rangeToDestination);
+        data.setRangeToDestination(rangeToDestination);
     }
     @Rule("string c string")
     protected void waypointToWaypoint(
             String toWaypoint,
             String fromWaypoint,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setWaypointToWaypoint(toWaypoint, fromWaypoint);
+        data.setWaypointToWaypoint(toWaypoint, fromWaypoint);
     }
     @Rule("decimal c letter c letter")
     protected void crossTrackError(
             float crossTrackError,  // NM
             char directionToSteer,
             char unit,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setCrossTrackError(crossTrackError, directionToSteer, unit);
+        data.setCrossTrackError(crossTrackError, directionToSteer, unit);
     }
     @Rule("decimal c letter")
     protected void crossTrackErrorNM(
             float crossTrackError,  // NM
             char directionToSteer,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setCrossTrackError(crossTrackError, directionToSteer, 'N');
+        data.setCrossTrackError(crossTrackError, directionToSteer, 'N');
     }
     @Rule("decimal c ew")
     protected void magneticVariation(
             float magneticVariation,    // degrees
             float mew,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setMagneticVariation(mew*magneticVariation);
+        data.setMagneticVariation(mew*magneticVariation);
     }
     @Rule("decimal")
     protected void speedOverGround(
             float speedOverGround,  // knots
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setSpeedOverGround(speedOverGround);
+        data.setSpeedOverGround(speedOverGround);
     }
     @Rule("decimal")
     protected void trackMadeGood(
             float trackMadeGood,  // knots
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setTrackMadeGood(trackMadeGood);
+        data.setTrackMadeGood(trackMadeGood);
     }
     @Rule("latitude c ns c longitude c ew")
     protected void location(
@@ -808,10 +855,10 @@ public abstract class NMEAParser implements ParserInfo
             float ns,
             float longitude,
             float ew,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setLocation(ns*latitude, ew*longitude);
+        data.setLocation(ns*latitude, ew*longitude);
     }
     @Rule("latitude c ns c longitude c ew")
     protected void destinationWaypointLocation(
@@ -819,15 +866,15 @@ public abstract class NMEAParser implements ParserInfo
             float ns,
             float longitude,
             float ew,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
-        measurement.setDestinationWaypointLocation(ns*latitude, ew*longitude);
+        data.setDestinationWaypointLocation(ns*latitude, ew*longitude);
     }
     @Rule("letter letter")
-    protected void talkerId(char c1, char c2, @ParserContext("measurement") Measurement measurement)
+    protected void talkerId(char c1, char c2, @ParserContext("data") NMEAData data)
     {
-        measurement.talkerId(c1, c2);
+        data.talkerId(c1, c2);
     }
     @Rule("hexAlpha hexAlpha")
     protected void checksum(
@@ -835,19 +882,19 @@ public abstract class NMEAParser implements ParserInfo
             char x2, 
             @ParserContext("checksum") Checksum checksum,
             @ParserContext("clock") Clock clock,
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data
             )
     {
         int sum = 16*parseHex(x1)+parseHex(x2);
         if (sum != checksum.getValue())
         {
             clock.rollback();
-            measurement.rollback("checksum "+Integer.toHexString(sum)+" != "+Integer.toHexString((int)checksum.getValue()));
+            data.rollback("checksum "+Integer.toHexString(sum)+" != "+Integer.toHexString((int)checksum.getValue()));
         }
         else
         {
             clock.commit();
-            measurement.commit();
+            data.commit();
         }
     }
     @Terminal(expression="[0-9]+\\.[0-9]+")
@@ -937,7 +984,7 @@ public abstract class NMEAParser implements ParserInfo
     }
     @RecoverMethod
     public void recover(
-            @ParserContext("measurement") Measurement measurement,
+            @ParserContext("data") NMEAData data,
             @ParserContext(ParserConstants.INPUTREADER) InputReader reader
             ) throws IOException
     {
@@ -948,20 +995,24 @@ public abstract class NMEAParser implements ParserInfo
             sb.append((char)cc);
             cc = reader.read();
         }
-        measurement.rollback("skipping "+sb);
+        data.rollback("skipping "+sb);
     }
-    public void parse(InputStream is, Measurement measurement)
+    public void parse(InputStream is, NMEAData data, AISData aisData)
     {
         Checksum checksum = new NMEAChecksum();
         Clock clock = new GPSClock();
-        parse(new CheckedInputStream(is, checksum), checksum, clock, measurement);
+        CheckedInputStream checkedInputStream = new CheckedInputStream(is, checksum);
+        AISInputStream aisInputStream = new AISInputStream(checkedInputStream);
+        parse(aisInputStream, checksum, clock, data, aisData, aisInputStream);
     }
     @ParseMethod(start = "statements", size=80)
     protected abstract void parse(
             InputStream is, 
             @ParserContext("checksum") Checksum checksum, 
             @ParserContext("clock") Clock clock, 
-            @ParserContext("measurement") Measurement measurement
+            @ParserContext("data") NMEAData data,
+            @ParserContext("aisData") AISData aisData,
+            @ParserContext("aisInputStream") AISInputStream aisInputStream
             );
     
     public static NMEAParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
@@ -977,10 +1028,11 @@ public abstract class NMEAParser implements ParserInfo
         try
         {
             String pck = NMEAParser.class.getPackage().getName().replace('.', '/')+"/";
-            InputStream is = NMEAParser.class.getClassLoader().getResourceAsStream(pck+"test.nmea");
-            FileInputStream fis = new FileInputStream("y:\\NMEA data\\2007_05_25_122516.nmea");
+            InputStream is = NMEAParser.class.getClassLoader().getResourceAsStream(pck+"nmea-sample");
+            //FileInputStream fis = new FileInputStream("y:\\NMEA data\\2007_05_25_122516.nmea");
             NMEAParser p = NMEAParser.newInstance();
-            p.parse(fis, new Tracer());
+            Tracer tracer = new Tracer();
+            p.parse(is, tracer, tracer);
         }
         catch (Exception ex)
         {

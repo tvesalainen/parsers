@@ -98,7 +98,6 @@ public class GPSClock implements Clock
         if (set)
         {
             offset = calendar.getTimeInMillis() - System.currentTimeMillis();
-            System.err.println(new Date(getTime()));
             wc.clear();
         }
     }

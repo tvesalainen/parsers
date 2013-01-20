@@ -15,11 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.vesalainen.parsers.nmea.ais;
+package org.vesalainen.parsers.nmea;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
 
 /**
  * @author Timo Vesalainen
@@ -27,6 +26,7 @@ import java.io.StringBufferInputStream;
 public class AISInputStream extends InputStream
 {
     private InputStream in;
+    private boolean decode;
     private int buffer;
     private int bit;
     
@@ -34,16 +34,38 @@ public class AISInputStream extends InputStream
     {
         this.in = in;
     }
+
+    public void setDecode(boolean decode)
+    {
+        this.decode = decode;
+    }
     
     @Override
     public int read() throws IOException
     {
+        if (decode)
+        {
+            int cc = readBit();
+            if (cc != -1)
+            {
+                return cc;
+            }
+        }
+        return in.read();
+    }
+    public int readBit() throws IOException
+    {
         if (bit == 0)
         {
             buffer = in.read();
+            if (buffer == ',')
+            {
+                decode = false;
+                return -1;
+            }
             if (buffer == -1)
             {
-                return -1;
+                throw new IOException("unexcpected EOF in AIS Data");
             }
             buffer -= 48;
             if (buffer > 40)
@@ -62,5 +84,4 @@ public class AISInputStream extends InputStream
             return '1';
         }
     }
-
 }

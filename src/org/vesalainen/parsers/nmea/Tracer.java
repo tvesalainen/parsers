@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author Timo Vesalainen
  */
-public class Tracer implements Measurement
+public class Tracer implements NMEAData, AISData
 {
 
     @Override
@@ -455,6 +455,30 @@ public class Tracer implements Measurement
     public void setVelocityToWaypoint(float velocityToWaypoint, char unit)
     {
         System.err.println("setVelocityToWaypoint("+velocityToWaypoint+", "+unit+")");
+    }
+
+    @Override
+    public void setNumberOfSentences(int numberOfSentences)
+    {
+        System.err.println("setNumberOfSentences("+numberOfSentences+")");
+    }
+
+    @Override
+    public void setSentenceNumber(int sentenceNumber)
+    {
+        System.err.println("setSentenceNumber("+sentenceNumber+")");
+    }
+
+    @Override
+    public void setSequenceMessageId(int sequentialMessageId)
+    {
+        System.err.println("setSequenceMessageId("+sequentialMessageId+")");
+    }
+
+    @Override
+    public void setChannel(char channel)
+    {
+        System.err.println("setChannel("+channel+")");
     }
 
 }

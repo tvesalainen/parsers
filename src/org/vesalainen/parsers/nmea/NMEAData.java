@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author Timo Vesalainen
  */
-public interface Measurement 
+public interface NMEAData 
 {
     /**
      * Talker Id of sending device.
