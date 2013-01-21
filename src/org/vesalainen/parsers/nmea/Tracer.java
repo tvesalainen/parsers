@@ -18,6 +18,10 @@
 package org.vesalainen.parsers.nmea;
 
 import java.util.List;
+import org.vesalainen.parsers.nmea.ais.EPFDFixTypes;
+import org.vesalainen.parsers.nmea.ais.ManeuverIndicator;
+import org.vesalainen.parsers.nmea.ais.MessageTypes;
+import org.vesalainen.parsers.nmea.ais.NavigationStatus;
 
 /**
  * @author Timo Vesalainen
@@ -479,6 +483,144 @@ public class Tracer implements NMEAData, AISData
     public void setChannel(char channel)
     {
         System.err.println("setChannel("+channel+")");
+    }
+
+    @Override
+    public void setMessageType(MessageTypes messageTypes)
+    {
+        System.err.println("setMessageType("+messageTypes+")");
+    }
+
+    @Override
+    public void setRepeatIndicator(int repeatIndicator)
+    {
+        System.err.println("setRepeatIndicator("+repeatIndicator+")");
+    }
+
+    @Override
+    public void setMMSI(int mmsi)
+    {
+        System.err.println("setMMSI("+mmsi+")");
+    }
+
+    @Override
+    public void setStatus(NavigationStatus navigationStatus)
+    {
+        System.err.println("setStatus("+navigationStatus+")");
+    }
+
+    @Override
+    public void setTurn(float degreesPerMinute)
+    {
+        System.err.println("setTurn("+degreesPerMinute+")");
+    }
+
+    @Override
+    public void setSpeed(float knots)
+    {
+        System.err.println("setSpeed("+knots+")");
+    }
+
+    @Override
+    public void setAccuracy(boolean accuracy)
+    {
+        System.err.println("setAccuracy("+accuracy+")");
+    }
+
+    @Override
+    public void setLongitude(double longitude)
+    {
+        System.err.println("setLongitude("+longitude+")");
+    }
+
+    @Override
+    public void setLatitude(float latitude)
+    {
+        System.err.println("setLatitude("+latitude+")");
+    }
+
+    @Override
+    public void setCourse(float setCourse)
+    {
+        System.err.println("setCourse("+setCourse+")");
+    }
+
+    @Override
+    public void setHeading(int heading)
+    {
+        System.err.println("setHeading("+heading+")");
+    }
+
+    @Override
+    public void setSecond(int second)
+    {
+        System.err.println("setSecond("+second+")");
+    }
+
+    @Override
+    public void setManeuver(ManeuverIndicator maneuverIndicator)
+    {
+        System.err.println("setManeuver("+maneuverIndicator+")");
+    }
+
+    @Override
+    public void setRAIM(boolean raim)
+    {
+        System.err.println("setRAIM("+raim+")");
+    }
+
+    @Override
+    public void setRadioStatus(int radio)
+    {
+        System.err.println("setRadioStatus("+radio+")");
+    }
+
+    @Override
+    public void setYear(int year)
+    {
+        System.err.println("setYear("+year+")");
+    }
+
+    @Override
+    public void setMonth(int month)
+    {
+        System.err.println("setMonth("+month+")");
+    }
+
+    @Override
+    public void setDay(int day)
+    {
+        System.err.println("setDay("+day+")");
+    }
+
+    @Override
+    public void setHour(int hour)
+    {
+        System.err.println("setHour("+hour+")");
+    }
+
+    @Override
+    public void setMinute(int minute)
+    {
+        System.err.println("setMinute("+minute+")");
+    }
+
+    @Override
+    public void setEPFD(EPFDFixTypes epfdFixTypes)
+    {
+        System.err.println("setEPFD("+epfdFixTypes+")");
+    }
+
+    @Override
+    public void setVersion(int version)
+    {
+        System.err.println("setVersion("+version+")");
+    }
+
+    @Override
+    public void setIMONumber(int setIMONumber)
+    {
+        System.err.println("setIMONumber("+setIMONumber+")");
     }
 
 }

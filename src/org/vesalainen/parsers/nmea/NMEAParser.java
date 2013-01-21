@@ -17,7 +17,6 @@
 
 package org.vesalainen.parsers.nmea;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -36,10 +35,15 @@ import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.parser.util.InputReader;
+import org.vesalainen.parsers.nmea.ais.EPFDFixTypes;
+import org.vesalainen.parsers.nmea.ais.ManeuverIndicator;
+import org.vesalainen.parsers.nmea.ais.MessageTypes;
+import org.vesalainen.parsers.nmea.ais.NavigationStatus;
 
 /**
  * @author Timo Vesalainen
  * @see <a href="http://catb.org/gpsd/NMEA.html">NMEA Revealed</a>
+ * @see <a href="http://gpsd.berlios.de/AIVDM.html">AIVDM/AIVDO protocol decoding</a>
  * @see <a href="doc-files/NMEAParser-statements.html#BNF">BNF Syntax for NMEA</a>
  */
 @GenClassname("org.vesalainen.parsers.nmea.NMEAParserImpl")
@@ -162,17 +166,164 @@ import org.vesalainen.parser.util.InputReader;
 })
 public abstract class NMEAParser implements ParserInfo
 {
-    protected void type(int messageType, @ParserContext("aisData") AISData aisData)
+    protected void aisType(int messageType, @ParserContext("aisData") AISData aisData)
     {
-        aisData.setMessageType(messageType);
+        aisData.setMessageType(MessageTypes.values()[messageType]);
     }
-    protected void repeat(int repeatIndicator, @ParserContext("aisData") AISData aisData)
+    protected void aisRepeat(int repeatIndicator, @ParserContext("aisData") AISData aisData)
     {
         aisData.setRepeatIndicator(repeatIndicator);
     }
-    protected void mmsi(int mmsi, @ParserContext("aisData") AISData aisData)
+    protected void aisMmsi(int mmsi, @ParserContext("aisData") AISData aisData)
     {
         aisData.setMMSI(mmsi);
+    }
+    protected void aisStatus(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setStatus(NavigationStatus.values()[status]);
+    }
+    /**
+     *<p> Turn rate is encoded as follows:
+     *<p> 0 = not turning
+     *<p> 1…126 = turning right at up to 708 degrees per minute or higher
+     *<p> 1…-126 = turning left at up to 708 degrees per minute or higher
+     *<p> 127 = turning right at more than 5deg/30s (No TI available)
+     *<p> -127 = turning left at more than 5deg/30s (No TI available)
+     *<p> 128 (80 hex) indicates no turn information available (default)
+     *<p>Values between 0 and 708 degrees/min coded by ROTAIS=4.733 * SQRT(ROTsensor) degrees/min where ROTsensor is the Rate of Turn as input by an external Rate of Turn Indicator. ROTAIS is rounded to the nearest integer value. Thus, to decode the field value, divide by 4.733 and then square it. Sign of the field value should be preserved when squaring it, otherwise the left/right indication will be lost.
+     * @param turn
+     * @param aisData 
+     */
+    protected void aisTurn(int turn, @ParserContext("aisData") AISData aisData)
+    {
+        switch (turn)
+        {
+            case 0:
+                aisData.setTurn(0);
+                break;
+            case 127:
+                aisData.setTurn(20);
+                break;
+            case -127:
+                aisData.setTurn(-20);
+                break;
+            case 128:
+                break;
+            default:
+                float f = turn;
+                f = f / 4.733F;
+                aisData.setTurn(Math.signum(f)*f*f);
+                break;
+        }
+    }
+    protected void aisSpeed(int speed, @ParserContext("aisData") AISData aisData)
+    {
+        if (speed != 1023)
+        {
+            float f = speed;
+            aisData.setSpeed(f/10F);
+        }
+    }
+    protected void aisAccuracy(int accuracy, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setAccuracy(accuracy == 1);
+    }
+    protected void aisLon(int lon, @ParserContext("aisData") AISData aisData)
+    {
+        if (lon != 0x6791AC0)
+        {
+            float f = lon;
+            aisData.setLongitude(f / 600000L);
+        }
+    }
+    protected void aisLat(int lat, @ParserContext("aisData") AISData aisData)
+    {
+        if (lat != 0x3412140)
+        {
+            float f = lat;
+            aisData.setLatitude(f / 600000L);
+        }
+    }
+    protected void aisCourse(int course, @ParserContext("aisData") AISData aisData)
+    {
+        if (course != 3600)
+        {
+            float f = course;
+            aisData.setCourse(f / 10F);
+        }
+    }
+    protected void aisHeading(int heading, @ParserContext("aisData") AISData aisData)
+    {
+        if (heading != 511)
+        {
+            aisData.setHeading(heading);
+        }
+    }
+    protected void aisSecond(int second, @ParserContext("aisData") AISData aisData)
+    {
+        if (second != 60)
+        {
+            aisData.setSecond(second);
+        }
+    }
+    protected void aisManeuver(int maneuver, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setManeuver(ManeuverIndicator.values()[maneuver]);
+    }
+    protected void aisRaim(int raim, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setRAIM(raim == 1);
+    }
+    protected void aisRadio(int radio, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setRadioStatus(radio);
+    }
+    protected void aisYear(int year, @ParserContext("aisData") AISData aisData)
+    {
+        if (year != 0)
+        {
+            aisData.setYear(year);
+        }
+    }
+    protected void aisMonth(int month, @ParserContext("aisData") AISData aisData)
+    {
+        if (month != 0)
+        {
+            aisData.setMonth(month);
+        }
+    }
+    protected void aisDay(int day, @ParserContext("aisData") AISData aisData)
+    {
+        if (day != 0)
+        {
+            aisData.setDay(day);
+        }
+    }
+    protected void aisHour(int hour, @ParserContext("aisData") AISData aisData)
+    {
+        if (hour != 24)
+        {
+            aisData.setHour(hour);
+        }
+    }
+    protected void aisMinute(int minute, @ParserContext("aisData") AISData aisData)
+    {
+        if (minute != 60)
+        {
+            aisData.setMinute(minute);
+        }
+    }
+    protected void aisEpfd(int epfd, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setEPFD(EPFDFixTypes.values()[epfd]);
+    }
+    protected void aisAisVersion(int version, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setVersion(version);
+    }
+    protected void aisImo(int imo, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setIMONumber(imo);
     }
     @Rule("letter c")
     protected void channel(
