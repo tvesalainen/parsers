@@ -18,10 +18,17 @@
 package org.vesalainen.parsers.nmea;
 
 import java.util.List;
+import org.vesalainen.parsers.nmea.ais.AreaNoticeDescription;
+import org.vesalainen.parsers.nmea.ais.CargoUnitCodes;
+import org.vesalainen.parsers.nmea.ais.CodesForShipType;
 import org.vesalainen.parsers.nmea.ais.EPFDFixTypes;
 import org.vesalainen.parsers.nmea.ais.ManeuverIndicator;
 import org.vesalainen.parsers.nmea.ais.MessageTypes;
+import org.vesalainen.parsers.nmea.ais.MooringPosition;
 import org.vesalainen.parsers.nmea.ais.NavigationStatus;
+import org.vesalainen.parsers.nmea.ais.RouteTypeCodes;
+import org.vesalainen.parsers.nmea.ais.ServiceStatus;
+import org.vesalainen.parsers.nmea.ais.SubareaType;
 
 /**
  * @author Timo Vesalainen
@@ -621,6 +628,726 @@ public class Tracer implements NMEAData, AISData
     public void setIMONumber(int setIMONumber)
     {
         System.err.println("setIMONumber("+setIMONumber+")");
+    }
+
+    @Override
+    public void setCallSign(String fromSixBitCharacters)
+    {
+        System.err.println("setCallSign("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setVesselName(String fromSixBitCharacters)
+    {
+        System.err.println("setVesselName("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setDimensionToBow(int dimension)
+    {
+        System.err.println("setDimensionToBow("+dimension+")");
+    }
+
+    @Override
+    public void setDimensionToStern(int dimension)
+    {
+        System.err.println("setDimensionToStern("+dimension+")");
+    }
+
+    @Override
+    public void setDimensionToPort(int dimension)
+    {
+        System.err.println("setDimensionToPort("+dimension+")");
+    }
+
+    @Override
+    public void setDimensionToStarboard(int dimension)
+    {
+        System.err.println("setDimensionToStarboard("+dimension+")");
+    }
+
+    @Override
+    public void setDraught(float meters)
+    {
+        System.err.println("setDraught("+meters+")");
+    }
+
+    @Override
+    public void setDestination(String fromSixBitCharacters)
+    {
+        System.err.println("setDestination("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setDTE(boolean ready)
+    {
+        System.err.println("setDTE("+ready+")");
+    }
+
+    @Override
+    public void setShipType(CodesForShipType codesForShipType)
+    {
+        System.err.println("setShipType("+codesForShipType+")");
+    }
+
+    @Override
+    public void setSequenceNumber(int seq)
+    {
+        System.err.println("setSequenceNumber("+seq+")");
+    }
+
+    @Override
+    public void setDestinationMMSI(int mmsi)
+    {
+        System.err.println("setDestinationMMSI("+mmsi+")");
+    }
+
+    @Override
+    public void setRetransmit(boolean retransmit)
+    {
+        System.err.println("setRetransmit("+retransmit+")");
+    }
+
+    @Override
+    public void setDAC(int dac)
+    {
+        System.err.println("setDAC("+dac+")");
+    }
+
+    @Override
+    public void setFID(int fid)
+    {
+        System.err.println("setFID("+fid+")");
+    }
+
+    @Override
+    public void setLastPort(String locode)
+    {
+        System.err.println("setLastPort("+locode+")");
+    }
+
+    @Override
+    public void setLastPortMonth(int month)
+    {
+        System.err.println("setLastPortMonth("+month+")");
+    }
+
+    @Override
+    public void setLastPortDay(int day)
+    {
+        System.err.println("setLastPortDay("+day+")");
+    }
+
+    @Override
+    public void setLastPortHour(int hour)
+    {
+        System.err.println("setLastPortHour("+hour+")");
+    }
+
+    @Override
+    public void setLastPortMinute(int minute)
+    {
+        System.err.println("setLastPortMinute("+minute+")");
+    }
+
+    @Override
+    public void setNextPort(String locode)
+    {
+        System.err.println("setNextPort("+locode+")");
+    }
+
+    @Override
+    public void setNextPortMonth(int month)
+    {
+        System.err.println("setNextPortMonth("+month+")");
+    }
+
+    @Override
+    public void setNextPortDay(int day)
+    {
+        System.err.println("setNextPortDay("+day+")");
+    }
+
+    @Override
+    public void setNextPortHour(int hour)
+    {
+        System.err.println("setNextPortHour("+hour+")");
+    }
+
+    @Override
+    public void setNextPortMinute(int minute)
+    {
+        System.err.println("setNextPortMinute("+minute+")");
+    }
+
+    @Override
+    public void setMainDangerousGood(String fromSixBitCharacters)
+    {
+        System.err.println("setMainDangerousGood("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setIMDCategory(String fromSixBitCharacters)
+    {
+        System.err.println("setIMDCategory("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void UNNumber(int unid)
+    {
+        System.err.println("UNNumber("+unid+")");
+    }
+
+    @Override
+    public void AmountOfCargo(int amount)
+    {
+        System.err.println("AmountOfCargo("+amount+")");
+    }
+
+    @Override
+    public void setUnitOfQuantity(CargoUnitCodes cargoUnitCodes)
+    {
+        System.err.println("setUnitOfQuantity("+cargoUnitCodes+")");
+    }
+
+    @Override
+    public void setFromHour(int hour)
+    {
+        System.err.println("setFromHour("+hour+")");
+    }
+
+    @Override
+    public void setFromMinute(int minute)
+    {
+        System.err.println("setFromMinute("+minute+")");
+    }
+
+    @Override
+    public void setToHour(int hour)
+    {
+        System.err.println("setToHour("+hour+")");
+    }
+
+    @Override
+    public void setToMinute(int minute)
+    {
+        System.err.println("setToMinute("+minute+")");
+    }
+
+    @Override
+    public void setCurrentDirection(int currentDirection)
+    {
+        System.err.println("setCurrentDirection("+currentDirection+")");
+    }
+
+    @Override
+    public void setCurrentSpeed(float knots)
+    {
+        System.err.println("setCurrentSpeed("+knots+")");
+    }
+
+    @Override
+    public void setPersonsOnBoard(int persons)
+    {
+        System.err.println("setPersonsOnBoard("+persons+")");
+    }
+
+    @Override
+    public void setLinkage(int id)
+    {
+        System.err.println("setLinkage("+id+")");
+    }
+
+    @Override
+    public void setPortname(String fromSixBitCharacters)
+    {
+        System.err.println("setPortname("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setAreaNotice(AreaNoticeDescription areaNoticeDescription)
+    {
+        System.err.println("setAreaNotice("+areaNoticeDescription+")");
+    }
+
+    @Override
+    public void setDuration(int duration)
+    {
+        System.err.println("setDuration("+duration+")");
+    }
+
+    @Override
+    public void setShape(SubareaType subareaType)
+    {
+        System.err.println("setShape("+subareaType+")");
+    }
+
+    @Override
+    public void setScale(int scale)
+    {
+        System.err.println("setScale("+scale+")");
+    }
+
+    @Override
+    public void setPrecision(int precision)
+    {
+        System.err.println("setPrecision("+precision+")");
+    }
+
+    @Override
+    public void setRadius(int radius)
+    {
+        System.err.println("setRadius("+radius+")");
+    }
+
+    @Override
+    public void setEast(int east)
+    {
+        System.err.println("setEast("+east+")");
+    }
+
+    @Override
+    public void setNorth(int north)
+    {
+        System.err.println("setNorth("+north+")");
+    }
+
+    @Override
+    public void setOrientation(int orientation)
+    {
+        System.err.println("setOrientation("+orientation+")");
+    }
+
+    @Override
+    public void setLeft(int left)
+    {
+        System.err.println("setLeft("+left+")");
+    }
+
+    @Override
+    public void setRight(int right)
+    {
+        System.err.println("setRight("+right+")");
+    }
+
+    @Override
+    public void setBearing(int bearing)
+    {
+        System.err.println("setBearing("+bearing+")");
+    }
+
+    @Override
+    public void setDistance(int distance)
+    {
+        System.err.println("setDistance("+distance+")");
+    }
+
+    @Override
+    public void setText(String fromSixBitCharacters)
+    {
+        System.err.println("setText("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setBerthLength(int meters)
+    {
+        System.err.println("setBerthLength("+meters+")");
+    }
+
+    @Override
+    public void setBerthDepth(float meters)
+    {
+        System.err.println("setBerthDepth("+meters+")");
+    }
+
+    @Override
+    public void setServicesAvailability(boolean available)
+    {
+        System.err.println("setServicesAvailability("+available+")");
+    }
+
+    @Override
+    public void setBerthName(String fromSixBitCharacters)
+    {
+        System.err.println("setBerthName("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setMooringPosition(MooringPosition mooringPosition)
+    {
+        System.err.println("setMooringPosition("+mooringPosition+")");
+    }
+
+    @Override
+    public void setAgentServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setAgentServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setFuelServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setFuelServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setChandlerServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setChandlerServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setStevedoreServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setStevedoreServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setElectricalServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setElectricalServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setWaterServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setWaterServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setCustomsServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setCustomsServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setCartageServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setCartageServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setCraneServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setCraneServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setLiftServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setLiftServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setMedicalServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setMedicalServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setNavrepairServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setNavrepairServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setProvisionsServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setProvisionsServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setShiprepairServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setShiprepairServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setSurveyorServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setSurveyorServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setSteamServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setSteamServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setTugsServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setTugsServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setSolidwasteServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setSolidwasteServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setLiquidwasteServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setLiquidwasteServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setHazardouswasteServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setHazardouswasteServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setBallastServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setBallastServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setAdditionalServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setAdditionalServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setRegional1ServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setRegional1ServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setRegional2ServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setRegional2ServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setFuture1ServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setFuture1ServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setFuture2ServiceStatus(ServiceStatus serviceStatus)
+    {
+        System.err.println("setFuture2ServiceStatus("+serviceStatus+")");
+    }
+
+    @Override
+    public void setSender(int sender)
+    {
+        System.err.println("setSender("+sender+")");
+    }
+
+    @Override
+    public void setWaypointCount(int count)
+    {
+        System.err.println("setWaypointCount("+count+")");
+    }
+
+    @Override
+    public void setRouteType(RouteTypeCodes routeTypeCodes)
+    {
+        System.err.println("setRouteType("+routeTypeCodes+")");
+    }
+
+    @Override
+    public void setDescription(String fromSixBitCharacters)
+    {
+        System.err.println("setDescription("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setMMSI1(int mmsi)
+    {
+        System.err.println("setMMSI1("+mmsi+")");
+    }
+
+    @Override
+    public void setMMSI2(int mmsi)
+    {
+        System.err.println("setMMSI2("+mmsi+")");
+    }
+
+    @Override
+    public void setMMSI3(int mmsi)
+    {
+        System.err.println("setMMSI3("+mmsi+")");
+    }
+
+    @Override
+    public void setMMSI4(int mmsi)
+    {
+        System.err.println("setMMSI4("+mmsi+")");
+    }
+
+    @Override
+    public void setAverageWindSpeed(int knots)
+    {
+        System.err.println("setAverageWindSpeed("+knots+")");
+    }
+
+    @Override
+    public void setGustSpeed(int knots)
+    {
+        System.err.println("setGustSpeed("+knots+")");
+    }
+
+    @Override
+    public void setWindDirection(int degrees)
+    {
+        System.err.println("setWindDirection("+degrees+")");
+    }
+
+    @Override
+    public void setWindGustDirection(int degrees)
+    {
+        System.err.println("setWindGustDirection("+degrees+")");
+    }
+
+    @Override
+    public void setAirTemperature(float degrees)
+    {
+        System.err.println("setAirTemperature("+degrees+")");
+    }
+
+    @Override
+    public void setRelativeHumidity(int humidity)
+    {
+        System.err.println("setRelativeHumidity("+humidity+")");
+    }
+
+    @Override
+    public void setDewPoint(float degrees)
+    {
+        System.err.println("setDewPoint("+degrees+")");
+    }
+
+    @Override
+    public void setAirPressure(int pressure)
+    {
+        System.err.println("setAirPressure("+pressure+")");
+    }
+
+    @Override
+    public void setAirPressureTendency(int tendency)
+    {
+        System.err.println("setAirPressureTendency("+tendency+")");
+    }
+
+    @Override
+    public void setVisibility(float nm)
+    {
+        System.err.println("setVisibility("+nm+")");
+    }
+
+    @Override
+    public void setWaterLevel(float meters)
+    {
+        System.err.println("setWaterLevel("+meters+")");
+    }
+
+    @Override
+    public void setWaterLevelTrend(int trend)
+    {
+        System.err.println("setWaterLevelTrend("+trend+")");
+    }
+
+    @Override
+    public void setSurfaceCurrentSpeed(float knots)
+    {
+        System.err.println("setSurfaceCurrentSpeed("+knots+")");
+    }
+
+    @Override
+    public void setCurrentSpeed2(float knots)
+    {
+        System.err.println("setCurrentSpeed2("+knots+")");
+    }
+
+    @Override
+    public void setCurrentDirection2(int degrees)
+    {
+        System.err.println("setCurrentDirection2("+degrees+")");
+    }
+
+    @Override
+    public void setMeasurementDepth2(float meters)
+    {
+        System.err.println("setMeasurementDepth2("+meters+")");
+    }
+
+    @Override
+    public void setCurrentSpeed3(float knots)
+    {
+        System.err.println("setCurrentSpeed3("+knots+")");
+    }
+
+    @Override
+    public void setCurrentDirection3(int degrees)
+    {
+        System.err.println("setCurrentDirection3("+degrees+")");
+    }
+
+    @Override
+    public void setMeasurementDepth3(float meters)
+    {
+        System.err.println("setMeasurementDepth3("+meters+")");
+    }
+
+    @Override
+    public void setWaveHeight(float meters)
+    {
+        System.err.println("setWaveHeight("+meters+")");
+    }
+
+    @Override
+    public void setWavePeriod(int seconds)
+    {
+        System.err.println("setWavePeriod("+seconds+")");
+    }
+
+    @Override
+    public void setWaveDirection(int degrees)
+    {
+        System.err.println("setWaveDirection("+degrees+")");
+    }
+
+    @Override
+    public void setSwellHeight(float meters)
+    {
+        System.err.println("setSwellHeight("+meters+")");
+    }
+
+    @Override
+    public void setSwellPeriod(int seconds)
+    {
+        System.err.println("setSwellPeriod("+seconds+")");
+    }
+
+    @Override
+    public void setSwellDirection(int degrees)
+    {
+        System.err.println("setSwellDirection("+degrees+")");
+    }
+
+    @Override
+    public void setWaterTemperature(float degrees)
+    {
+        System.err.println("setWaterTemperature("+degrees+")");
+    }
+
+    @Override
+    public void setSalinity(float f)
+    {
+        System.err.println("setSalinity("+f+")");
+    }
+
+    @Override
+    public void setIce(int ice)
+    {
+        System.err.println("setIce("+ice+")");
     }
 
 }

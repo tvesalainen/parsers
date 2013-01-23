@@ -32,6 +32,7 @@ import org.vesalainen.parser.annotation.ParserContext;
 import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
+import org.vesalainen.parser.util.InputReader;
 import org.vesalainen.regex.Regex;
 
 /**
@@ -68,11 +69,6 @@ public abstract class AISGrammarGenerator
                 prev = next;
             }
         }
-        /*
-        if (title != null && ".Message types".equals(title.trim()))
-        {
-            createEnum(".Message types", lines);
-        }
         for (String ref : references)
         {
             if (title != null && ref.equals(title.trim()))
@@ -80,8 +76,11 @@ public abstract class AISGrammarGenerator
                 createEnum(ref, lines);
             }
         }
-        */
-        createMessageRule(grammar, lines);
+        createMessageRule(
+                grammar, 
+                title != null ? title : lastTitle, 
+                lines
+                );
     }
             
     @Rule("('\\|' cell?)+ '[\r\n]+'")
@@ -161,7 +160,7 @@ public abstract class AISGrammarGenerator
         }
     }
 
-    private void createMessageRule(Grammar grammar, List<List<String>> lines)
+    private void createMessageRule(Grammar grammar, String title, List<List<String>> lines)
     {
         try
         {
@@ -169,57 +168,95 @@ public abstract class AISGrammarGenerator
             List<String> header = iterator.next();
             if (check(header))
             {
-                List<String> rhs = new ArrayList<>();
+                System.err.println(camel(title));
+                StringBuilder rhs = new StringBuilder();
+                boolean hasArray = false;
                 while (iterator.hasNext())
                 {
                     List<String> line = iterator.next();
-                    String t = line.get(4);
-                    if (t.startsWith("a"))
-                    {
-                        return;
-                    }
-                    int radix = 2;
-                    if (t.toLowerCase().startsWith("i"))
-                    {
-                        radix = -2;
-                    }
-                    int[] len = bounds(line.get(1));
-                    String description = line.get(2);
                     String member = line.get(3);
+                    if (hasArray && "shape".equals(member))
+                    {
+                        rhs.append(" shape");
+                        break;
+                    }
+                    String description = line.get(2);
                     String units = line.get(5);
-                    if ("Constant: 25".equals(units) || "Constant: 26".equals(units))
+                    String t = line.get(4);
+                    int type = t.charAt(0);
+                    if (type == 'a')
                     {
-                        return;
-                    }
-                    if (units == null)
-                    {
-                        units = "";
-                    }
-                    String expression = createExpression(len, t, units);
-                    if (member.isEmpty())
-                    {
-                        grammar.addAnonymousTerminal(expression);
-                        rhs.add(expression);
+                        hasArray = true;
+                        rhs.append(" (");
                     }
                     else
                     {
-                        Class<?> type = int.class;
-                        if (len[0] > 32)
+                        Class<?> javaType = int.class;
+                        int radix = 2;
+                        int[] len = bounds(line.get(1));
+                        switch (type)
                         {
-                            type = long.class;
+                            case 'u':
+                            case 'U':
+                            case 'e':
+                            case 'b':
+                                if (len[0] > 32)
+                                {
+                                    javaType = long.class;
+                                }
+                                break;
+                            case 'i':
+                                radix = -2;
+                                break;
+                            case 't':
+                                javaType = InputReader.class;
+                                break;
+                            case 'x':
+                                break;
                         }
-                        String reducer = "ais"+camel(member);
-                        grammar.addTerminal(
-                                NMEAParser.class.getDeclaredMethod(reducer, type, AISData.class), 
-                                member, 
-                                expression, 
-                                description, 
-                                0, 
-                                radix);
-                        rhs.add(member);
+                        checkReference(units);
+                        if (
+                                "Constant: 25".equals(units) || 
+                                "Constant: 26".equals(units))
+                        {
+                            return;
+                        }
+                        if ("dac".equals(member) && "Unsigned integer".equals(units))
+                        {
+                            return;
+                        }
+                        if (units == null)
+                        {
+                            units = "";
+                        }
+                        String expression = createExpression(len, t, units);
+                        if (member.isEmpty())
+                        {
+                            rhs.append(" `"+expression+"´");
+                        }
+                        else
+                        {
+                            String reducer = "ais"+camel(member);
+                            if (t.length() > 1)
+                            {
+                                reducer = reducer+"_"+t;
+                            }
+                            grammar.addTerminal(
+                                    NMEAParser.class.getDeclaredMethod(reducer, javaType, AISData.class), 
+                                    member, 
+                                    expression, 
+                                    description, 
+                                    0, 
+                                    radix);
+                            rhs.append(" "+member);
+                        }
                     }
                 }
-                grammar.addRule("aisMessage", rhs);
+                if (hasArray)
+                {
+                    rhs.append(")+");
+                }
+                grammar.addRule(camel(title), rhs.toString());
             }
         }
         catch (NoSuchMethodException ex)
@@ -236,17 +273,17 @@ public abstract class AISGrammarGenerator
                 "Len".equals(header.get(1)) &&
                 "Description".equals(header.get(2)) &&
                 ("Member".equals(header.get(3)) || "Member/Type".equals(header.get(3))) &&
-                "T".equals(header.get(4)) &&
+                ("T".equals(header.get(4)) || "u".equals(header.get(4))) &&
                 ("Units".equals(header.get(5)) || "Encoding".equals(header.get(5)))
                 );
     }
 
     private String createExpression(int[] len, String t, String units)
     {
-        if ("u".equals(t) && units.startsWith("Constant:"))
+        String constant = getConstant(units);
+        if ("u".equals(t) && constant != null)
         {
-            String c = units.substring(9).trim();
-            int[] bounds = bounds(c);
+            int[] bounds = bounds(constant);
             int from = bounds[0];
             int to = bounds[1];
             StringBuilder sb = new StringBuilder();
@@ -278,6 +315,22 @@ public abstract class AISGrammarGenerator
         }
     }
 
+    private String getConstant(String units)
+    {
+        if (units.startsWith("Constant:"))
+        {
+            return units.substring(9).trim();
+        }
+        if (units.startsWith("DAC = "))
+        {
+            return units.substring(6).trim();
+        }
+        if (units.startsWith("FID = "))
+        {
+            return units.substring(6).trim();
+        }
+        return null;
+    }
     private int[] bounds(String s)
     {
         String[] ss = s.trim().split("-");
@@ -311,9 +364,12 @@ public abstract class AISGrammarGenerator
         System.err.println("{");
         for (List<String> line : lines)
         {
-            assert line.size() == 2;
             String code = line.get(0);
-            if (!"Code".equals(code))
+            if (code.isEmpty())
+            {
+                continue;
+            }
+            if (!"Code".equals(code) && !"Scale".equals(code))
             {
                 int[] bounds = bounds(line.get(0));
                 String text = line.get(1);
@@ -348,6 +404,8 @@ public abstract class AISGrammarGenerator
 
     private String camel(String str)
     {
+        str = str.replace('=', ' ');
+        str = str.trim();
         StringBuilder sb = new StringBuilder();
         String[] ss = str.split("[ \\:\\(\\)\\,/\\-\\.\\=_]+");
         for (String s : ss)

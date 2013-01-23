@@ -1453,7 +1453,7 @@ bit is on.
 |183-184 |  2 |Regional reserved 1|regional1   |e|See "Service Status"
 |185-186 |  2 |Regional reserved 2|regional2   |e|See "Service Status"
 |187-188 |  2 |Reserved for future|future1     |e|See "Service Status"
-|189-190 |  2 |Reserved for future|future1     |e|See "Service Status"
+|189-190 |  2 |Reserved for future|future2     |e|See "Service Status"
 |191-310 |120 |Name of Berth      |berth_name  |t|20 6-bit characters
 |311-335 | 25 |Longitude          |berth_lon   |I3|Minutes * 0.001,
                                                   181000 = N/A (default)

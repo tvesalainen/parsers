@@ -35,10 +35,19 @@ import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.parser.util.InputReader;
+import org.vesalainen.parsers.nmea.ais.AreaNoticeDescription;
+import org.vesalainen.parsers.nmea.ais.BeaufortScale;
+import org.vesalainen.parsers.nmea.ais.CargoUnitCodes;
+import org.vesalainen.parsers.nmea.ais.CodesForShipType;
 import org.vesalainen.parsers.nmea.ais.EPFDFixTypes;
 import org.vesalainen.parsers.nmea.ais.ManeuverIndicator;
 import org.vesalainen.parsers.nmea.ais.MessageTypes;
+import org.vesalainen.parsers.nmea.ais.MooringPosition;
 import org.vesalainen.parsers.nmea.ais.NavigationStatus;
+import org.vesalainen.parsers.nmea.ais.PrecipitationTypes;
+import org.vesalainen.parsers.nmea.ais.RouteTypeCodes;
+import org.vesalainen.parsers.nmea.ais.ServiceStatus;
+import org.vesalainen.parsers.nmea.ais.SubareaType;
 
 /**
  * @author Timo Vesalainen
@@ -194,7 +203,7 @@ public abstract class NMEAParser implements ParserInfo
      * @param turn
      * @param aisData 
      */
-    protected void aisTurn(int turn, @ParserContext("aisData") AISData aisData)
+    protected void aisTurn_I3(int turn, @ParserContext("aisData") AISData aisData)
     {
         switch (turn)
         {
@@ -216,7 +225,7 @@ public abstract class NMEAParser implements ParserInfo
                 break;
         }
     }
-    protected void aisSpeed(int speed, @ParserContext("aisData") AISData aisData)
+    protected void aisSpeed_U1(int speed, @ParserContext("aisData") AISData aisData)
     {
         if (speed != 1023)
         {
@@ -228,7 +237,7 @@ public abstract class NMEAParser implements ParserInfo
     {
         aisData.setAccuracy(accuracy == 1);
     }
-    protected void aisLon(int lon, @ParserContext("aisData") AISData aisData)
+    protected void aisLon_I4(int lon, @ParserContext("aisData") AISData aisData)
     {
         if (lon != 0x6791AC0)
         {
@@ -236,7 +245,7 @@ public abstract class NMEAParser implements ParserInfo
             aisData.setLongitude(f / 600000L);
         }
     }
-    protected void aisLat(int lat, @ParserContext("aisData") AISData aisData)
+    protected void aisLat_I4(int lat, @ParserContext("aisData") AISData aisData)
     {
         if (lat != 0x3412140)
         {
@@ -244,7 +253,23 @@ public abstract class NMEAParser implements ParserInfo
             aisData.setLatitude(f / 600000L);
         }
     }
-    protected void aisCourse(int course, @ParserContext("aisData") AISData aisData)
+    protected void aisLon_I3(int lon, @ParserContext("aisData") AISData aisData)
+    {
+        if (lon != 0x6791AC0)
+        {
+            float f = lon;
+            aisData.setLongitude(f / 60000L);
+        }
+    }
+    protected void aisLat_I3(int lat, @ParserContext("aisData") AISData aisData)
+    {
+        if (lat != 0x3412140)
+        {
+            float f = lat;
+            aisData.setLatitude(f / 60000L);
+        }
+    }
+    protected void aisCourse_U1(int course, @ParserContext("aisData") AISData aisData)
     {
         if (course != 3600)
         {
@@ -324,6 +349,615 @@ public abstract class NMEAParser implements ParserInfo
     protected void aisImo(int imo, @ParserContext("aisData") AISData aisData)
     {
         aisData.setIMONumber(imo);
+    }
+    protected void aisCallsign(InputReader reader, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setCallSign(fromSixBitCharacters(reader));
+    }
+    protected void aisShipname(InputReader reader, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setVesselName(fromSixBitCharacters(reader));
+    }
+    protected void aisShiptype(int shiptype, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setShipType(CodesForShipType.values()[shiptype]);
+    }
+    protected void aisToBow(int dimension, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setDimensionToBow(dimension);
+    }
+    protected void aisToStern(int dimension, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setDimensionToStern(dimension);
+    }
+    protected void aisToPort(int dimension, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setDimensionToPort(dimension);
+    }
+    protected void aisToStarboard(int dimension, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setDimensionToStarboard(dimension);
+    }
+    protected void aisDraught_U1(int draught, @ParserContext("aisData") AISData aisData)
+    {
+        float f = draught;
+        aisData.setDraught(f / 10F);
+    }
+    protected void aisDestination(InputReader reader, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setDestination(fromSixBitCharacters(reader));
+    }
+    protected void aisDte(int dte, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setDTE(dte != 1);
+    }
+    protected void aisSeqno(int seq, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setSequenceNumber(seq);
+    }
+    protected void aisDestMmsi(int mmsi, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setDestinationMMSI(mmsi);
+    }
+    protected void aisRetransmit(int retransmit, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setRetransmit(retransmit == 1);
+    }
+    protected void aisDac(int dac, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setDAC(dac);
+    }
+    protected void aisFid(int fid, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setFID(fid);
+    }
+    protected void aisLastport(InputReader reader, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setLastPort(fromSixBitCharacters(reader));
+    }
+    protected void aisLmonth(int month, @ParserContext("aisData") AISData aisData)
+    {
+        if (month != 0)
+        {
+            aisData.setLastPortMonth(month);
+        }
+    }
+    protected void aisLday(int day, @ParserContext("aisData") AISData aisData)
+    {
+        if (day != 0)
+        {
+            aisData.setLastPortDay(day);
+        }
+    }
+    protected void aisLhour(int hour, @ParserContext("aisData") AISData aisData)
+    {
+        if (hour != 24)
+        {
+            aisData.setLastPortHour(hour);
+        }
+    }
+    protected void aisLminute(int minute, @ParserContext("aisData") AISData aisData)
+    {
+        if (minute != 60)
+        {
+            aisData.setLastPortMinute(minute);
+        }
+    }
+    protected void aisNextport(InputReader reader, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setNextPort(fromSixBitCharacters(reader));
+    }
+    protected void aisNmonth(int month, @ParserContext("aisData") AISData aisData)
+    {
+        if (month != 0)
+        {
+            aisData.setNextPortMonth(month);
+        }
+    }
+    protected void aisNday(int day, @ParserContext("aisData") AISData aisData)
+    {
+        if (day != 0)
+        {
+            aisData.setNextPortDay(day);
+        }
+    }
+    protected void aisNhour(int hour, @ParserContext("aisData") AISData aisData)
+    {
+        if (hour != 24)
+        {
+            aisData.setNextPortHour(hour);
+        }
+    }
+    protected void aisNminute(int minute, @ParserContext("aisData") AISData aisData)
+    {
+        if (minute != 60)
+        {
+            aisData.setNextPortMinute(minute);
+        }
+    }
+    protected void aisDangerous(InputReader reader, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setMainDangerousGood(fromSixBitCharacters(reader));
+    }
+    protected void aisImdcat(InputReader reader, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setIMDCategory(fromSixBitCharacters(reader));
+    }
+    protected void aisUnid(int unid, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.UNNumber(unid);
+    }
+    protected void aisAmount(int amount, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.AmountOfCargo(amount);
+    }
+    protected void aisUnit(int unit, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setUnitOfQuantity(CargoUnitCodes.values()[unit]);
+    }
+    protected void aisFromHour(int hour, @ParserContext("aisData") AISData aisData)
+    {
+        if (hour != 24)
+        {
+            aisData.setFromHour(hour);
+        }
+    }
+    protected void aisFromMin(int minute, @ParserContext("aisData") AISData aisData)
+    {
+        if (minute != 60)
+        {
+            aisData.setFromMinute(minute);
+        }
+    }
+    protected void aisToHour(int hour, @ParserContext("aisData") AISData aisData)
+    {
+        if (hour != 24)
+        {
+            aisData.setToHour(hour);
+        }
+    }
+    protected void aisToMin(int minute, @ParserContext("aisData") AISData aisData)
+    {
+        if (minute != 60)
+        {
+            aisData.setFromMinute(minute);
+        }
+    }
+    protected void aisCdir(int currentDirection, @ParserContext("aisData") AISData aisData)
+    {
+        if (currentDirection != 360)
+        {
+            aisData.setCurrentDirection(currentDirection);
+        }
+    }
+    protected void aisCspeed_U1(int currentSpeed, @ParserContext("aisData") AISData aisData)
+    {
+        if (currentSpeed != 127)
+        {
+            float f = currentSpeed;
+            aisData.setCurrentSpeed(f / 10F);
+        }
+    }
+    protected void aisPersons(int persons, @ParserContext("aisData") AISData aisData)
+    {
+        if (persons != 0)
+        {
+            aisData.setPersonsOnBoard(persons);
+        }
+    }
+    protected void aisLinkage(int id, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setLinkage(id);
+    }
+    protected void aisPortname(InputReader reader, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setPortname(fromSixBitCharacters(reader));
+    }
+    protected void aisNotice(int notice, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setAreaNotice(AreaNoticeDescription.values()[notice]);
+    }
+    protected void aisDuration(int duration, @ParserContext("aisData") AISData aisData)
+    {
+        if (duration != 262143)
+        {
+            aisData.setDuration(duration);
+        }
+    }
+    protected void aisShape(int shape, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setShape(SubareaType.values()[shape]);
+    }
+    protected void aisScale(int scale, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setScale(scale);
+    }
+    protected void aisPrecision(int precision, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setPrecision(precision);
+    }
+    protected void aisRadius(int radius, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setRadius(radius);
+    }
+    protected void aisEast(int east, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setEast(east);
+    }
+    protected void aisNorth(int north, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setNorth(north);
+    }
+    protected void aisOrientation(int orientation, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setOrientation(orientation);
+    }
+    protected void aisLeft(int left, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setLeft(left);
+    }
+    protected void aisRight(int right, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setRight(right);
+    }
+    protected void aisBearing(int bearing, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setBearing(bearing);
+    }
+    protected void aisDistance(int distance, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setDistance(distance);
+    }
+    protected void aisText(InputReader reader, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setText(fromSixBitCharacters(reader));
+    }
+    protected void aisBerthLength(int meters, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setBerthLength(meters);
+    }
+    protected void aisBerthDepth_U1(int meters, @ParserContext("aisData") AISData aisData)
+    {
+        float f = meters;
+        aisData.setBerthDepth(f / 10F);
+    }
+    protected void aisPosition(int position, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setMooringPosition(MooringPosition.values()[position]);
+    }
+    protected void aisAvailability(int available, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setServicesAvailability(available == 1);
+    }
+    protected void aisAgent(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setAgentServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisFuel(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setFuelServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisChandler(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setChandlerServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisStevedore(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setStevedoreServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisElectrical(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setElectricalServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisWater(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setWaterServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisCustoms(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setCustomsServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisCartage(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setCartageServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisCrane(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setCraneServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisLift(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setLiftServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisMedical(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setMedicalServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisNavrepair(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setNavrepairServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisProvisions(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setProvisionsServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisShiprepair(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setShiprepairServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisSurveyor(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setSurveyorServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisSteam(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setSteamServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisTugs(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setTugsServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisSolidwaste(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setSolidwasteServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisLiquidwaste(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setLiquidwasteServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisHazardouswaste(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setHazardouswasteServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisBallast(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setBallastServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisAdditional(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setAdditionalServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisRegional1(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setRegional1ServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisRegional2(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setRegional2ServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisFuture1(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setFuture1ServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisFuture2(int status, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setFuture2ServiceStatus(ServiceStatus.values()[status]);
+    }
+    protected void aisBerthName(InputReader reader, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setBerthName(fromSixBitCharacters(reader));
+    }
+    protected void aisBerthLon_I3(int lon, @ParserContext("aisData") AISData aisData)
+    {
+        if (lon != 0x6791AC0)
+        {
+            float f = lon;
+            aisData.setLongitude(f / 60000L);
+        }
+    }
+    protected void aisBerthLat_I3(int lat, @ParserContext("aisData") AISData aisData)
+    {
+        if (lat != 0x3412140)
+        {
+            float f = lat;
+            aisData.setLatitude(f / 60000L);
+        }
+    }
+    protected void aisSender(int sender, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setSender(sender);
+    }
+    protected void aisRtype(int type, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setRouteType(RouteTypeCodes.values()[type]);
+    }
+    protected void aisWaycount(int count, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setWaypointCount(count);
+    }
+    protected void aisDescription(InputReader reader, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setDescription(fromSixBitCharacters(reader));
+    }
+    protected void aisMmsi1(int mmsi, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setMMSI1(mmsi);
+    }
+    protected void aisMmsi2(int mmsi, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setMMSI2(mmsi);
+    }
+    protected void aisMmsi3(int mmsi, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setMMSI3(mmsi);
+    }
+    protected void aisMmsi4(int mmsi, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setMMSI4(mmsi);
+    }
+    protected void aisWspeed(int knots, @ParserContext("aisData") AISData aisData)
+    {
+        if (knots != 127)
+        {
+            aisData.setAverageWindSpeed(knots);
+        }
+    }
+    protected void aisWgust(int knots, @ParserContext("aisData") AISData aisData)
+    {
+        if (knots != 127)
+        {
+            aisData.setGustSpeed(knots);
+        }
+    }
+    protected void aisWdir(int degrees, @ParserContext("aisData") AISData aisData)
+    {
+        if (degrees <= 360)
+        {
+            aisData.setWindDirection(degrees);
+        }
+    }
+    protected void aisWgustdir(int degrees, @ParserContext("aisData") AISData aisData)
+    {
+        if (degrees <= 360)
+        {
+            aisData.setWindGustDirection(degrees);
+        }
+    }
+    protected void aisTemperature(int degrees, @ParserContext("aisData") AISData aisData)
+    {
+        float f = degrees;
+        aisData.setAirTemperature((f / 10F) - 60F);
+    }
+    protected void aisHumidity(int humidity, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setRelativeHumidity(humidity);
+    }
+    protected void aisDewpoint(int degrees, @ParserContext("aisData") AISData aisData)
+    {
+        float f = degrees;
+        aisData.setDewPoint((f / 10F) - 20F);
+    }
+    protected void aisPressure(int pressure, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setAirPressure(pressure + 400);
+    }
+    protected void aisPressuretend(int tendency, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setAirPressureTendency(tendency);
+    }
+    protected void aisVisibility_U1(int visibility, @ParserContext("aisData") AISData aisData)
+    {
+        float f = visibility;
+        aisData.setVisibility(f / 10F);
+    }
+    protected void aisWaterlevel_U1(int level, @ParserContext("aisData") AISData aisData)
+    {
+        float f = level;
+        aisData.setWaterLevel((f / 10F) - 10F);
+    }
+    protected void aisLeveltrend(int trend, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setWaterLevelTrend(trend);
+    }
+    protected void aisCspeed2_U1(int speed, @ParserContext("aisData") AISData aisData)
+    {
+        float f = speed;
+        aisData.setCurrentSpeed2(f / 10F);
+    }
+    protected void aisCdir2(int degrees, @ParserContext("aisData") AISData aisData)
+    {
+        if (degrees <= 360)
+        {
+            aisData.setCurrentDirection2(degrees);
+        }
+    }
+    protected void aisCdepth2_U1(int depth, @ParserContext("aisData") AISData aisData)
+    {
+        float f = depth;
+        aisData.setMeasurementDepth2(f / 10F);
+    }
+    protected void aisCspeed3_U1(int speed, @ParserContext("aisData") AISData aisData)
+    {
+        float f = speed;
+        aisData.setCurrentSpeed3(f / 10F);
+    }
+    protected void aisCdir3(int degrees, @ParserContext("aisData") AISData aisData)
+    {
+        if (degrees <= 360)
+        {
+            aisData.setCurrentDirection3(degrees);
+        }
+    }
+    protected void aisCdepth3_U1(int depth, @ParserContext("aisData") AISData aisData)
+    {
+        float f = depth;
+        aisData.setMeasurementDepth3(f / 10F);
+    }
+    protected void aisWaveheight_U1(int height, @ParserContext("aisData") AISData aisData)
+    {
+        float f = height;
+        aisData.setWaveHeight(f / 10F);
+    }
+    protected void aisWaveperiod(int seconds, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setWavePeriod(seconds);
+    }
+    protected void aisWavedir(int degrees, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setWaveDirection(degrees);
+    }
+    protected void aisSwellheight_U1(int height, @ParserContext("aisData") AISData aisData)
+    {
+        float f = height;
+        aisData.setSwellHeight(f / 10F);
+    }
+    protected void aisSwellperiod(int seconds, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setSwellPeriod(seconds);
+    }
+    protected void aisSwelldir(int degrees, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setSwellDirection(degrees);
+    }
+    protected void aisSeastate(int state, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setSeaState(BeaufortScale.values()[state]);
+    }
+    protected void aisWatertemp_U1(int temp, @ParserContext("aisData") AISData aisData)
+    {
+        float f = temp;
+        aisData.setWaterTemperature((f / 10F) - 10F);
+    }
+    protected void aisPreciptype(int type, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setPrecipitation(PrecipitationTypes.values()[type]);
+    }
+    protected void aisSalinity_U1(int salinity, @ParserContext("aisData") AISData aisData)
+    {
+        float f = salinity;
+        aisData.setSalinity(f / 10F);
+    }
+    protected void aisIce(int ice, @ParserContext("aisData") AISData aisData)
+    {
+        aisData.setIce(ice);
+    }
+    private String fromSixBitCharacters(InputReader reader)
+    {
+        StringBuilder sb = new StringBuilder();
+        char[] array = reader.getArray();
+        int start = reader.getStart();
+        int length = reader.getLength();
+        assert length % 6 == 0;
+        int bit = 0;
+        int cc = 0;
+        for (int ii=0;ii<length;ii++)
+        {
+            bit ++;
+            cc <<= 1;
+            cc += array[start + ii % array.length];
+            if (bit == 6)
+            {
+                if (cc < 32)
+                {
+                    sb.append((char)(cc + '@'));
+                }
+                else
+                {
+                    sb.append((char)cc);
+                }
+            }
+        }
+        return sb.toString().trim();
     }
     @Rule("letter c")
     protected void channel(
