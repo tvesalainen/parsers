@@ -19,16 +19,22 @@ package org.vesalainen.parsers.nmea;
 
 import java.util.List;
 import org.vesalainen.parsers.nmea.ais.AreaNoticeDescription;
+import org.vesalainen.parsers.nmea.ais.BeaufortScale;
 import org.vesalainen.parsers.nmea.ais.CargoUnitCodes;
 import org.vesalainen.parsers.nmea.ais.CodesForShipType;
 import org.vesalainen.parsers.nmea.ais.EPFDFixTypes;
+import org.vesalainen.parsers.nmea.ais.ExtensionUnit;
 import org.vesalainen.parsers.nmea.ais.ManeuverIndicator;
+import org.vesalainen.parsers.nmea.ais.MarineTrafficSignals;
 import org.vesalainen.parsers.nmea.ais.MessageTypes;
 import org.vesalainen.parsers.nmea.ais.MooringPosition;
 import org.vesalainen.parsers.nmea.ais.NavigationStatus;
+import org.vesalainen.parsers.nmea.ais.PrecipitationTypes;
 import org.vesalainen.parsers.nmea.ais.RouteTypeCodes;
 import org.vesalainen.parsers.nmea.ais.ServiceStatus;
 import org.vesalainen.parsers.nmea.ais.SubareaType;
+import org.vesalainen.parsers.nmea.ais.TargetIdentifierType;
+import org.vesalainen.parsers.nmea.ais.WMOCode45501;
 
 /**
  * @author Timo Vesalainen
@@ -1348,6 +1354,139 @@ public class Tracer implements NMEAData, AISData
     public void setIce(int ice)
     {
         System.err.println("setIce("+ice+")");
+    }
+
+    @Override
+    public void setPrecipitation(PrecipitationTypes precipitationTypes)
+    {
+        System.err.println("setPrecipitation("+precipitationTypes+")");
+    }
+
+    @Override
+    public void setSeaState(BeaufortScale beaufortScale)
+    {
+        System.err.println("setSeaState("+beaufortScale+")");
+    }
+
+    @Override
+    public void setReasonForClosing(String fromSixBitCharacters)
+    {
+        System.err.println("setReasonForClosing("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setClosingFrom(String fromSixBitCharacters)
+    {
+        System.err.println("setClosingFrom("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setClosingTo(String fromSixBitCharacters)
+    {
+        System.err.println("setClosingTo("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setUnitOfExtension(ExtensionUnit unit)
+    {
+        System.err.println("setUnitOfExtension("+unit+")");
+    }
+
+
+    @Override
+    public void setFromMonth(int month)
+    {
+        System.err.println("setFromMonth("+month+")");
+    }
+
+    @Override
+    public void setFromDay(int day)
+    {
+        System.err.println("setFromDay("+day+")");
+    }
+
+    @Override
+    public void setToMonth(int month)
+    {
+        System.err.println("setToMonth("+month+")");
+    }
+
+    @Override
+    public void setToDay(int day)
+    {
+        System.err.println("setToDay("+day+")");
+    }
+
+    @Override
+    public void setAirDraught(int meters)
+    {
+        System.err.println("setAirDraught("+meters+")");
+    }
+
+    @Override
+    public void setIdType(TargetIdentifierType targetIdentifierType)
+    {
+        System.err.println("setIdType("+targetIdentifierType+")");
+    }
+
+    @Override
+    public void setId(long id)
+    {
+        System.err.println("setId("+id+")");
+    }
+
+    @Override
+    public void setStation(String fromSixBitCharacters)
+    {
+        System.err.println("setStation("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setSignal(MarineTrafficSignals marineTrafficSignals)
+    {
+        System.err.println("setSignal("+marineTrafficSignals+")");
+    }
+
+    @Override
+    public void setNextSignal(MarineTrafficSignals marineTrafficSignals)
+    {
+        System.err.println("setNextSignal("+marineTrafficSignals+")");
+    }
+
+    @Override
+    public void setVariant(int variant)
+    {
+        System.err.println("setVariant("+variant+")");
+    }
+
+    @Override
+    public void setLocation(String fromSixBitCharacters)
+    {
+        System.err.println("setLocation("+fromSixBitCharacters+")");
+    }
+
+    @Override
+    public void setWeather(WMOCode45501 wmoCode45501)
+    {
+        System.err.println("setWeather("+wmoCode45501+")");
+    }
+
+    @Override
+    public void setVisibilityLimit(boolean reached)
+    {
+        System.err.println("setVisibilityLimit("+reached+")");
+    }
+
+    @Override
+    public void setAirPressure(float pressure)
+    {
+        System.err.println("setAirPressure("+pressure+")");
+    }
+
+    @Override
+    public void setAirPressureChange(float delta)
+    {
+        System.err.println("setAirPressureChange("+delta+")");
     }
 
 }

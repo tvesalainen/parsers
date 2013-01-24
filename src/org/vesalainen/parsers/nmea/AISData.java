@@ -21,7 +21,9 @@ import org.vesalainen.parsers.nmea.ais.BeaufortScale;
 import org.vesalainen.parsers.nmea.ais.CargoUnitCodes;
 import org.vesalainen.parsers.nmea.ais.CodesForShipType;
 import org.vesalainen.parsers.nmea.ais.EPFDFixTypes;
+import org.vesalainen.parsers.nmea.ais.ExtensionUnit;
 import org.vesalainen.parsers.nmea.ais.ManeuverIndicator;
+import org.vesalainen.parsers.nmea.ais.MarineTrafficSignals;
 import org.vesalainen.parsers.nmea.ais.MessageTypes;
 import org.vesalainen.parsers.nmea.ais.MooringPosition;
 import org.vesalainen.parsers.nmea.ais.NavigationStatus;
@@ -29,6 +31,8 @@ import org.vesalainen.parsers.nmea.ais.PrecipitationTypes;
 import org.vesalainen.parsers.nmea.ais.RouteTypeCodes;
 import org.vesalainen.parsers.nmea.ais.ServiceStatus;
 import org.vesalainen.parsers.nmea.ais.SubareaType;
+import org.vesalainen.parsers.nmea.ais.TargetIdentifierType;
+import org.vesalainen.parsers.nmea.ais.WMOCode45501;
 
 /**
  *
@@ -787,4 +791,108 @@ public interface AISData
      * @param beaufortScale 
      */
     public void setSeaState(BeaufortScale beaufortScale);
+    /**
+     * Reason For Closing
+     * @param fromSixBitCharacters 
+     */
+    public void setReasonForClosing(String fromSixBitCharacters);
+    /**
+     * Location Of Closing From
+     * @param fromSixBitCharacters 
+     */
+    public void setClosingFrom(String fromSixBitCharacters);
+    /**
+     * Location of Closing To
+     * @param fromSixBitCharacters 
+     */
+    public void setClosingTo(String fromSixBitCharacters);
+    /**
+     * Unit of extension
+     * @param unit
+     */
+    public void setUnitOfExtension(ExtensionUnit unit);
+    /**
+     * From month (UTC)
+     * @param month 1-12
+     */
+    public void setFromMonth(int month);
+    /**
+     * From day (UTC)
+     * @param day 1-31
+     */
+    public void setFromDay(int day);
+    /**
+     * To month (UTC)
+     * @param month 1-12
+     */
+    public void setToMonth(int month);
+    /**
+     * To day (UTC)
+     * @param day 1-31
+     */
+    public void setToDay(int day);
+    /**
+     * Air Draught
+     * @param meters Height in meters
+     */
+    public void setAirDraught(int meters);
+    /**
+     * Identifier type
+     * @param targetIdentifierType 
+     */
+    public void setIdType(TargetIdentifierType targetIdentifierType);
+    /**
+     * Target identifier
+     * @param id Target ID data.
+     * @see #setIdType(TargetIdentifierType)
+     */
+    public void setId(long id);
+    /**
+     * Name of Signal Station
+     * @param fromSixBitCharacters 
+     */
+    public void setStation(String fromSixBitCharacters);
+    /**
+     * Signal In Service
+     * @param marineTrafficSignals 
+     */
+    public void setSignal(MarineTrafficSignals marineTrafficSignals);
+    /**
+     * Expected Next Signal
+     * @param marineTrafficSignals 
+     */
+    public void setNextSignal(MarineTrafficSignals marineTrafficSignals);
+    /**
+     * Variant
+     * @param variant 
+     */
+    public void setVariant(int variant);
+    /**
+     * Location
+     * @param fromSixBitCharacters 
+     */
+    public void setLocation(String fromSixBitCharacters);
+    /**
+     * Present Weather
+     * @param wmoCode45501 
+     */
+    public void setWeather(WMOCode45501 wmoCode45501);
+    /**
+     * Visibility Limit
+     * @param reached when on, indicates that the maximum range of the 
+     * visibility equipment was reached and the visibility reading shall be 
+     * regarded as > x.x NM.
+     */
+    public void setVisibilityLimit(boolean reached);
+    /**
+     * Pressure at sea level
+     * @param pressure 90-1100 hPa
+     */
+    public void setAirPressure(float pressure);
+    /**
+     * Pressure Change
+     * @param delta -50-+50hPa: units of 0.1hPa averaged over last 3 hours.
+     */
+    public void setAirPressureChange(float delta);
+
 }

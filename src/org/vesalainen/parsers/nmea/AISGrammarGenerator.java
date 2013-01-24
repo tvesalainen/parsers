@@ -18,11 +18,14 @@
 package org.vesalainen.parsers.nmea;
 
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.vesalainen.grammar.Grammar;
 import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.annotation.GenClassname;
@@ -50,6 +53,15 @@ public abstract class AISGrammarGenerator
 {
     protected String lastTitle;
     private Set<String> references = new HashSet<>();
+
+    public AISGrammarGenerator()
+    {
+        references.add(".Sensor report types");
+        references.add(".Sensor Owner Codes");
+        references.add(".Data Timeout Codes");
+        references.add(".Sensor Types");
+        references.add(".Vertical Reference Datum");
+    }
     
     @Rule("tableTitle? start line+ end")
     protected void table(String title, List<List<String>> lines, @ParserContext("grammar") Grammar grammar)
@@ -115,7 +127,6 @@ public abstract class AISGrammarGenerator
     @Terminal(expression="(\\[[^\n]*[\r\n]+)?\\|[=]+[\r\n]+")
     protected void start(String title)
     {
-        System.err.println(title);
     }
     
     @Terminal(expression="\\|[=]+[\r\n]+")
@@ -142,129 +153,129 @@ public abstract class AISGrammarGenerator
         gen.parse(is, g);
         return g;
     }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) 
-    {
-        try
-        {
-            String pkg = AISGrammarGenerator.class.getPackage().getName().replace('.', '/')+"/";
-            InputStream is = AISGrammarGenerator.class.getClassLoader().getResourceAsStream(pkg+"AIVDM.txt");
-            AISGrammarGenerator gen = AISGrammarGenerator.newInstance();
-            gen.parse(is, new Grammar());
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
     private void createMessageRule(Grammar grammar, String title, List<List<String>> lines)
     {
-        try
+        Iterator<List<String>> iterator = lines.iterator();
+        List<String> header = iterator.next();
+        if (check(header))
         {
-            Iterator<List<String>> iterator = lines.iterator();
-            List<String> header = iterator.next();
-            if (check(header))
+            System.err.println("// "+camel(title));
+            StringBuilder rhs = new StringBuilder();
+            boolean hasArray = false;
+            while (iterator.hasNext())
             {
-                System.err.println(camel(title));
-                StringBuilder rhs = new StringBuilder();
-                boolean hasArray = false;
-                while (iterator.hasNext())
+                List<String> line = iterator.next();
+                String member = line.get(3);
+                if (hasArray && "shape".equals(member))
                 {
-                    List<String> line = iterator.next();
-                    String member = line.get(3);
-                    if (hasArray && "shape".equals(member))
+                    rhs.append(" shape");
+                    break;
+                }
+                String description = line.get(2);
+                String units = line.get(5);
+                String t = line.get(4);
+                int type = t.charAt(0);
+                if (type == 'a')
+                {
+                    hasArray = true;
+                    rhs.append(" (");
+                }
+                else
+                {
+                    Class<?> javaType = int.class;
+                    int radix = 2;
+                    int[] len = bounds(line.get(1));
+                    switch (type)
                     {
-                        rhs.append(" shape");
-                        break;
+                        case 'u':
+                        case 'U':
+                        case 'e':
+                        case 'b':
+                            if (len[0] > 32)
+                            {
+                                javaType = long.class;
+                            }
+                            break;
+                        case 'i':
+                            radix = -2;
+                            break;
+                        case 't':
+                            javaType = InputReader.class;
+                            break;
+                        case 'x':
+                            break;
                     }
-                    String description = line.get(2);
-                    String units = line.get(5);
-                    String t = line.get(4);
-                    int type = t.charAt(0);
-                    if (type == 'a')
-                    {
-                        hasArray = true;
-                        rhs.append(" (");
-                    }
-                    else
-                    {
-                        Class<?> javaType = int.class;
-                        int radix = 2;
-                        int[] len = bounds(line.get(1));
-                        switch (type)
-                        {
-                            case 'u':
-                            case 'U':
-                            case 'e':
-                            case 'b':
-                                if (len[0] > 32)
-                                {
-                                    javaType = long.class;
-                                }
-                                break;
-                            case 'i':
-                                radix = -2;
-                                break;
-                            case 't':
-                                javaType = InputReader.class;
-                                break;
-                            case 'x':
-                                break;
-                        }
-                        checkReference(units);
+                    checkReference(units);
                         if (
                                 "Constant: 25".equals(units) || 
                                 "Constant: 26".equals(units))
                         {
                             return;
                         }
-                        if ("dac".equals(member) && "Unsigned integer".equals(units))
+                    if ("dac".equals(member) && "Unsigned integer".equals(units))
+                    {
+                        return;
+                    }
+                    if (units == null)
+                    {
+                        units = "";
+                    }
+                    String constant = getConstant(units);
+                    String expression = createExpression(len, t, units, constant);
+                    if (member.isEmpty())
+                    {
+                        rhs.append(" `"+expression+"´");
+                    }
+                    else
+                    {
+                        String reducer = "ais"+camel(member);
+                        if (t.length() > 1)
                         {
-                            return;
+                            reducer = reducer+"_"+t;
                         }
-                        if (units == null)
+                        grammar.addTerminal(
+                                getReducer(reducer, javaType, AISData.class), 
+                                member, 
+                                expression, 
+                                description, 
+                                0, 
+                                radix);
+                        if (constant != null)
                         {
-                            units = "";
-                        }
-                        String expression = createExpression(len, t, units);
-                        if (member.isEmpty())
-                        {
-                            rhs.append(" `"+expression+"´");
+                            rhs.append(" "+member+constant);
                         }
                         else
                         {
-                            String reducer = "ais"+camel(member);
-                            if (t.length() > 1)
-                            {
-                                reducer = reducer+"_"+t;
-                            }
-                            grammar.addTerminal(
-                                    NMEAParser.class.getDeclaredMethod(reducer, javaType, AISData.class), 
-                                    member, 
-                                    expression, 
-                                    description, 
-                                    0, 
-                                    radix);
                             rhs.append(" "+member);
                         }
                     }
                 }
-                if (hasArray)
-                {
-                    rhs.append(")+");
-                }
-                grammar.addRule(camel(title), rhs.toString());
             }
-        }
-        catch (NoSuchMethodException ex)
-        {
-            throw new IllegalArgumentException(ex);
+            if (hasArray)
+            {
+                rhs.append(")+");
+            }
+            grammar.addRule(camel(title), rhs.toString());
         }
     }
 
+    private Set<String> generatedMethods = new HashSet<>();
+    private Method getReducer(String name, Class<?>... p) throws SecurityException
+    {
+        try
+        {
+            return NMEAParser.class.getDeclaredMethod(name, p);
+        }
+        catch (NoSuchMethodException ex)
+        {
+            if (!generatedMethods.contains(name))
+            {
+                generatedMethods.add(name);
+                System.err.println("protected void "+name+"("+p[0].getSimpleName()+" arg, @ParserContext(\"aisData\") AISData aisData){}");
+            }
+            return null;
+        }
+    }
     private boolean check(List<String> header)
     {
         return (
@@ -278,9 +289,8 @@ public abstract class AISGrammarGenerator
                 );
     }
 
-    private String createExpression(int[] len, String t, String units)
+    private String createExpression(int[] len, String t, String units, String constant)
     {
-        String constant = getConstant(units);
         if ("u".equals(t) && constant != null)
         {
             int[] bounds = bounds(constant);
@@ -304,9 +314,9 @@ public abstract class AISGrammarGenerator
         }
         else
         {
-            if (len.length == 1)
+            if (len[0] == len[1])
             {
-                return "[01]{"+len+"}";
+                return "[01]{"+len[0]+"}";
             }
             else
             {
@@ -319,7 +329,9 @@ public abstract class AISGrammarGenerator
     {
         if (units.startsWith("Constant:"))
         {
-            return units.substring(9).trim();
+            String sub = units.substring(9).trim();
+            String[] ss = sub.split(" ");
+            return ss[0];
         }
         if (units.startsWith("DAC = "))
         {
@@ -348,7 +360,7 @@ public abstract class AISGrammarGenerator
     }
     private void checkReference(String units)
     {
-        if (units.startsWith("See \"") && units.endsWith("\""))
+        if (units != null && units.startsWith("See \"") && units.endsWith("\""))
         {
             String ref = units.substring(5, units.length()-1);
             references.add('.'+ref);
@@ -357,9 +369,17 @@ public abstract class AISGrammarGenerator
 
     private void createEnum(String title, List<List<String>> lines)
     {
-        Set<String> set = new HashSet<>();
         int next = 0;
         title = camel(title.substring(1));
+        try
+        {
+            Class.forName("org.vesalainen.parsers.nmea.ais."+title);
+            return;
+        }
+        catch (ClassNotFoundException ex)
+        {
+        }
+        Set<String> set = new HashSet<>();
         System.err.println("public enum "+title);
         System.err.println("{");
         for (List<String> line : lines)
@@ -407,7 +427,7 @@ public abstract class AISGrammarGenerator
         str = str.replace('=', ' ');
         str = str.trim();
         StringBuilder sb = new StringBuilder();
-        String[] ss = str.split("[ \\:\\(\\)\\,/\\-\\.\\=_]+");
+        String[] ss = str.split("[ \\:\\(\\)\\,/\\-\\.\\=_\"]+");
         for (String s : ss)
         {
             if (!s.isEmpty())
@@ -421,4 +441,24 @@ public abstract class AISGrammarGenerator
     {
         return str.substring(0, 1).toUpperCase()+str.substring(1);
     }
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) 
+    {
+        try
+        {
+            String pkg = AISGrammarGenerator.class.getPackage().getName().replace('.', '/')+"/";
+            InputStream is = AISGrammarGenerator.class.getClassLoader().getResourceAsStream(pkg+"AIVDM.txt");
+            AISGrammarGenerator gen = AISGrammarGenerator.newInstance();
+            Grammar grammar = new Grammar();
+            gen.parse(is, grammar);
+            grammar.print(System.err);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
 }
