@@ -24,8 +24,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.vesalainen.grammar.Grammar;
 import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.annotation.GenClassname;
@@ -36,6 +34,7 @@ import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.parser.util.InputReader;
+import org.vesalainen.parsers.nmea.ais.SubareaType;
 import org.vesalainen.regex.Regex;
 
 /**
@@ -51,6 +50,22 @@ import org.vesalainen.regex.Regex;
 })
 public abstract class AISGrammarGenerator
 {
+
+    public static Grammar appendGrammar(Grammar grammar)
+    {
+        String pkg = AISGrammarGenerator.class.getPackage().getName().replace('.', '/')+"/";
+        InputStream is = AISGrammarGenerator.class.getClassLoader().getResourceAsStream(pkg+"AIVDM.txt");
+        AISGrammarGenerator gen = AISGrammarGenerator.newInstance();
+        for (SubareaType sat : SubareaType.values())
+        {
+            if (!sat.toString().startsWith("Reserved"))
+            {
+                grammar.addRule("shape", sat.toString());
+            }
+        }
+        gen.parse(is, grammar);
+        return grammar;
+    }
     protected String lastTitle;
     private Set<String> references = new HashSet<>();
 
@@ -159,9 +174,11 @@ public abstract class AISGrammarGenerator
         List<String> header = iterator.next();
         if (check(header))
         {
-            System.err.println("// "+camel(title));
+            String rule = camel(title);
+            System.err.println("// "+rule);
             StringBuilder rhs = new StringBuilder();
             boolean hasArray = false;
+            boolean msgRule = false;
             while (iterator.hasNext())
             {
                 List<String> line = iterator.next();
@@ -206,12 +223,6 @@ public abstract class AISGrammarGenerator
                             break;
                     }
                     checkReference(units);
-                        if (
-                                "Constant: 25".equals(units) || 
-                                "Constant: 26".equals(units))
-                        {
-                            return;
-                        }
                     if ("dac".equals(member) && "Unsigned integer".equals(units))
                     {
                         return;
@@ -221,6 +232,17 @@ public abstract class AISGrammarGenerator
                         units = "";
                     }
                     String constant = getConstant(units);
+                    if ("type".equals(member) && 
+                            !(
+                            "1-3".equals(constant) || 
+                            "5".equals(constant) || 
+                            "18".equals(constant) || 
+                            "19".equals(constant)
+                            )
+                            )
+                    {
+                        return;
+                    }
                     String expression = createExpression(len, t, units, constant);
                     if (member.isEmpty())
                     {
@@ -233,29 +255,35 @@ public abstract class AISGrammarGenerator
                         {
                             reducer = reducer+"_"+t;
                         }
+                        String nt = member;
+                        if (constant != null)
+                        {
+                            nt = member+constant;
+                        }
                         grammar.addTerminal(
                                 getReducer(reducer, javaType, AISData.class), 
-                                member, 
+                                nt, 
                                 expression, 
                                 description, 
                                 0, 
                                 radix);
-                        if (constant != null)
-                        {
-                            rhs.append(" "+member+constant);
-                        }
-                        else
-                        {
-                            rhs.append(" "+member);
-                        }
+                        rhs.append(" "+nt);
                     }
+                }
+                if ("type".equals(member))
+                {
+                    msgRule = true;
                 }
             }
             if (hasArray)
             {
                 rhs.append(")+");
             }
-            grammar.addRule(camel(title), rhs.toString());
+            grammar.addRule(rule, rhs.toString());
+            if (msgRule)
+            {
+                grammar.addRule("aisMessage", rule);
+            }
         }
     }
 
@@ -291,7 +319,7 @@ public abstract class AISGrammarGenerator
 
     private String createExpression(int[] len, String t, String units, String constant)
     {
-        if ("u".equals(t) && constant != null)
+        if (constant != null)
         {
             int[] bounds = bounds(constant);
             int from = bounds[0];
@@ -448,11 +476,7 @@ public abstract class AISGrammarGenerator
     {
         try
         {
-            String pkg = AISGrammarGenerator.class.getPackage().getName().replace('.', '/')+"/";
-            InputStream is = AISGrammarGenerator.class.getClassLoader().getResourceAsStream(pkg+"AIVDM.txt");
-            AISGrammarGenerator gen = AISGrammarGenerator.newInstance();
-            Grammar grammar = new Grammar();
-            gen.parse(is, grammar);
+            Grammar grammar = AISGrammarGenerator.appendGrammar(new Grammar());
             grammar.print(System.err);
         }
         catch (Exception ex)

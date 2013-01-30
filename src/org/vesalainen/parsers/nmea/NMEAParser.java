@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
+import org.vesalainen.grammar.AnnotatedGrammar;
 import org.vesalainen.parser.ParserConstants;
 import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.ParserInfo;
@@ -55,10 +56,8 @@ import org.vesalainen.parsers.nmea.ais.WMOCode45501;
 /**
  * @author Timo Vesalainen
  * @see <a href="http://catb.org/gpsd/NMEA.html">NMEA Revealed</a>
- * @see <a href="http://gpsd.berlios.de/AIVDM.html">AIVDM/AIVDO protocol
- * decoding</a>
- * @see <a href="doc-files/NMEAParser-statements.html#BNF">BNF Syntax for
- * NMEA</a>
+ * @see <a href="http://gpsd.berlios.de/AIVDM.html">AIVDM/AIVDO protocol decoding</a>
+ * @see <a href="doc-files/NMEAParser-statements.html#BNF">BNF Syntax for NMEA</a>
  */
 @GenClassname("org.vesalainen.parsers.nmea.NMEAParserImpl")
 @GrammarDef()
@@ -67,7 +66,7 @@ import org.vesalainen.parsers.nmea.ais.WMOCode45501;
     @Rule(left = "statements", value = "statement*"),
     @Rule(left = "statement", value = "nmeaStatement"),
     @Rule(left = "nmeaStatement", value = "'\\$' talkerId nmeaSentence '\\*' checksum '\r\n'"),
-    @Rule(left = "nmeaStatement", value = "'\\!AIVDM'  c numberOfSentences c sentenceNumber c sequentialMessageId c channel aisMessage '0\\*' checksum '\r\n'"),
+    @Rule(left = "nmeaStatement", value = "'!AIVDM'  c numberOfSentences c sentenceNumber c sequentialMessageId c channel aisMessage '[0-5]+\\*' checksum '\r\n'"),
     @Rule(left = "nmeaSentence", value = "'AAM' c arrivalStatus c waypointStatus c arrivalCircleRadius c waypoint"),
     @Rule(left = "nmeaSentence", value = "'ALM' c totalNumberOfMessages c messageNumber c satellitePRNNumber c gpsWeekNumber c svHealth c eccentricity c almanacReferenceTime c inclinationAngle c rateOfRightAscension c rootOfSemiMajorAxis c argumentOfPerigee c longitudeOfAscensionNode c meanAnomaly c f0ClockParameter c f1ClockParameter"),
     @Rule(left = "nmeaSentence", value = "'APA' c status c status2 c crossTrackError c arrivalStatus c waypointStatus c bearingOriginToDestination c waypoint"),
@@ -104,6 +103,7 @@ import org.vesalainen.parsers.nmea.ais.WMOCode45501;
     @Rule(left = "nmeaSentence", value = "'XTE' c status c status2 c crossTrackError faaModeIndicator"),
     @Rule(left = "nmeaSentence", value = "'XTR' c crossTrackError"),
     @Rule(left = "nmeaSentence", value = "'ZDA' c utc c day c month c year c localZoneHours c localZoneMinutes"),
+    @Rule(left = "sequentialMessageId"),
     @Rule(left = "rateOfTurn"),
     @Rule(left = "waterTemperature"),
     @Rule(left = "heading"),
@@ -145,8 +145,6 @@ import org.vesalainen.parsers.nmea.ais.WMOCode45501;
     @Rule(left = "arrivalCircleRadius", value = "c"),
     @Rule(left = "depthOfWater", value = "c"),
     @Rule(left = "windSpeed"),
-    @Rule(left = ""),
-    @Rule(left = ""),
     @Rule(left = "destinationWaypointLocation", value = "c c c"),
     @Rule(left = "location", value = "c c c"),
     @Rule(left = "trackMadeGood"),
@@ -260,8 +258,15 @@ public abstract class NMEAParser implements ParserInfo
     {
         if (lon != 0x6791AC0)
         {
-            float f = lon;
-            aisData.setLongitude(f / 600000L);
+            if (lon <= 180*60*10000 && lon >= -180*60*10000)
+            {
+                float f = lon;
+                aisData.setLongitude(f / 600000F);
+            }
+            else
+            {
+                System.err.println("longitude I4 = "+lon);
+            }
         }
     }
 
@@ -269,8 +274,15 @@ public abstract class NMEAParser implements ParserInfo
     {
         if (lat != 0x3412140)
         {
-            float f = lat;
-            aisData.setLatitude(f / 600000L);
+            if (lat <= 90*60*10000 && lat >= -90*60*10000)
+            {
+                float f = lat;
+                aisData.setLatitude(f / 600000F);
+            }
+            else
+            {
+                System.err.println("latitude I4 = "+lat);
+            }
         }
     }
 
@@ -278,8 +290,15 @@ public abstract class NMEAParser implements ParserInfo
     {
         if (lon != 0x6791AC0)
         {
-            float f = lon;
-            aisData.setLongitude(f / 60000L);
+            if (lon <= 180*60*1000 && lon >= -180*60*1000)
+            {
+                float f = lon;
+                aisData.setLongitude(f / 60000F);
+            }
+            else
+            {
+                System.err.println("longitude I3 = "+lon);
+            }
         }
     }
 
@@ -287,8 +306,15 @@ public abstract class NMEAParser implements ParserInfo
     {
         if (lat != 0x3412140)
         {
-            float f = lat;
-            aisData.setLatitude(f / 60000L);
+            if (lat <= 90*60*1000 && lat >= -90*60*1000)
+            {
+                float f = lat;
+                aisData.setLatitude(f / 60000L);
+            }
+            else
+            {
+                System.err.println("latitude I3 = "+lat);
+            }
         }
     }
 
@@ -296,8 +322,15 @@ public abstract class NMEAParser implements ParserInfo
     {
         if (course != 3600)
         {
-            float f = course;
-            aisData.setCourse(f / 10F);
+            if (course >= 0 && course < 3600)
+            {
+                float f = course;
+                aisData.setCourse(f / 10F);
+            }
+            else
+            {
+                System.err.println("course U1 = "+course);
+            }
         }
     }
 
@@ -319,7 +352,10 @@ public abstract class NMEAParser implements ParserInfo
 
     protected void aisManeuver(int maneuver, @ParserContext("aisData") AISData aisData)
     {
-        aisData.setManeuver(ManeuverIndicator.values()[maneuver]);
+        if (maneuver < 3)
+        {
+            aisData.setManeuver(ManeuverIndicator.values()[maneuver]);
+        }
     }
 
     protected void aisRaim(int raim, @ParserContext("aisData") AISData aisData)
@@ -1583,7 +1619,7 @@ protected void aisGnss(int arg, @ParserContext("aisData") AISData aisData){}
         {
             bit++;
             cc <<= 1;
-            cc += array[start + ii % array.length];
+            cc += array[(start + ii) % array.length] - '0';
             if (bit == 6)
             {
                 if (cc < 32)
@@ -1594,6 +1630,8 @@ protected void aisGnss(int arg, @ParserContext("aisData") AISData aisData){}
                 {
                     sb.append((char) cc);
                 }
+                bit = 0;
+                cc = 0;
             }
         }
         return sb.toString().trim();
@@ -2309,18 +2347,21 @@ protected void aisGnss(int arg, @ParserContext("aisData") AISData aisData){}
             char x2,
             @ParserContext("checksum") Checksum checksum,
             @ParserContext("clock") Clock clock,
-            @ParserContext("data") NMEAData data)
+            @ParserContext("data") NMEAData data,
+            @ParserContext("aisData") AISData aisData)
     {
         int sum = 16 * parseHex(x1) + parseHex(x2);
         if (sum != checksum.getValue())
         {
             clock.rollback();
             data.rollback("checksum " + Integer.toHexString(sum) + " != " + Integer.toHexString((int) checksum.getValue()));
+            aisData.rollback();
         }
         else
         {
             clock.commit();
             data.commit();
+            aisData.commit();
         }
     }
 
@@ -2410,7 +2451,7 @@ protected void aisGnss(int arg, @ParserContext("aisData") AISData aisData){}
         }
     }
 
-    @RecoverMethod
+    //@RecoverMethod
     public void recover(
             @ParserContext("data") NMEAData data,
             @ParserContext(ParserConstants.INPUTREADER) InputReader reader) throws IOException
@@ -2434,7 +2475,7 @@ protected void aisGnss(int arg, @ParserContext("aisData") AISData aisData){}
         parse(aisInputStream, checksum, clock, data, aisData, aisInputStream);
     }
 
-    @ParseMethod(start = "statements", size = 80)
+    @ParseMethod(start = "statements", size = 1024, wideIndex=true)
     protected abstract void parse(
             InputStream is,
             @ParserContext("checksum") Checksum checksum,
@@ -2445,7 +2486,7 @@ protected void aisGnss(int arg, @ParserContext("aisData") AISData aisData){}
 
     public static NMEAParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
     {
-        return (NMEAParser) ParserFactory.getParserInstance(NMEAParser.class);
+        return (NMEAParser) ParserFactory.getParserInstance(NMEAParser.class, AISGrammarGenerator.appendGrammar(new AnnotatedGrammar(NMEAParser.class)));
     }
 
     /**

@@ -38,7 +38,7 @@ import org.vesalainen.parsers.nmea.ais.WMOCode45501;
  *
  * @author Timo Vesalainen
  */
-public interface AISData
+public interface AISData extends Transactional
 {   
     public void setMessageType(MessageTypes messageTypes);
     

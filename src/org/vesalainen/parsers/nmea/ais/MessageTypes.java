@@ -22,7 +22,7 @@ package org.vesalainen.parsers.nmea.ais;
  */
 public enum MessageTypes
 {
-
+    ZeroNotUsed("not used"),
     /**
      * Position Report Class A
      */

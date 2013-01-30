@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author Timo Vesalainen
  */
-public interface NMEAData 
+public interface NMEAData extends Transactional
 {
     /**
      * Talker Id of sending device.
@@ -30,14 +30,6 @@ public interface NMEAData
      * @param c2 
      */
     void talkerId(char c1, char c2);
-    /**
-     * Read NMEA sentence was broken.
-     */
-    public void rollback(String reason);
-    /**
-     * Read NMEA sentence was correct.
-     */
-    public void commit();
     /**
      * Location in degrees. BWC, BWR, GGA, GLL, RMA, RMC 
      * @param latitude Latitude. South is negative.

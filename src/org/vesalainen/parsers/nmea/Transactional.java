@@ -14,55 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.vesalainen.parsers.nmea;
 
-import java.util.zip.Checksum;
-
 /**
+ *
  * @author Timo Vesalainen
  */
-public class NMEAChecksum implements Checksum
+public interface Transactional
 {
-    private boolean on;
-    private int value;
-    @Override
-    public void update(int b)
-    {
-        if (b == '*')
-        {
-            on = false;
-        }
-        if (on)
-        {
-            value ^= b;
-        }
-        if (b == '$' || b == '!')
-        {
-            value = 0;
-            on = true;
-        }
-    }
+    public void rollback();
 
-    @Override
-    public void update(byte[] b, int off, int len)
-    {
-        for (int ii=0;ii<len;ii++)
-        {
-            update(b[ii+off]);
-        }
-    }
-
-    @Override
-    public long getValue()
-    {
-        return value;
-    }
-
-    @Override
-    public void reset()
-    {
-        value = 0;
-    }
+    public void rollback(String reason);
+    
+    public void commit();
 
 }

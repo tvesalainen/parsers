@@ -998,7 +998,7 @@ A message 6 subtype. DAC = 001 FID = 16.
 |0-5     |  6 |Message Type         |type     |u|Constant: 6
 |6-7     |  2 |Repeat Indicator     |repeat   |u|As in Common Navigation Block
 |8-37    | 30 |Source MMSI          |mmsi     |u|9 decimal digits
-|38-39   |  2 |Spare                |         |x|Not used
+|38-39   |  2 |Spare                |seqno    |u|Not used
 |40-49   | 10 |DAC                  |dac      |u|DAC = 001
 |50-55   |  6 |FID                  |fid      |u|FID = 16
 |55-68   | 13 |# persons on board   |persons  |u|Unsigned integer
@@ -1412,8 +1412,8 @@ bit is on.
 |70-70   |  1 |Retransmit flag    |retransmit  |b|0 = no retransmit (default)
                                                   1 = retransmitted
 |71-71   |  1 |Spare              |            |x|Not used
-|72-81   | 10 |DAC                |dac         |u|AC = 001
-|82-87   |  6 |FID                |fid         |u|ID = 20
+|72-81   | 10 |DAC                |dac         |u|DAC = 001
+|82-87   |  6 |FID                |fid         |u|FID = 20
 |88-97   | 10 |Message Linkage ID |linkage     |u|Unsigned integer
 |98-106  |  9 |Berth length       |berth_length|u|In 1m steps, 1-510m,
                                                   511 = >= 511m
@@ -2148,7 +2148,7 @@ length: 360 bits.
 |38-39   |   2 |Spare              |            |x|Not used
 |40-49   | 10  |DAC                |dac         |u|DAC = 001
 |50-55   |  6  |FID                |fid         |u|FID = 21
-|56-56   |   1 |Variant            |wmo         |b|Constant: 0 in this variant
+|56-56   |   1 |Variant            |wmo         |u|Constant: 0 in this variant
 |57-176  | 120 |Location           |location    |t|20 6-bit characters
 |177-201 |  25 |Longitude          |lon         |I3|Unit = minutes * 0.001,
                                                    181000 = N/A (default),
@@ -2391,7 +2391,7 @@ is the message header format:
 |0-5     |  6 |Message Type         |type       |u|Constant: 6
 |6-7     |  2 |Repeat Indicator     |repeat     |u|As in Common Navigation Block
 |8-37    | 30 |Source MMSI          |mmsi       |u|9 decimal digits
-|38-39   |  2 |Spare                |           |x|Not used
+|38-39   |  2 |Spare                |seqno      |u|Not used
 |40-49   | 10 |DAC                  |dac        |u|DAC = 001
 |50-55   |  6 |FID                  |fid        |u|FID = 22
 |56-65   | 10 |Message Linkage ID   |linkage    |u|Unsigned integer
@@ -2422,7 +2422,7 @@ A message 8 subtype. DAC = 001 FID = 26. Variable length: 168-1008 bits.
 |0-5     |  6 |Message Type         |type       |u|Constant: 6
 |6-7     |  2 |Repeat Indicator     |repeat     |u|As in Common Navigation Block
 |8-37    | 30 |Source MMSI          |mmsi       |u|9 decimal digits
-|38-39   |  2 |Spare                |           |x|Not used
+|38-39   |  2 |Spare                |seqno      |u|Not used
 |40-49   | 10 |DAC                  |dac        |u|DAC = 001
 |50-55   |  6 |FID                  |fid        |u|FID = 26
 |56      |    |                     |reports    |a5|Sensor records array
@@ -3789,7 +3789,7 @@ station network.
 [frame="topbot",options="header"]
 |==============================================================================
 |Field    |Len |Description      |Member       |T|Units
-|0-5      | 6  |Message Type     |type         |u|Unsigned Integer: 23
+|0-5      | 6  |Message Type     |type         |u|Constant: 23
 |6-7      | 2  |Repeat Indicator |repeat       |u|As in Common Navigation Block
 |8-37     |30  |MMSI             |mmsi         |u|Unsigned Integer: 9 digits
 |38-39    | 2  |Spare            |             |x|Not used

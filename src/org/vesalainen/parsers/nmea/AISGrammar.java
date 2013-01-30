@@ -17,52 +17,19 @@
 
 package org.vesalainen.parsers.nmea;
 
-import java.util.zip.Checksum;
+import java.io.IOException;
+import org.vesalainen.grammar.AnnotatedGrammar;
 
 /**
  * @author Timo Vesalainen
  */
-public class NMEAChecksum implements Checksum
+public class AISGrammar extends AnnotatedGrammar
 {
-    private boolean on;
-    private int value;
-    @Override
-    public void update(int b)
-    {
-        if (b == '*')
-        {
-            on = false;
-        }
-        if (on)
-        {
-            value ^= b;
-        }
-        if (b == '$' || b == '!')
-        {
-            value = 0;
-            on = true;
-        }
-    }
 
-    @Override
-    public void update(byte[] b, int off, int len)
+    public AISGrammar() throws IOException
     {
-        for (int ii=0;ii<len;ii++)
-        {
-            update(b[ii+off]);
-        }
+        super(NMEAParser.class);
+        AISGrammarGenerator.appendGrammar(this);
     }
-
-    @Override
-    public long getValue()
-    {
-        return value;
-    }
-
-    @Override
-    public void reset()
-    {
-        value = 0;
-    }
-
+    
 }

@@ -55,6 +55,12 @@ public class Tracer implements NMEAData, AISData
     }
 
     @Override
+    public void rollback()
+    {
+        System.err.println("rollback()");
+    }
+
+    @Override
     public void rollback(String reason)
     {
         System.err.println("rollback("+reason+")");
@@ -553,9 +559,9 @@ public class Tracer implements NMEAData, AISData
     }
 
     @Override
-    public void setCourse(float setCourse)
+    public void setCourse(float course)
     {
-        System.err.println("setCourse("+setCourse+")");
+        System.err.println("setCourse("+course+")");
     }
 
     @Override
