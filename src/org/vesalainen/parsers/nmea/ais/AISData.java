@@ -14,8 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.vesalainen.parsers.nmea;
+package org.vesalainen.parsers.nmea.ais;
 
+import org.vesalainen.parsers.nmea.Transactional;
+import org.vesalainen.parsers.nmea.Transactional;
 import org.vesalainen.parsers.nmea.ais.AreaNoticeDescription;
 import org.vesalainen.parsers.nmea.ais.BeaufortScale;
 import org.vesalainen.parsers.nmea.ais.CargoUnitCodes;

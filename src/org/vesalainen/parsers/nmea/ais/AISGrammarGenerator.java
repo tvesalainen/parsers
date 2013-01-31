@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.vesalainen.parsers.nmea;
+package org.vesalainen.parsers.nmea.ais;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -34,6 +34,7 @@ import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.parser.util.InputReader;
+import org.vesalainen.parsers.nmea.NMEAParser;
 import org.vesalainen.parsers.nmea.ais.SubareaType;
 import org.vesalainen.regex.Regex;
 

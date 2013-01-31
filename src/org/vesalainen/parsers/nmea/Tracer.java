@@ -17,6 +17,7 @@
 
 package org.vesalainen.parsers.nmea;
 
+import org.vesalainen.parsers.nmea.ais.AISData;
 import java.util.List;
 import org.vesalainen.parsers.nmea.ais.AreaNoticeDescription;
 import org.vesalainen.parsers.nmea.ais.BeaufortScale;

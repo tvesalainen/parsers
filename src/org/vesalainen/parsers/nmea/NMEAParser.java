@@ -16,6 +16,9 @@
  */
 package org.vesalainen.parsers.nmea;
 
+import org.vesalainen.parsers.nmea.ais.AISData;
+import org.vesalainen.parsers.nmea.ais.AISGrammarGenerator;
+import org.vesalainen.parsers.nmea.ais.AISInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;

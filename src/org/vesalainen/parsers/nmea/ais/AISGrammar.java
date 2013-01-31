@@ -15,10 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.vesalainen.parsers.nmea;
+package org.vesalainen.parsers.nmea.ais;
 
 import java.io.IOException;
 import org.vesalainen.grammar.AnnotatedGrammar;
+import org.vesalainen.parsers.nmea.NMEAParser;
 
 /**
  * @author Timo Vesalainen
