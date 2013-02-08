@@ -17,6 +17,8 @@
 
 package org.vesalainen.parsers.nmea.ais;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.vesalainen.grammar.Grammar;
 import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.annotation.GenClassname;
@@ -35,7 +39,6 @@ import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.parser.util.InputReader;
 import org.vesalainen.parsers.nmea.NMEAParser;
-import org.vesalainen.parsers.nmea.ais.SubareaType;
 import org.vesalainen.regex.Regex;
 
 /**
@@ -55,8 +58,10 @@ public abstract class AISGrammarGenerator
     public static Grammar appendGrammar(Grammar grammar)
     {
         String pkg = AISGrammarGenerator.class.getPackage().getName().replace('.', '/')+"/";
-        InputStream is = AISGrammarGenerator.class.getClassLoader().getResourceAsStream(pkg+"AIVDM.txt");
+        InputStream is = null;
+        is = AISGrammarGenerator.class.getClassLoader().getResourceAsStream(pkg+"AIVDM.txt");
         AISGrammarGenerator gen = AISGrammarGenerator.newInstance();
+        grammar.addRule("messages", "(('0*\n')? message)+");
         for (SubareaType sat : SubareaType.values())
         {
             if (!sat.toString().startsWith("Reserved"))
@@ -162,7 +167,7 @@ public abstract class AISGrammarGenerator
     }
     public Grammar parse()
     {
-        Grammar g = new Grammar();
+        Grammar g = new Grammar(5, 50);
         String pkg = AISGrammarGenerator.class.getPackage().getName().replace('.', '/')+"/";
         InputStream is = AISGrammarGenerator.class.getClassLoader().getResourceAsStream(pkg+"AIVDM.txt");
         AISGrammarGenerator gen = AISGrammarGenerator.newInstance();
@@ -236,6 +241,7 @@ public abstract class AISGrammarGenerator
                     if ("type".equals(member) && 
                             !(
                             "1-3".equals(constant) || 
+                            "4".equals(constant) || 
                             "5".equals(constant) || 
                             "18".equals(constant) || 
                             "19".equals(constant)
@@ -262,7 +268,7 @@ public abstract class AISGrammarGenerator
                             nt = member+constant;
                         }
                         grammar.addTerminal(
-                                getReducer(reducer, javaType, AISData.class), 
+                                getReducer(reducer, javaType, AISObserver.class), 
                                 nt, 
                                 expression, 
                                 description, 
@@ -283,7 +289,7 @@ public abstract class AISGrammarGenerator
             grammar.addRule(rule, rhs.toString());
             if (msgRule)
             {
-                grammar.addRule("aisMessage", rule);
+                grammar.addRule("message", rule);
             }
         }
     }
@@ -293,7 +299,7 @@ public abstract class AISGrammarGenerator
     {
         try
         {
-            return NMEAParser.class.getDeclaredMethod(name, p);
+            return AISParser.class.getDeclaredMethod(name, p);
         }
         catch (NoSuchMethodException ex)
         {
@@ -477,7 +483,7 @@ public abstract class AISGrammarGenerator
     {
         try
         {
-            Grammar grammar = AISGrammarGenerator.appendGrammar(new Grammar());
+            Grammar grammar = new AISGrammar();
             grammar.print(System.err);
         }
         catch (Exception ex)

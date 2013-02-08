@@ -18,18 +18,17 @@
 package org.vesalainen.parsers.nmea.ais;
 
 import java.io.IOException;
-import org.vesalainen.grammar.AnnotatedGrammar;
-import org.vesalainen.parsers.nmea.NMEAParser;
+import org.vesalainen.grammar.Grammar;
 
 /**
  * @author Timo Vesalainen
  */
-public class AISGrammar extends AnnotatedGrammar
+public class AISGrammar extends Grammar
 {
 
     public AISGrammar() throws IOException
     {
-        super(NMEAParser.class);
+        super(5, 50);
         AISGrammarGenerator.appendGrammar(this);
     }
     

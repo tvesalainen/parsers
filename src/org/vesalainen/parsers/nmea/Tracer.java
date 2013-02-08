@@ -17,7 +17,7 @@
 
 package org.vesalainen.parsers.nmea;
 
-import org.vesalainen.parsers.nmea.ais.AISData;
+import org.vesalainen.parsers.nmea.ais.AISObserver;
 import java.util.List;
 import org.vesalainen.parsers.nmea.ais.AreaNoticeDescription;
 import org.vesalainen.parsers.nmea.ais.BeaufortScale;
@@ -40,7 +40,7 @@ import org.vesalainen.parsers.nmea.ais.WMOCode45501;
 /**
  * @author Timo Vesalainen
  */
-public class Tracer implements NMEAData, AISData
+public class Tracer implements NMEAObserver, AISObserver
 {
 
     @Override
@@ -50,15 +50,9 @@ public class Tracer implements NMEAData, AISData
     }
 
     @Override
-    public void commit()
+    public void commit(String reason)
     {
-        System.err.println("commit");
-    }
-
-    @Override
-    public void rollback()
-    {
-        System.err.println("rollback()");
+        System.err.println("commit("+reason+")");
     }
 
     @Override

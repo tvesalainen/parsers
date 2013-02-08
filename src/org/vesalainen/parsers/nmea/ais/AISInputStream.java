@@ -26,8 +26,7 @@ import java.io.InputStream;
 public class AISInputStream extends InputStream
 {
     private InputStream in;
-    private boolean decode;
-    private int buffer;
+    private int cc;
     private int bit;
     
     public AISInputStream(InputStream in)
@@ -35,47 +34,32 @@ public class AISInputStream extends InputStream
         this.in = in;
     }
 
-    public void setDecode(boolean decode)
-    {
-        this.decode = decode;
-    }
-    
     @Override
     public int read() throws IOException
     {
-        if (decode)
+        if (bit == 0)
         {
-            int cc = readBit();
-            if (cc != -1)
+            cc = in.read();
+            if ((cc >= '0' && cc <= 'W') || (cc >= '`' && cc <= 'w'))
+            {
+                if (cc == -1)
+                {
+                    throw new IOException("unexpected EOF in AIS Data");
+                }
+                cc -= '0';
+                if (cc > 40)
+                {
+                    cc -= 8;
+                }
+                bit = 6;
+            }
+            else
             {
                 return cc;
             }
         }
-        return in.read();
-    }
-    public int readBit() throws IOException
-    {
-        if (bit == 0)
-        {
-            buffer = in.read();
-            if (buffer == ',')
-            {
-                decode = false;
-                return -1;
-            }
-            if (buffer == -1)
-            {
-                throw new IOException("unexcpected EOF in AIS Data");
-            }
-            buffer -= 48;
-            if (buffer > 40)
-            {
-                buffer -= 8;
-            }
-            bit = 6;
-        }
         bit--;
-        if ((buffer & (1<<bit)) == 0)
+        if ((cc & (1<<bit)) == 0)
         {
             return '0';
         }

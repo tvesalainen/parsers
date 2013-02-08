@@ -22,10 +22,8 @@ package org.vesalainen.parsers.nmea;
  */
 public interface Transactional
 {
-    public void rollback();
-
     public void rollback(String reason);
     
-    public void commit();
+    public void commit(String reason);
 
 }
