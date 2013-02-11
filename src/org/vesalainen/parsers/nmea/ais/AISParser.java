@@ -35,32 +35,6 @@ import org.vesalainen.parsers.nmea.NMEAObserver;
 @GrammarDef()
 public abstract class AISParser
 {
-    public Thread parseAis(final SwitchingInputStream sis, final AISObserver aisData)
-    {
-        Runnable background = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                while (true)
-                {
-                    try
-                    {
-                        parse(sis, aisData);
-                    }
-                    catch (Exception ex)
-                    {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-        };
-        Thread thread = new Thread(background, "AIS Parser");
-        thread.setDaemon(true);
-        thread.start();
-        return thread;
-    }
-
     /**
      * Parses AIS messages encoded in NMEA message <p> Example input:
      * 53nFBv01SJ...
@@ -112,9 +86,9 @@ public abstract class AISParser
         {
             sb.append((char) cc);
             cc = reader.read();
+            reader.clear();
         }
-        aisData.rollback("skipping " + sb);
-        reader.clear();
+        aisData.rollback("skipping " + sb+" "+thr);
     }
 
     protected void aisType(int messageType, @ParserContext("aisData") AISObserver aisData)
@@ -522,12 +496,12 @@ public abstract class AISParser
 
     protected void aisUnid(int unid, @ParserContext("aisData") AISObserver aisData)
     {
-        aisData.UNNumber(unid);
+        aisData.setUNNumber(unid);
     }
 
     protected void aisAmount(int amount, @ParserContext("aisData") AISObserver aisData)
     {
-        aisData.AmountOfCargo(amount);
+        aisData.setAmountOfCargo(amount);
     }
 
     protected void aisUnit(int unit, @ParserContext("aisData") AISObserver aisData)

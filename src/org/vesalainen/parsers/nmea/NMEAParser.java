@@ -16,6 +16,7 @@
  */
 package org.vesalainen.parsers.nmea;
 
+import java.io.FileInputStream;
 import org.vesalainen.parsers.nmea.ais.AISObserver;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,8 +36,10 @@ import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.parser.util.InputReader;
+import org.vesalainen.parsers.nmea.ais.AISContext;
 import org.vesalainen.parsers.nmea.ais.AISParser;
 import org.vesalainen.parsers.nmea.ais.SwitchingInputStream;
+import org.vesalainen.parsers.nmea.ais.VesselMonitor;
 
 /**
  * @author Timo Vesalainen
@@ -51,7 +54,7 @@ import org.vesalainen.parsers.nmea.ais.SwitchingInputStream;
     @Rule(left = "statements", value = "statement*"),
     @Rule(left = "statement", value = "nmeaStatement"),
     @Rule(left = "nmeaStatement", value = "'\\$' talkerId nmeaSentence '\\*' checksum '\r\n'"),
-    @Rule(left = "nmeaStatement", value = "'!AIVDM' aisPrefix '[0-5]+\\*' checksum '\r\n'"),
+    @Rule(left = "nmeaStatement", value = "aivdm aisPrefix '[0-5]+\\*' checksum '\r\n'"),
     @Rule(left = "nmeaSentence", value = "'AAM' c arrivalStatus c waypointStatus c arrivalCircleRadius c waypoint"),
     @Rule(left = "nmeaSentence", value = "'ALM' c totalNumberOfMessages c messageNumber c satellitePRNNumber c gpsWeekNumber c svHealth c eccentricity c almanacReferenceTime c inclinationAngle c rateOfRightAscension c rootOfSemiMajorAxis c argumentOfPerigee c longitudeOfAscensionNode c meanAnomaly c f0ClockParameter c f1ClockParameter"),
     @Rule(left = "nmeaSentence", value = "'APA' c status c status2 c crossTrackError c arrivalStatus c waypointStatus c bearingOriginToDestination c waypoint"),
@@ -163,6 +166,12 @@ import org.vesalainen.parsers.nmea.ais.SwitchingInputStream;
 })
 public abstract class NMEAParser implements ParserInfo
 {
+    @Rule("'!AIVDM'")
+    protected void aivdm(@ParserContext("aisContext") AISContext aisContext)
+    {
+        aisContext.ensureStarted();
+    }
+
     @Rule
     protected int sequentialMessageID()
     {
@@ -193,17 +202,20 @@ public abstract class NMEAParser implements ParserInfo
             int sentenceNumber,
             int sequentialMessageID,
             char channel,
-            @ParserContext("aisInputStream") SwitchingInputStream aisInputStream,
-            @ParserContext("aisData") AISObserver aisData
+            @ParserContext("aisContext") AISContext aisContext
             )
     {
+        AISObserver aisData = aisContext.getAisData();
+        SwitchingInputStream aisInputStream = aisContext.getAisInputStream();
+        aisData.setPrefix(
+            numberOfSentences,
+            sentenceNumber,
+            sequentialMessageID,
+            channel
+                );
         if (sentenceNumber == 1)
         {
-            aisInputStream.setPrefix('\n');
-        }
-        else
-        {
-            aisInputStream.setPrefix((char)0);
+            aisInputStream.setNumberOfSentences(numberOfSentences);
         }
         aisInputStream.getSideSemaphore().release();
         try
@@ -1021,29 +1033,17 @@ public abstract class NMEAParser implements ParserInfo
         Checksum checksum = new NMEAChecksum();
         Clock clock = new GPSClock();
         CheckedInputStream checkedInputStream = new CheckedInputStream(is, checksum);
-        AISParser aisParser = AISParser.newInstance();
-        SwitchingInputStream aisInputStream = new SwitchingInputStream(checkedInputStream);
-        final Thread aisParserThread = aisParser.parseAis(aisInputStream, aisData);
-        Runnable shutdownRunnable = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                aisParserThread.interrupt();
-            }
-        };
-        Runtime.getRuntime().addShutdownHook(new Thread(shutdownRunnable));
-        parse(checkedInputStream, aisInputStream, checksum, clock, data, aisData);
+        AISContext aisContext = new AISContext(is, aisData);
+        parse(checkedInputStream, checksum, clock, data, aisContext);
     }
 
-    @ParseMethod(start = "statements", size = 1024, wideIndex=true)
+    @ParseMethod(start = "statements", size = 1024, charSet="ASCII", wideIndex=true)
     protected abstract void parse(
             InputStream is,
-            @ParserContext("aisInputStream") SwitchingInputStream aisInputStream,
             @ParserContext("checksum") Checksum checksum,
             @ParserContext("clock") Clock clock,
             @ParserContext("data") NMEAObserver data,
-            @ParserContext("aisData") AISObserver aisData
+            @ParserContext("aisContext") AISContext aisContext
             ) throws IOException;
 
     public static NMEAParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
@@ -1060,10 +1060,10 @@ public abstract class NMEAParser implements ParserInfo
         {
             String pck = AISParser.class.getPackage().getName().replace('.', '/') + "/";
             InputStream is = AISParser.class.getClassLoader().getResourceAsStream(pck + "nmea-sample");
-            //FileInputStream fis = new FileInputStream("y:\\NMEA data\\2007_05_25_122516.nmea");
+            FileInputStream fis = new FileInputStream("C:\\Users\\tkv\\Documents\\NetBeansProjects\\Parsers\\src\\org\\vesalainen\\parsers\\nmea\\ais\\nmea-sample_1");
             NMEAParser p = NMEAParser.newInstance();
-            Tracer tracer = new Tracer();
-            p.parse(is, tracer, tracer);
+            p.parse(fis, new AbstractNMEAObserver(), new VesselMonitor());
+            System.err.println("nmea finished");
         }
         catch (Exception ex)
         {

@@ -20,8 +20,6 @@ package org.vesalainen.parsers.nmea.ais;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Semaphore;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Timo Vesalainen
@@ -30,8 +28,8 @@ public class SwitchingInputStream extends InputStream
 {
     private Semaphore mainSemaphore;
     private Semaphore sideSemaphore;
-    private boolean starting = true;
-    private char prefix;
+    private boolean sleeping = true;
+    private int count;
     private InputStream is;
 
     public SwitchingInputStream(InputStream is)
@@ -51,9 +49,9 @@ public class SwitchingInputStream extends InputStream
         return sideSemaphore;
     }
 
-    public void setPrefix(char prefix)
+    public void setNumberOfSentences(int count)
     {
-        this.prefix = prefix;
+        this.count = count;
     }
 
     @Override
@@ -61,24 +59,23 @@ public class SwitchingInputStream extends InputStream
     {
         try
         {
-            if (starting)
+            if (sleeping)
             {
-                starting = false;
+                sleeping = false;
                 sideSemaphore.acquire();
-                if (prefix != 0)
-                {
-                    return prefix;
-                }
             }
             int cc = is.read();
             if (cc == ',')
             {
                 mainSemaphore.release();
-                sideSemaphore.acquire();
-                if (prefix != 0)
+                count--;
+                if (count == 0)
                 {
-                    return prefix;
+                    sleeping = true;
+                    return '\n';
                 }
+                // continue sentence
+                sideSemaphore.acquire();
                 cc = is.read();
             }
             return cc;

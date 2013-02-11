@@ -800,13 +800,13 @@ public class Tracer implements NMEAObserver, AISObserver
     }
 
     @Override
-    public void UNNumber(int unid)
+    public void setUNNumber(int unid)
     {
         System.err.println("UNNumber("+unid+")");
     }
 
     @Override
-    public void AmountOfCargo(int amount)
+    public void setAmountOfCargo(int amount)
     {
         System.err.println("AmountOfCargo("+amount+")");
     }
@@ -1488,6 +1488,12 @@ public class Tracer implements NMEAObserver, AISObserver
     public void setAirPressureChange(float delta)
     {
         System.err.println("setAirPressureChange("+delta+")");
+    }
+
+    @Override
+    public void setPrefix(int numberOfSentences, int sentenceNumber, int sequentialMessageID, char channel)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

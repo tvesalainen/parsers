@@ -55,6 +55,10 @@ public class AISInputStream extends InputStream
             }
             else
             {
+                if (cc != '\n')
+                {
+                    throw new IOException(cc+" unexpected");
+                }
                 return cc;
             }
         }

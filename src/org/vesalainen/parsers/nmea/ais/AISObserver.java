@@ -304,12 +304,12 @@ public interface AISObserver extends Transactional
      * UN Number
      * @param unid 
      */
-    void UNNumber(int unid);
+    void setUNNumber(int unid);
     /**
      * Amount of Cargo
      * @param amount 
      */
-    void AmountOfCargo(int amount);
+    void setAmountOfCargo(int amount);
     /**
      * Unit of Quantity
      * @param cargoUnitCodes 
@@ -878,5 +878,7 @@ public interface AISObserver extends Transactional
      * @param delta -50-+50hPa: units of 0.1hPa averaged over last 3 hours.
      */
     void setAirPressureChange(float delta);
+
+    public void setPrefix(int numberOfSentences, int sentenceNumber, int sequentialMessageID, char channel);
 
 }
