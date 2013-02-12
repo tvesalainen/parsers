@@ -36,12 +36,12 @@ import org.vesalainen.parser.annotation.ParserContext;
  * @see <a href="doc-files/InternetDateParser-iso8601.html#BNF">BNF Syntax for ISO8601 date</a>
  */
 @GenClassname("org.vesalainen.parsers.date.InternetDateParserImpl")
-@GrammarDef
+@GrammarDef(grammarClass=InternetDateGrammar.class)
 public abstract class InternetDateParser extends DateReducers
 {
     public static InternetDateParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
     {
-        return (InternetDateParser) ParserFactory.getParserInstance(InternetDateParser.class, new InternetDateGrammar());
+        return (InternetDateParser) ParserFactory.getParserInstance(InternetDateParser.class);
     }
     /**
      * Parses dates in either ISO8601, RFC1123, RFC850 or asctime format.

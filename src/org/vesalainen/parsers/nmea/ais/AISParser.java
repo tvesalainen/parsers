@@ -26,13 +26,14 @@ import org.vesalainen.parser.annotation.ParseMethod;
 import org.vesalainen.parser.annotation.ParserContext;
 import org.vesalainen.parser.annotation.RecoverMethod;
 import org.vesalainen.parser.util.InputReader;
+import org.vesalainen.parsers.date.InternetDateGrammar;
 import org.vesalainen.parsers.nmea.NMEAObserver;
 
 /**
  * @author Timo Vesalainen
  */
 @GenClassname("org.vesalainen.parsers.nmea.ais.AISParserImpl")
-@GrammarDef()
+@GrammarDef(grammarClass=AISGrammar.class)
 public abstract class AISParser
 {
     /**
@@ -65,7 +66,7 @@ public abstract class AISParser
 
     public static AISParser newInstance() throws IOException
     {
-        return (AISParser) ParserFactory.getParserInstance(AISParser.class, new AISGrammar());
+        return (AISParser) ParserFactory.getParserInstance(AISParser.class);
     }
 
     @ParseMethod(start = "messages", size = 1024, wideIndex = true)
@@ -136,12 +137,12 @@ public abstract class AISParser
                 aisData.setTurn(0);
                 break;
             case 127:
-                aisData.setTurn(20);
+                aisData.setTurn(10);
                 break;
             case -127:
-                aisData.setTurn(-20);
+                aisData.setTurn(-10);
                 break;
-            case 128:
+            case -128:
                 break;
             default:
                 float f = turn;
@@ -255,7 +256,7 @@ public abstract class AISParser
 
     protected void aisSecond(int second, @ParserContext("aisData") AISObserver aisData)
     {
-        if (second != 60)
+        if (second < 60)
         {
             aisData.setSecond(second);
         }

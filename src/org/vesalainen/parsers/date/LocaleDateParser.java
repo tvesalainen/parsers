@@ -38,7 +38,7 @@ import org.vesalainen.parser.annotation.ParserContext;
  * @see <a href="doc-files/LocaleDateParser-time.html#BNF">BNF Syntax for locale time</a>
  */
 @GenClassname("org.vesalainen.parsers.date.LocaleDateParserImpl")
-@GrammarDef
+@GrammarDef(grammarClass=LocaleDateGrammar.class)
 public abstract class LocaleDateParser extends DateReducers
 {
     public Date parseDate(String text) throws IOException
@@ -115,7 +115,7 @@ public abstract class LocaleDateParser extends DateReducers
 
     public static LocaleDateParser newInstance() throws IOException
     {
-        return (LocaleDateParser) ParserFactory.getParserInstance(LocaleDateParser.class, new LocaleDateGrammar());
+        return (LocaleDateParser) ParserFactory.getParserInstance(LocaleDateParser.class);
     }
     
 }

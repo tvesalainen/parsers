@@ -36,12 +36,12 @@ import org.vesalainen.parser.annotation.ParserContext;
  * @see <a href="doc-files/SQLDateParser-sqlTimestamp.html#BNF">Implemented BNF Syntax for SQL Timestamp</a>
  */
 @GenClassname("org.vesalainen.parsers.date.SQLDateParserImpl")
-@GrammarDef
+@GrammarDef(grammarClass=SQLDateGrammar.class)
 public abstract class SQLDateParser extends DateReducers
 {
     public static SQLDateParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
     {
-        return (SQLDateParser) ParserFactory.getParserInstance(SQLDateParser.class, new SQLDateGrammar());
+        return (SQLDateParser) ParserFactory.getParserInstance(SQLDateParser.class);
     }
     public Date parseDate(String text)
     {

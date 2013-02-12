@@ -905,8 +905,10 @@ public abstract class NMEAParser implements ParserInfo
             @ParserContext("checksum") Checksum checksum,
             @ParserContext("clock") Clock clock,
             @ParserContext("data") NMEAObserver data,
-            @ParserContext("aisData") AISObserver aisData)
+            @ParserContext("aisContext") AISContext aisContext
+            )
     {
+        AISObserver aisData = aisContext.getAisData();
         int sum = 16 * parseHex(x1) + parseHex(x2);
         if (sum != checksum.getValue())
         {
@@ -1033,8 +1035,9 @@ public abstract class NMEAParser implements ParserInfo
         Checksum checksum = new NMEAChecksum();
         Clock clock = new GPSClock();
         CheckedInputStream checkedInputStream = new CheckedInputStream(is, checksum);
-        AISContext aisContext = new AISContext(is, aisData);
+        AISContext aisContext = new AISContext(checkedInputStream, aisData);
         parse(checkedInputStream, checksum, clock, data, aisContext);
+        aisContext.stop();
     }
 
     @ParseMethod(start = "statements", size = 1024, charSet="ASCII", wideIndex=true)
