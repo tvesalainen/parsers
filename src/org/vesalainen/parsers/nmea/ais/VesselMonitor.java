@@ -105,6 +105,31 @@ public class VesselMonitor extends AbstractAISObserver
         target.setCourse(cog);
     }
 
+    public void setYear(int year)
+    {
+        target.setYear(year);
+    }
+
+    public void setMonth(int month)
+    {
+        target.setMonth(month);
+    }
+
+    public void setDay(int day)
+    {
+        target.setDay(day);
+    }
+
+    public void setMinute(int minute)
+    {
+        target.setMinute(minute);
+    }
+
+    public void setHour(int hour)
+    {
+        target.setHour(hour);
+    }
+
     public void setSecond(int second)
     {
         target.setSecond(second);

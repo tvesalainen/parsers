@@ -37,7 +37,7 @@ public class AISContext implements Runnable
     
     public void ensureStarted()
     {
-        if (aisInputStream == null)
+        if (thread == null)
         {
             thread = new Thread(this, "AIS Parser");
             thread.start();
@@ -65,6 +65,14 @@ public class AISContext implements Runnable
         catch (IOException ex)
         {
             throw new IllegalArgumentException(ex);
+        }
+    }
+
+    public void stop()
+    {
+        if (thread != null)
+        {
+            thread.interrupt();
         }
     }
     

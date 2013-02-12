@@ -17,6 +17,9 @@
 
 package org.vesalainen.parsers.nmea.ais;
 
+import java.util.Calendar;
+import java.util.TimeZone;
+
 /**
  * @author Timo Vesalainen
  */
@@ -29,11 +32,12 @@ public class Vessel extends AbstractAISObserver
     private double longitude;
     private float latitude;
     private float courseOverGround;
-    private int second;
+    private Calendar calendar;
 
     public Vessel(int mmsi)
     {
         this.mmsi = mmsi;
+        calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     }
 
     @Override
@@ -57,10 +61,6 @@ public class Vessel extends AbstractAISObserver
     @Override
     public void setLongitude(double longitude)
     {
-        if (this.longitude != 0)
-        {
-            System.err.println();
-        }
         this.longitude = longitude;
     }
 
@@ -77,9 +77,39 @@ public class Vessel extends AbstractAISObserver
     }
 
     @Override
-    public void setSecond(int second)
+    public void setYear(int year)
     {
-        this.second = second;
+        calendar.set(Calendar.YEAR, year);
+    }
+
+    @Override
+    public void setMonth(int month)
+    {
+        calendar.set(Calendar.MONTH, month-1);
+    }
+
+    @Override
+    public void setDay(int day)
+    {
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+    }
+
+    @Override
+    public void setHour(int hour)
+    {
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+    }
+
+    @Override
+    public void setMinute(int minute)
+    {
+        calendar.set(Calendar.MINUTE, minute);
     }
     
+    @Override
+    public void setSecond(int second)
+    {
+        calendar.set(Calendar.SECOND, second);
+    }
+
 }

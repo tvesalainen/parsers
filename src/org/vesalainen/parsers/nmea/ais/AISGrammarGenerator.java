@@ -209,13 +209,18 @@ public abstract class AISGrammarGenerator
                         case 'U':
                         case 'e':
                         case 'b':
-                            if (len[0] > 32)
+                            if (len[0] > 31)
                             {
                                 javaType = long.class;
                             }
                             break;
                         case 'i':
+                        case 'I':
                             radix = -2;
+                            if (len[0] > 32)
+                            {
+                                javaType = long.class;
+                            }
                             break;
                         case 't':
                             javaType = InputReader.class;
