@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.ParserConstants;
-import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.parser.util.InputReader;
@@ -73,7 +73,7 @@ public abstract class XMLDocumentParser extends XMLDTDBaseGrammar implements XML
     }
     public static XMLDocumentParser getInstance() throws IOException
     {
-        return (XMLDocumentParser) ParserFactory.getParserInstance(XMLDocumentParser.class);
+        return (XMLDocumentParser) GenClassFactory.getGenInstance(XMLDocumentParser.class);
     }
 
     void setFeatures(SAXFeatures features)

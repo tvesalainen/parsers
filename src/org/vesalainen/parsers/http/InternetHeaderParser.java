@@ -118,7 +118,7 @@ public abstract class InternetHeaderParser
         {
             ParserCompiler pc = new ParserCompiler(InternetHeaderParser.class);
             pc.compile();
-            InternetHeaderParser ih = (InternetHeaderParser) pc.parserInstance();
+            InternetHeaderParser ih = (InternetHeaderParser) pc.newInstance();
             String sr = "a: a-hdr\r\nb: b-hdr\r\nc: c-hdr\r\n c-cont1\r\n c-cont2\r\n\r\n";
             Map<String,List<String>> hdr = ih.parse(sr);
             System.err.println(hdr);

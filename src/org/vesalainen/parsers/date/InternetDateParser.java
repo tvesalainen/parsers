@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import org.vesalainen.parser.ParserFactory;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
@@ -41,7 +41,7 @@ public abstract class InternetDateParser extends DateReducers
 {
     public static InternetDateParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
     {
-        return (InternetDateParser) ParserFactory.getParserInstance(InternetDateParser.class);
+        return (InternetDateParser) GenClassFactory.getGenInstance(InternetDateParser.class);
     }
     /**
      * Parses dates in either ISO8601, RFC1123, RFC850 or asctime format.

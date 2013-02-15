@@ -104,7 +104,7 @@ public abstract class SqlParser<R, C>
      * @return 
      * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
      */
-    @ParseMethod(start = "batchStatement", useOffsetLocatorException = true, whiteSpace =
+    @ParseMethod(start = "batchStatement", useOffsetLocatorException = true, wideIndex= true, whiteSpace =
     {
         "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
     })
@@ -124,7 +124,7 @@ public abstract class SqlParser<R, C>
      * @return 
      * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
      */
-    @ParseMethod(start = "batchStatement", useOffsetLocatorException = true, size = 1024, whiteSpace =
+    @ParseMethod(start = "batchStatement", useOffsetLocatorException = true, size = 1024, wideIndex= true, whiteSpace =
     {
         "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
     })

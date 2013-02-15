@@ -20,7 +20,7 @@ package org.vesalainen.parsers.date;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import org.vesalainen.parser.ParserFactory;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
@@ -41,7 +41,7 @@ public abstract class SQLDateParser extends DateReducers
 {
     public static SQLDateParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
     {
-        return (SQLDateParser) ParserFactory.getParserInstance(SQLDateParser.class);
+        return (SQLDateParser) GenClassFactory.getGenInstance(SQLDateParser.class);
     }
     public Date parseDate(String text)
     {

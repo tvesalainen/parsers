@@ -29,7 +29,7 @@ import org.vesalainen.bcc.MethodImplementor;
 import org.vesalainen.bcc.type.ClassWrapper;
 import org.vesalainen.bcc.type.MethodWrapper;
 import org.vesalainen.grammar.Grammar;
-import org.vesalainen.parser.ParserFactory;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 
 /**
@@ -53,7 +53,7 @@ public abstract class DateFormatParser
     
     public static DateFormatParser newInstance(Class<?> superClass)
     {
-        DateFormatParser dfg = (DateFormatParser) ParserFactory.getParserInstance(DateFormatParser.class);
+        DateFormatParser dfg = (DateFormatParser) GenClassFactory.getGenInstance(DateFormatParser.class);
         dfg.setSuperClass(superClass);
         return dfg;
     }

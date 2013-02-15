@@ -18,8 +18,8 @@ package org.vesalainen.parsers.nmea.ais;
 
 import java.io.IOException;
 import java.io.InputStream;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.ParserConstants;
-import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
@@ -66,7 +66,7 @@ public abstract class AISParser
 
     public static AISParser newInstance() throws IOException
     {
-        return (AISParser) ParserFactory.getParserInstance(AISParser.class);
+        return (AISParser) GenClassFactory.getGenInstance(AISParser.class);
     }
 
     @ParseMethod(start = "messages", size = 1024, wideIndex = true)

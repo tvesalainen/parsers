@@ -22,14 +22,16 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import org.vesalainen.parser.ParserFactory;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
+import org.vesalainen.parser.annotation.MapDef;
 import org.vesalainen.parser.util.InputReader;
 
 /**
  * @author Timo Vesalainen
  */
 @GenClassname("org.vesalainen.parsers.magic.MagicImpl")
+@MapDef(mapClass=MagicMap.class)
 public abstract class Magic implements MapParser
 {
     static final String ERROR = "Error";
@@ -79,7 +81,7 @@ public abstract class Magic implements MapParser
     
     public static Magic getInstance()
     {
-        Magic magic = (Magic) ParserFactory.loadParserInstance(Magic.class);
+        Magic magic = (Magic) GenClassFactory.getGenInstance(Magic.class);
         if (magic == null)
         {
             throw new NullPointerException();

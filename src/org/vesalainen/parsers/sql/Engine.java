@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
-import org.vesalainen.parser.ParserFactory;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.util.InputReader;
 import org.vesalainen.parsers.sql.util.JoinMap;
 
@@ -47,12 +47,12 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
     
     public Engine()
     {
-        parser = (SqlParser) ParserFactory.getParserInstance(SqlParser.class);
+        parser = (SqlParser) GenClassFactory.getGenInstance(SqlParser.class);
     }
 
     protected Engine(Class<?> grammar)
     {
-        parser = (SqlParser) ParserFactory.getParserInstance(grammar);
+        parser = (SqlParser) GenClassFactory.getGenInstance(grammar);
     }
 
     public Statement prepare(String sql)

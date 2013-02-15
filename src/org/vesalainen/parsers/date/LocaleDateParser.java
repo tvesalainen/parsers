@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import org.vesalainen.parser.ParserFactory;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
@@ -115,7 +115,7 @@ public abstract class LocaleDateParser extends DateReducers
 
     public static LocaleDateParser newInstance() throws IOException
     {
-        return (LocaleDateParser) ParserFactory.getParserInstance(LocaleDateParser.class);
+        return (LocaleDateParser) GenClassFactory.getGenInstance(LocaleDateParser.class);
     }
     
 }

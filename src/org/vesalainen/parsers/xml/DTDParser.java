@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import org.vesalainen.grammar.AnnotatedGrammar;
 import org.vesalainen.grammar.Grammar;
-import org.vesalainen.parser.ParserFactory;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.util.InputReader;
 import org.vesalainen.parsers.xml.model.Attribute;
@@ -56,7 +56,7 @@ public abstract class DTDParser extends XMLDTDBaseGrammar
 
     public static DTDParser createDTDParser() throws IOException
     {
-        return (DTDParser) ParserFactory.getParserInstance(DTDParser.class);
+        return (DTDParser) GenClassFactory.getGenInstance(DTDParser.class);
     }
     public void parse(String officialSystemId) throws IOException, SAXException, URISyntaxException
     {

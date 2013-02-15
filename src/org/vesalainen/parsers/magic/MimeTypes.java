@@ -20,8 +20,9 @@ package org.vesalainen.parsers.magic;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.locks.ReentrantLock;
-import org.vesalainen.parser.ParserFactory;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
+import org.vesalainen.parser.annotation.MapDef;
 import org.vesalainen.parser.util.InputReader;
 import org.vesalainen.parsers.magic.Magic.MagicResult;
 import org.vesalainen.regex.ant.MapParser;
@@ -33,6 +34,7 @@ import org.vesalainen.regex.ant.MapParser;
  * @author Timo Vesalainen
  */
 @GenClassname("org.vesalainen.parsers.magic.MimeTypesImpl")
+@MapDef(mapClass=MimeMap.class)
 public abstract class MimeTypes implements MapParser
 {
     static final String ERROR = "Error";
@@ -89,7 +91,7 @@ public abstract class MimeTypes implements MapParser
     }
     public static MimeTypes getInstance()
     {
-        MimeTypes mimeTypes = (MimeTypes) ParserFactory.loadParserInstance(MimeTypes.class);
+        MimeTypes mimeTypes = (MimeTypes) GenClassFactory.loadGenInstance(MimeTypes.class);
         if (mimeTypes == null)
         {
             throw new NullPointerException();

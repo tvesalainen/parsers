@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.ParserConstants;
-import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.parser.ParserInfo;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
@@ -1051,7 +1051,7 @@ public abstract class NMEAParser implements ParserInfo
 
     public static NMEAParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
     {
-        return (NMEAParser) ParserFactory.getParserInstance(NMEAParser.class);
+        return (NMEAParser) GenClassFactory.getGenInstance(NMEAParser.class);
     }
 
     /**

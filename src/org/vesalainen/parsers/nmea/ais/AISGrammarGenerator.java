@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.vesalainen.grammar.Grammar;
-import org.vesalainen.parser.ParserFactory;
+import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
@@ -158,7 +158,7 @@ public abstract class AISGrammarGenerator
     
     public static AISGrammarGenerator newInstance()
     {
-        return (AISGrammarGenerator) ParserFactory.getParserInstance(AISGrammarGenerator.class);
+        return (AISGrammarGenerator) GenClassFactory.getGenInstance(AISGrammarGenerator.class);
     }
     public Grammar parse()
     {

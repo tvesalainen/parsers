@@ -9,7 +9,6 @@ import org.vesalainen.regex.SyntaxErrorException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Locale;
-import org.vesalainen.parser.ParserFactory;
 import org.vesalainen.regex.DFACompiler;
 
 /**
