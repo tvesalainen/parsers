@@ -18,7 +18,6 @@ package org.vesalainen.parsers.xml.model;
 
 import java.io.Writer;
 import java.nio.charset.Charset;
-import org.vesalainen.bcc.type.MethodWrapper;
 
 /**
  * @author Timo Vesalainen
@@ -31,8 +30,9 @@ public class Document<R extends Element>
 
     public static String getPackagename(String systemId)
     {
-        String identifier = MethodWrapper.makeJavaIdentifier(systemId);
-        return "org.vesalainen.parsers.xml."+identifier;
+        //String identifier = MethodWrapper.makeJavaIdentifier(systemId);
+        //return "org.vesalainen.parsers.xml."+identifier;
+        throw new UnsupportedOperationException();
     }
     public void setRoot(R element)
     {

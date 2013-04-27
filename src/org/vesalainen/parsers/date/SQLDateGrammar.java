@@ -42,4 +42,19 @@ public class SQLDateGrammar extends SimpleDateGrammar
             throw new UnsupportedOperationException(ex);
         }
     }
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) 
+    {
+        try
+        {
+            SQLDateGrammar g = new SQLDateGrammar();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
 }

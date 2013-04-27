@@ -13,21 +13,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+import org.vesalainen.bcc.model.El;
 import org.vesalainen.grammar.AnnotatedGrammar;
+import org.vesalainen.grammar.Grammar;
 
 /**
  * SimpleDateGrammar is build by using same patterns as in java.text.SimpleDateFormat. 
  * @author tkv
  */
-public class SimpleDateGrammar extends AnnotatedGrammar
+public class SimpleDateGrammar extends Grammar
 {
     protected DateFormatParser formatParser;
     protected Locale locale;
     protected DateFormatSymbols symbols;
-    protected Method[] era;
-    protected Method[] month;
-    protected Method[] weekday;
-    protected Method[] ampm;
+    protected ExecutableElement[] era;
+    protected ExecutableElement[] month;
+    protected ExecutableElement[] weekday;
+    protected ExecutableElement[] ampm;
     protected Set<String> patternSet = new HashSet<>();
 
     protected SimpleDateGrammar(Locale locale, Class<?> superClass) throws UnsupportedOperationException, IOException
@@ -37,53 +42,48 @@ public class SimpleDateGrammar extends AnnotatedGrammar
 
     protected SimpleDateGrammar(Locale locale, DateFormatSymbols symbols, Class<?> superClass) throws UnsupportedOperationException, IOException
     {
-        super(DateReducers.class);
         this.locale = locale;
         this.symbols = symbols;
-        try
+        TypeElement parserClass = El.getTypeElement("org.vesalainen.parsers.date.DateReducers");
+        TypeElement calendarElement = El.getTypeElement(Calendar.class.getCanonicalName());
+        TypeMirror calendarType = calendarElement.asType();
+        era = new ExecutableElement[]
         {
-            era = new Method[]
-            {
-                DateReducers.class.getDeclaredMethod("ad", Calendar.class),
-                DateReducers.class.getDeclaredMethod("bc", Calendar.class)
-            };
-            month = new Method[]
-            {
-                DateReducers.class.getDeclaredMethod("month1", Calendar.class),
-                DateReducers.class.getDeclaredMethod("month2", Calendar.class),
-                DateReducers.class.getDeclaredMethod("month3", Calendar.class),
-                DateReducers.class.getDeclaredMethod("month4", Calendar.class),
-                DateReducers.class.getDeclaredMethod("month5", Calendar.class),
-                DateReducers.class.getDeclaredMethod("month6", Calendar.class),
-                DateReducers.class.getDeclaredMethod("month7", Calendar.class),
-                DateReducers.class.getDeclaredMethod("month8", Calendar.class),
-                DateReducers.class.getDeclaredMethod("month9", Calendar.class),
-                DateReducers.class.getDeclaredMethod("month10", Calendar.class),
-                DateReducers.class.getDeclaredMethod("month11", Calendar.class),
-                DateReducers.class.getDeclaredMethod("month12", Calendar.class)
-            };
-            weekday = new Method[]
-            {
-                DateReducers.class.getDeclaredMethod("weekday1", Calendar.class),
-                DateReducers.class.getDeclaredMethod("weekday2", Calendar.class),
-                DateReducers.class.getDeclaredMethod("weekday3", Calendar.class),
-                DateReducers.class.getDeclaredMethod("weekday4", Calendar.class),
-                DateReducers.class.getDeclaredMethod("weekday5", Calendar.class),
-                DateReducers.class.getDeclaredMethod("weekday6", Calendar.class),
-                DateReducers.class.getDeclaredMethod("weekday7", Calendar.class)
-            };
-            ampm = new Method[]
-            {
-                DateReducers.class.getDeclaredMethod("am", Calendar.class),
-                DateReducers.class.getDeclaredMethod("pm", Calendar.class)
-            };
+            El.getMethod(parserClass, "ad", calendarType),
+            El.getMethod(parserClass, "bc", calendarType)
+        };
+        month = new ExecutableElement[]
+        {
+            El.getMethod(parserClass, "month1", calendarType),
+            El.getMethod(parserClass, "month2", calendarType),
+            El.getMethod(parserClass, "month3", calendarType),
+            El.getMethod(parserClass, "month4", calendarType),
+            El.getMethod(parserClass, "month5", calendarType),
+            El.getMethod(parserClass, "month6", calendarType),
+            El.getMethod(parserClass, "month7", calendarType),
+            El.getMethod(parserClass, "month8", calendarType),
+            El.getMethod(parserClass, "month9", calendarType),
+            El.getMethod(parserClass, "month10", calendarType),
+            El.getMethod(parserClass, "month11", calendarType),
+            El.getMethod(parserClass, "month12", calendarType)
+        };
+        weekday = new ExecutableElement[]
+        {
+            El.getMethod(parserClass, "weekday1", calendarType),
+            El.getMethod(parserClass, "weekday2", calendarType),
+            El.getMethod(parserClass, "weekday3", calendarType),
+            El.getMethod(parserClass, "weekday4", calendarType),
+            El.getMethod(parserClass, "weekday5", calendarType),
+            El.getMethod(parserClass, "weekday6", calendarType),
+            El.getMethod(parserClass, "weekday7", calendarType)
+        };
+        ampm = new ExecutableElement[]
+        {
+            El.getMethod(parserClass, "am", calendarType),
+            El.getMethod(parserClass, "pm", calendarType)
+        };
 
-            formatParser = DateFormatParser.newInstance(superClass);
-        }
-        catch (NoSuchMethodException | SecurityException ex)
-        {
-            throw new UnsupportedOperationException(ex);
-        }
+        formatParser = DateFormatParser.newInstance(superClass);
     }
     /**
      * Adds a date pattern in java.text.SimpleDateFormat format. Rules left hand side will 

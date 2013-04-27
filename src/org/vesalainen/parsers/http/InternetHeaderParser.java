@@ -109,24 +109,4 @@ public abstract class InternetHeaderParser
     {
         return s1+" "+s2;
     }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) 
-    {
-        try
-        {
-            ParserCompiler pc = new ParserCompiler(InternetHeaderParser.class);
-            pc.compile();
-            InternetHeaderParser ih = (InternetHeaderParser) pc.newInstance();
-            String sr = "a: a-hdr\r\nb: b-hdr\r\nc: c-hdr\r\n c-cont1\r\n c-cont2\r\n\r\n";
-            Map<String,List<String>> hdr = ih.parse(sr);
-            System.err.println(hdr);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
 }

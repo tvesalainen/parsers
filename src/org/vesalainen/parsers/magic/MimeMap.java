@@ -17,13 +17,13 @@
 
 package org.vesalainen.parsers.magic;
 
-import org.vesalainen.regex.ant.AbstractDFAMap;
-import org.vesalainen.regex.ant.MapParser;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Timo Vesalainen
  */
-public class MimeMap extends AbstractDFAMap<String>
+public class MimeMap extends HashMap<String,String>
 {
 
     public MimeMap()
@@ -184,32 +184,14 @@ public class MimeMap extends AbstractDFAMap<String>
         put("kmz", "application/vnd.google-earth.kmz");
     }
 
-    @Override
-    public Class<? extends MapParser> getParserClass()
-    {
-        return MimeTypes.class;
-    }
-
-    @Override
-    public String getErrorToken()
-    {
-        return MimeTypes.ERROR;
-    }
-
-    @Override
-    public String getEofToken()
-    {
-        return MimeTypes.EOF;
-    }
-
     public static void main(String... args)
     {
         try
         {
             MimeMap m = new MimeMap();
-            for (String e : m.keySet())
+            for (Map.Entry<String, String> e : m.entrySet())
             {
-                System.err.println("map.get(\""+e+"\");");
+                System.err.println("@DFAMapEntry(key=\""+e.getKey().replace("\\", "\\\\") +"\", value=\""+e.getValue()+"\"),");
             }
         }
         catch (Exception ex)

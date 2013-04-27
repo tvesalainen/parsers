@@ -25,6 +25,10 @@ import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
 import org.vesalainen.parser.annotation.ParserContext;
+import org.vesalainen.parser.annotation.Rule;
+import org.vesalainen.parser.annotation.Rules;
+import org.vesalainen.parser.annotation.Terminal;
+import org.vesalainen.parser.annotation.Terminals;
 
 /**
  * @author Timo Vesalainen
@@ -36,7 +40,29 @@ import org.vesalainen.parser.annotation.ParserContext;
  * @see <a href="doc-files/SQLDateParser-sqlTimestamp.html#BNF">Implemented BNF Syntax for SQL Timestamp</a>
  */
 @GenClassname("org.vesalainen.parsers.date.SQLDateParserImpl")
-@GrammarDef(grammarClass=SQLDateGrammar.class)
+@GrammarDef //(grammarClass=SQLDateGrammar.class)
+@Terminals({
+@Terminal(left="':'", expression=":")
+,@Terminal(left="'\\-'", expression="\\-")
+,@Terminal(left="' '", expression=" ")
+})
+@Rules({
+@Rule(left="mm", value={"minute"})
+,@Rule(left="dd", value={"dayInMonth"})
+,@Rule(left="HH", value={"hour23"})
+,@Rule(left="sqlTime", value={"HH", "':'", "mm", "':'", "ss"})
+,@Rule(left="sqlTime", value={"HH", "':'", "mm", "':'", "ss", "Z"})
+,@Rule(left="MM", value={"month"})
+,@Rule(left="yyyy", value={"year4"})
+,@Rule(left="ss", value={"second"})
+,@Rule(left="date", value={"sqlDate"})
+,@Rule(left="date", value={"sqlTimestamp"})
+,@Rule(left="date", value={"sqlTime"})
+,@Rule(left="sqlDate", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd"})
+,@Rule(left="sqlTimestamp", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd", "' '", "HH", "':'", "mm", "':'", "ss", "Z"})
+,@Rule(left="sqlTimestamp", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd", "' '", "HH", "':'", "mm", "':'", "ss"})
+,@Rule(left="Z", value={"rfc822"})
+})
 public abstract class SQLDateParser extends DateReducers
 {
     public static SQLDateParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException

@@ -23,23 +23,20 @@ import java.lang.reflect.Type;
 import java.util.List;
 import org.vesalainen.bcc.MethodCompiler;
 import org.vesalainen.bcc.SubClass;
-import org.vesalainen.bcc.type.ClassWrapper;
-import org.vesalainen.bcc.type.FieldWrapper;
-import org.vesalainen.bcc.type.MethodWrapper;
-import org.vesalainen.bcc.type.TypeFactory;
 import org.vesalainen.parsers.xml.attr.AttDef;
 import org.vesalainen.parsers.xml.attr.AttType;
 import org.vesalainen.parsers.xml.attr.DefaultDecl;
 import org.vesalainen.parsers.xml.attr.DefaultDecl.DefaultValue;
 
 /**
+ * @deprecated Not migrated to annotation processor
  * @author Timo Vesalainen
  */
 public class ElementCompiler
 {
     private String packageName;
     private String localName;
-    private ClassWrapper thisClass;
+    //private ClassWrapper thisClass;
     private SubClass subClass;
     private List<AttDef> attributes;
 
@@ -48,19 +45,19 @@ public class ElementCompiler
         this.packageName = packageName;
         this.localName = localName;
         this.attributes = attributes;
-        thisClass = ClassWrapper.wrap(ClassWrapper.makeClassname(packageName, localName), Element.class);
+      //  thisClass = ClassWrapper.wrap(ClassWrapper.makeClassname(packageName, localName), Element.class);
     }
 
     public void compile() throws IOException
     {
-        subClass = new SubClass(thisClass);
+//        subClass = new SubClass(thisClass);
         
         subClass.defineConstantField(Modifier.PRIVATE|Modifier.STATIC, "localName", localName);
         defineGetter(Modifier.PUBLIC|Modifier.STATIC, "localName", String.class);
         
         for (AttDef attr : attributes)
         {
-            String name = lowerStart(MethodWrapper.makeJavaIdentifier(attr.getName()));
+        //    String name = lowerStart(MethodWrapper.makeJavaIdentifier(attr.getName()));
             AttType attType = attr.getAttType();
             DefaultDecl defaultDecl = attr.getDefaultDecl();
             Type classType = String.class;
@@ -70,7 +67,7 @@ public class ElementCompiler
                     attType == AttType.NMTOKENS
                     )
             {
-                classType = TypeFactory.createParameterizedType(List.class, null, String.class);
+          //      classType = TypeFactory.createParameterizedType(List.class, null, String.class);
                 if (defaultDecl instanceof DefaultValue)
                 {
                     throw new UnsupportedOperationException("default value for "+attType+" nt supported");
@@ -83,13 +80,13 @@ public class ElementCompiler
                     DefaultValue defVal = (DefaultValue) defaultDecl;
                     if (defVal.isFixed())
                     {
-                        subClass.defineConstantField(Modifier.PRIVATE|Modifier.STATIC, name, defVal.getValue());
-                        defineGetter(Modifier.PUBLIC|Modifier.STATIC, name, classType);
+            //            subClass.defineConstantField(Modifier.PRIVATE|Modifier.STATIC, name, defVal.getValue());
+              //          defineGetter(Modifier.PUBLIC|Modifier.STATIC, name, classType);
                     }
                     else
                     {
-                        subClass.defineConstantField(Modifier.PRIVATE, name, defVal.getValue());
-                        defineGetter(Modifier.PUBLIC, name, classType);
+                //        subClass.defineConstantField(Modifier.PRIVATE, name, defVal.getValue());
+                  //      defineGetter(Modifier.PUBLIC, name, classType);
                     }
                 }
             }
@@ -103,22 +100,26 @@ public class ElementCompiler
 
     private void defineGetter(int modifier, String fieldName, Type type) throws IOException
     {
+        /*
         String methodName = "get"+upperStart(fieldName);
         MethodCompiler mc = subClass.defineMethod(modifier, methodName, type);
         FieldWrapper fw = new FieldWrapper(modifier, fieldName, thisClass, type);
         mc.get(fw);
         mc.treturn();
         mc.end();
+        */
     }
     
     private void defineSetter(int modifier, String fieldName, Type type) throws IOException
     {
+        /*
         String methodName = "set"+upperStart(fieldName);
         MethodCompiler mc = subClass.defineMethod(modifier, methodName, void.class, type);
         mc.aload(1);
         FieldWrapper fw = new FieldWrapper(modifier, fieldName, thisClass, type);
         mc.put(fw);
         mc.end();
+        */
     }
     
     private static String upperStart(String str)

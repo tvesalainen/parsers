@@ -148,7 +148,7 @@ public abstract class SqlParser<R, C>
         @Rule("showSpecification"),
         @Rule("describeSpecification")
     })
-    protected abstract Statement<R, C> statement(Statement statement);
+    protected abstract Statement<R, C> statement(Statement<R, C> statement);
 
     @Rule("statementList")
     protected Statement<R, C> batchStatement(
@@ -309,10 +309,10 @@ public abstract class SqlParser<R, C>
         @Rule("fromConstructor")
     //@Rule("fromDefault"),
     })
-    protected abstract InsertColumnsAndSource insertColumnsAndSource(InsertColumnsAndSource<R, C> insertColumnsAndSource);
+    protected abstract InsertColumnsAndSource<R, C> insertColumnsAndSource(InsertColumnsAndSource<R, C> insertColumnsAndSource);
 
     @Rule("'\\(' column ('\\,' column)* '\\)' querySpecification")
-    protected InsertColumnsAndSource fromSubQuery(String column, List<String> columnList, Statement subSelect)
+    protected InsertColumnsAndSource<R, C> fromSubQuery(String column, List<String> columnList, Statement subSelect)
     {
         SelectStatement select = (SelectStatement) subSelect;
         columnList.add(0, column);
@@ -320,11 +320,11 @@ public abstract class SqlParser<R, C>
         {
             select.throwException("column list and value list sizes differ");
         }
-        return new InsertColumnsAndSource(columnList, select);
+        return new InsertColumnsAndSource<>(columnList, select);
     }
 
     @Rule("'\\(' column ('\\,' column)* '\\)' values '\\(' literal ('\\,' literal)* '\\)'")
-    protected InsertColumnsAndSource fromConstructor(String column, List<String> columnList, Literal<R, C> literal, List<Literal<R, C>> valueList)
+    protected InsertColumnsAndSource<R, C> fromConstructor(String column, List<String> columnList, Literal<R, C> literal, List<Literal<R, C>> valueList)
     {
         columnList.add(0, column);
         valueList.add(0, literal);
@@ -332,7 +332,7 @@ public abstract class SqlParser<R, C>
         {
             literal.throwException("column list and value list sizes differ");
         }
-        return new InsertColumnsAndSource(columnList, valueList);
+        return new InsertColumnsAndSource<>(columnList, valueList);
     }
 
     @Rule("identifier")

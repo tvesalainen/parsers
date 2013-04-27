@@ -231,7 +231,7 @@ public abstract class DateReducers
         cal.set(Calendar.MILLISECOND, m);
     }
     
-    @Rule("tzName")
+    //@Rule("tzName")
     protected void generalTZ(int offset, @ParserContext Calendar cal)
     {
         cal.set(Calendar.ZONE_OFFSET, offset);

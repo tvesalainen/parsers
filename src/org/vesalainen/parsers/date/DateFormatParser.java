@@ -4,7 +4,6 @@
  */
 package org.vesalainen.parsers.date;
 
-import org.vesalainen.bcc.MethodCompiler;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
 import org.vesalainen.parser.annotation.ParserContext;
@@ -13,11 +12,9 @@ import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.regex.Regex;
 import java.io.IOException;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,15 +22,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-import org.vesalainen.bcc.MethodImplementor;
-import org.vesalainen.bcc.type.ClassWrapper;
-import org.vesalainen.bcc.type.MethodWrapper;
+import javax.lang.model.element.ExecutableElement;
+import org.vesalainen.bcc.model.El;
 import org.vesalainen.grammar.Grammar;
 import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 
 /**
- * DateFormatParser is an abstract base class for DateFormatParser. Generated
+ * DateFormatParser is an abstract base class for DateFormatParserImpl. Generated
  * DateFormatParser parses java.text.SimpleDateFormat style patterns and creates
  * grammar rules for actual date parser.
  * @author tkv
@@ -44,17 +40,10 @@ import org.vesalainen.parser.annotation.GenClassname;
 @GrammarDef()
 public abstract class DateFormatParser
 {
-    private Class<?> superClass;
 
-    public void setSuperClass(Class<?> superClass)
-    {
-        this.superClass = superClass;
-    }
-    
     public static DateFormatParser newInstance(Class<?> superClass)
     {
         DateFormatParser dfg = (DateFormatParser) GenClassFactory.getGenInstance(DateFormatParser.class);
-        dfg.setSuperClass(superClass);
         return dfg;
     }
     /**
@@ -78,10 +67,10 @@ public abstract class DateFormatParser
             @ParserContext("GRAMMAR") Grammar grammar,
             @ParserContext("LOCALE") Locale locale,
             @ParserContext("SYMBOLS") DateFormatSymbols symbols,
-            @ParserContext("ERA") Method[] era,
-            @ParserContext("MONTH") Method[] month,
-            @ParserContext("WEEKDAY") Method[] weekday,
-            @ParserContext("AMPM") Method[] ampm
+            @ParserContext("ERA") ExecutableElement[] era,
+            @ParserContext("MONTH") ExecutableElement[] month,
+            @ParserContext("WEEKDAY") ExecutableElement[] weekday,
+            @ParserContext("AMPM") ExecutableElement[] ampm
             ) throws IOException;
     @Rule()
     protected List<String> rhs()
@@ -105,7 +94,7 @@ public abstract class DateFormatParser
             List<String> rhs, String name,
             @ParserContext("GRAMMAR") Grammar grammar,
             @ParserContext("SYMBOLS") DateFormatSymbols symbols,
-            @ParserContext("ERA") Method[] era)
+            @ParserContext("ERA") ExecutableElement[] era)
     {
         if (!grammar.hasNonterminal(name))
         {
@@ -140,7 +129,7 @@ public abstract class DateFormatParser
     protected List<String> month(List<String> rhs, String name, 
             @ParserContext("GRAMMAR") Grammar grammar,
             @ParserContext("SYMBOLS") DateFormatSymbols symbols,
-            @ParserContext("MONTH") Method[] month) throws NoSuchMethodException
+            @ParserContext("MONTH") ExecutableElement[] month) throws NoSuchMethodException
     {
         int len = name.length();
         if (len >= 3)
@@ -221,7 +210,7 @@ public abstract class DateFormatParser
             String name,
             @ParserContext("GRAMMAR") Grammar grammar,
             @ParserContext("SYMBOLS") DateFormatSymbols symbols,
-            @ParserContext("WEEKDAY") Method[] weekday) throws NoSuchMethodException
+            @ParserContext("WEEKDAY") ExecutableElement[] weekday) throws NoSuchMethodException
     {
         if (!grammar.hasNonterminal(name))
         {
@@ -236,7 +225,7 @@ public abstract class DateFormatParser
             String name,
             @ParserContext("GRAMMAR") Grammar grammar,
             @ParserContext("SYMBOLS") DateFormatSymbols symbols,
-            @ParserContext("AMPM") Method[] ampm) throws NoSuchMethodException
+            @ParserContext("AMPM") ExecutableElement[] ampm) throws NoSuchMethodException
     {
         if (!grammar.hasNonterminal(name))
         {
@@ -477,7 +466,7 @@ public abstract class DateFormatParser
     {
         return text;
     }
-    private static void addRules(Grammar grammar, String nt, String[] choice, Method[] reducer)
+    private static void addRules(Grammar grammar, String nt, String[] choice, ExecutableElement[] reducer)
     {
         int c;
         if (choice[0].isEmpty())
@@ -494,7 +483,7 @@ public abstract class DateFormatParser
             c++;
         }
     }
-    private static void addRules(Grammar grammar, String nt, String[] shortChoice, String[] longChoice, Method[] reducer)
+    private static void addRules(Grammar grammar, String nt, String[] shortChoice, String[] longChoice, ExecutableElement[] reducer)
     {
         int c;
         if (shortChoice[0].isEmpty())
@@ -615,12 +604,14 @@ public abstract class DateFormatParser
         }
         for (int offset : map.keySet())
         {
-            TZOffsetMethod om = new TZOffsetMethod(offset);
-            om.setImplementor(om);
+            String methodName = "tzOffset"+offset;
+            methodName = methodName.replace('-', '_');
             StringBuilder sb = map.get(offset);
             if (sb.length() > 0)
             {
-                grammar.addRule(om, "tzName", "'"+Grammar.literal(sb.toString())+"'");
+                grammar.addRule(El.getMethod(DateReducers.class, "generalTZ", int.class, Calendar.class), "generalTZ", methodName);
+                System.err.println("@Terminal(expression=\""+sb.toString().replace("\\", "\\\\") +"\")");
+                System.err.println("protected int "+methodName+"() { return "+offset+";}");
             }
         }
     }
@@ -645,32 +636,4 @@ public abstract class DateFormatParser
         }
     }
 
-    private class TZOffsetMethod extends MethodWrapper implements MethodImplementor
-    {
-        private int offset;
-
-        public TZOffsetMethod(int offset)
-        {
-            this(offset, "tzOffset"+offset);
-        }
-        private TZOffsetMethod(int offset, String name)
-        {
-            super(
-                    Modifier.PRIVATE, 
-                    ClassWrapper.wrap(superClass.getAnnotation(GenClassname.class).value(), superClass), 
-                    name.replace('-', '_'), 
-                    int.class
-                    );
-            this.offset = offset;
-        }
-
-        @Override
-        public void implement(MethodCompiler mc, Member mw) throws IOException
-        {
-            mc.iconst(offset);
-            mc.ireturn();
-            mc.end();
-        }
-        
-    }
 }

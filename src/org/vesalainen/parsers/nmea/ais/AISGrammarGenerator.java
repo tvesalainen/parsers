@@ -17,14 +17,19 @@
 
 package org.vesalainen.parsers.nmea.ais;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.lang.model.element.ExecutableElement;
+import org.vesalainen.bcc.model.El;
+import org.vesalainen.grammar.GRule;
 import org.vesalainen.grammar.Grammar;
+import org.vesalainen.lpg.LALRKParserGenerator;
 import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
@@ -50,11 +55,9 @@ import org.vesalainen.regex.Regex;
 public abstract class AISGrammarGenerator
 {
 
-    public static Grammar appendGrammar(Grammar grammar)
+    public static Grammar appendGrammar(Grammar grammar) throws FileNotFoundException
     {
-        String pkg = AISGrammarGenerator.class.getPackage().getName().replace('.', '/')+"/";
-        InputStream is = null;
-        is = AISGrammarGenerator.class.getClassLoader().getResourceAsStream(pkg+"AIVDM.txt");
+        InputStream is = new FileInputStream("src\\org\\vesalainen\\parsers\\nmea\\ais\\AIVDM.txt");
         AISGrammarGenerator gen = AISGrammarGenerator.newInstance();
         grammar.addRule("messages", "(message '0*\n')+");
         for (SubareaType sat : SubareaType.values())
@@ -295,13 +298,10 @@ public abstract class AISGrammarGenerator
     }
 
     private Set<String> generatedMethods = new HashSet<>();
-    private Method getReducer(String name, Class<?>... p) throws SecurityException
+    private ExecutableElement getReducer(String name, Class<?>... p) throws SecurityException
     {
-        try
-        {
-            return AISParser.class.getDeclaredMethod(name, p);
-        }
-        catch (NoSuchMethodException ex)
+        ExecutableElement method = El.getMethod(AISParser.class, name, p);
+        if (method == null)
         {
             if (!generatedMethods.contains(name))
             {
@@ -310,6 +310,7 @@ public abstract class AISGrammarGenerator
             }
             return null;
         }
+        return method;
     }
     private boolean check(List<String> header)
     {
@@ -483,8 +484,10 @@ public abstract class AISGrammarGenerator
     {
         try
         {
+            //AISGrammarGenerator g = (AISGrammarGenerator) GenClassFactory.getGenInstance(AISGrammarGenerator.class);
             Grammar grammar = new AISGrammar();
-            grammar.print(System.err);
+            LALRKParserGenerator lrk = grammar.createParserGenerator("messages", false);
+            lrk.printAnnotations(System.err);
         }
         catch (Exception ex)
         {

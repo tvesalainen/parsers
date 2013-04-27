@@ -7,9 +7,7 @@ package org.vesalainen.parsers.date;
 
 import org.vesalainen.regex.SyntaxErrorException;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Locale;
-import org.vesalainen.regex.DFACompiler;
 
 /**
  * InternetDateGrammar makes rules for parses parsing dates in one of ISO8601 formats
@@ -35,7 +33,7 @@ import org.vesalainen.regex.DFACompiler;
  */
 public class InternetDateGrammar extends SimpleDateGrammar
 {
-    public InternetDateGrammar() throws UnsupportedOperationException, IOException
+    public InternetDateGrammar() throws IOException
     {
         super(Locale.US, InternetDateParser.class);
         try
@@ -70,16 +68,7 @@ public class InternetDateGrammar extends SimpleDateGrammar
     {
         try
         {
-            InternetDateParser dp = InternetDateParser.newInstance();
-            
-            if (DFACompiler.dfaCount > 0)
-            {
-                float bytesToDFAState = DFACompiler.byteCount/DFACompiler.dfaCount;
-                float maxDFAStates = 0x10000/bytesToDFAState;
-                System.err.println("bytes/DFAState="+bytesToDFAState+" maxDFAStates/method="+maxDFAStates);
-            }            
-            Date d = dp.parseDate("2007-11-20T22:19:17Pacific/Kiritimati");
-            System.err.println(d);
+            InternetDateGrammar g = new InternetDateGrammar();
         }
         catch (Exception ex)
         {

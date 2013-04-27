@@ -57,4 +57,19 @@ public class LocaleDateGrammar extends SimpleDateGrammar
         addPattern("time", df.toPattern());
     }
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) 
+    {
+        try
+        {
+            LocaleDateGrammar g = new LocaleDateGrammar();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
 }

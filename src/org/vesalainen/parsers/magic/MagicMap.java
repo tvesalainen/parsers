@@ -16,9 +16,6 @@
  */
 package org.vesalainen.parsers.magic;
 
-import org.vesalainen.regex.ant.AbstractDFAMap;
-import org.vesalainen.regex.ant.MapParser;
-
 /**
  *
  * @author Timo Vesalainen
@@ -27,7 +24,7 @@ import org.vesalainen.regex.ant.MapParser;
  * @see <a href="http://www.garykessler.net/library/file_sigs.html#acks">FILE
  * SIGNATURES TABLE</a>
  */
-public class MagicMap extends AbstractDFAMap<String>
+public class MagicMap
 {
     public MagicMap()
     {
@@ -399,21 +396,21 @@ public class MagicMap extends AbstractDFAMap<String>
         }
     }
 
-    @Override
-    public Class<? extends MapParser> getParserClass()
+    private String put(String key, String value)
     {
-        return Magic.class;
+        System.err.println("@DFAMapEntry(key=\""+key.replace("\\", "\\\\") +"\", value=\""+value+"\"),");
+        return null;
     }
 
-    @Override
-    public String getErrorToken()
+    public static void main(String... args)
     {
-        return Magic.ERROR;
-    }
-
-    @Override
-    public String getEofToken()
-    {
-        return Magic.EOF;
+        try
+        {
+            MagicMap m = new MagicMap();
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 }

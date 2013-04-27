@@ -26,12 +26,13 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import org.vesalainen.bcc.type.ClassWrapper;
-import org.vesalainen.bcc.type.MethodWrapper;
-import org.vesalainen.bcc.type.TypeFactory;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.type.TypeMirror;
+import org.vesalainen.bcc.model.Jav;
 import org.vesalainen.parsers.xml.XMLParserBase;
 
 /**
+ * @deprecated Not migrated to annotation processor
  * @author Timo Vesalainen
  */
 public abstract class Element implements Iterable<Element>
@@ -43,22 +44,22 @@ public abstract class Element implements Iterable<Element>
     {
         return $prefix;
     }
-    
-    public static MethodWrapper getNewInstanceMethodWithContent(String systemId, String elementName) throws NoSuchMethodException
+    /*
+    public static ExecutableElement getNewInstanceMethodWithContent(String systemId, String elementName) throws NoSuchMethodException
     {
         Type attrs = TypeFactory.createParameterizedType(Collection.class, null, Attribute.class);
         Type elems = TypeFactory.createParameterizedType(Collection.class, null, Element.class);
         return getNewInstanceMethod(systemId, elementName, attrs, elems, Document.class);
     }
-    public static MethodWrapper getNewInstanceMethodWithoutContent(String systemId, String elementName) throws NoSuchMethodException
+    public static ExecutableElement getNewInstanceMethodWithoutContent(String systemId, String elementName) throws NoSuchMethodException
     {
         Type attrs = TypeFactory.createParameterizedType(Collection.class, null, Attribute.class);
         return getNewInstanceMethod(systemId, elementName, attrs, Document.class);
     }
-    private static MethodWrapper getNewInstanceMethod(String systemId, String elementName, Type... parameters) throws NoSuchMethodException
+    private static ExecutableElement getNewInstanceMethod(String systemId, String elementName, TypeMirror... parameters) throws NoSuchMethodException
     {
         String packageName = Document.getPackagename(systemId);
-        String elementClassname = ClassWrapper.makeClassname(packageName+".el", elementName);
+        String elementClassname = packageName+".el."+Jav.makeJavaClassname(elementName);
         Type enclosingClass = ClassWrapper.wrap(elementClassname, Element.class);
         MethodWrapper mw = new MethodWrapper(
                 Modifier.PUBLIC|Modifier.STATIC, 
@@ -73,6 +74,7 @@ public abstract class Element implements Iterable<Element>
         mw.addParameterAnnotation(parameters.length-1, document);
         return mw;
     }
+    */
     /**
      * Returns elements localname;
      * @return 

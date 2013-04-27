@@ -27,6 +27,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.lang.model.element.ExecutableElement;
+import org.vesalainen.bcc.model.El;
 import org.vesalainen.grammar.AnnotatedGrammar;
 import org.vesalainen.grammar.Grammar;
 import org.vesalainen.parser.GenClassFactory;
@@ -39,10 +41,10 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- *
+ * @deprecated Not migrated to annotation processor
  * @author tkv
  */
-@GenClassname("org.vesalainen.parsers.xml.DTDParserImpl")
+//@GenClassname("org.vesalainen.parsers.xml.DTDParserImpl")
 @GrammarDef()
 public abstract class DTDParser extends XMLDTDBaseGrammar
 {
@@ -92,13 +94,13 @@ public abstract class DTDParser extends XMLDTDBaseGrammar
 
     private void createGrammar() throws IOException
     {
-        try
+        //try
         {
             if (elementMap.size() - childElements.size() != 1)
             {
                 throw new IllegalArgumentException("not exactly one root element");
             }
-            Grammar g = new AnnotatedGrammar(DTDParserCompilerBase.class);
+            Grammar g = new AnnotatedGrammar(El.getTypeElement(DTDParserCompilerBase.class.getCanonicalName()));
             g.addRule("any");
             for (QName name : elementMap.keySet())
             {
@@ -109,10 +111,10 @@ public abstract class DTDParser extends XMLDTDBaseGrammar
                 if (!attList.isEmpty())
                 {
                     lhsAttrs = lhs+"Attrs";
-                    g.addRule(DTDParser.class.getDeclaredMethod("attributeListStart"), lhsAttrs);
+                    g.addRule(El.getMethod(DTDParser.class, "attributeListStart"), lhsAttrs);
                     for (AttDef attr : attList)
                     {
-                        Member reducer = DTDParser.class.getDeclaredMethod("attributeListNext", List.class, Attribute.class);
+                        ExecutableElement reducer = El.getMethod(DTDParser.class, "attributeListNext", List.class, Attribute.class);
                         g.addRule(reducer, lhsAttrs, lhsAttrs, attr.greateRhs());
                     }
                 }
@@ -121,6 +123,7 @@ public abstract class DTDParser extends XMLDTDBaseGrammar
                     g.addRule("element", lhs);
                 }
                 String rhs = elementMap.get(name);
+                /* TODO
                 if (rhs != null)
                 {
                     Member reducer = Element.getNewInstanceMethodWithContent(officialSystemId, localPart);
@@ -134,6 +137,7 @@ public abstract class DTDParser extends XMLDTDBaseGrammar
                     g.addRule(reducer, lhs, "'<' namePrefix '"+localPart+"' "+lhsAttrs+" '/>'");
                     g.addRule(reducer, lhs, "'<' namePrefix '"+localPart+"' "+lhsAttrs+" '>' '</' namePrefix '"+localPart+"' '>'");
                 }
+                */
                 g.addRule("any", "any", lhs);
             }
             /*
@@ -152,9 +156,9 @@ public abstract class DTDParser extends XMLDTDBaseGrammar
         }
 
 
-        catch (ReflectiveOperationException ex)
+        //catch (ReflectiveOperationException ex)
         {
-            throw new IOException(ex);
+            //throw new IOException(ex);
         }
     }
 

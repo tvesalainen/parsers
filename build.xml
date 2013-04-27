@@ -71,72 +71,21 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <!--
     <target name="-post-compile">
         <taskdef
-            name="parsercomp"
-            classname="org.vesalainen.parser.ant.ParserBuilder"
+            name="genclasscomp"
+            classname="org.vesalainen.parser.ant.GenClassBuilder"
             classpath="${run.classpath}"
             />
-        <parsercomp
-            src="org.vesalainen.parsers.date.DateFormatParser"
+        <genclasscomp
             destdir="${build.classes.dir}"
             srcdir="${src.dir}"
-            />
-        <parsercomp
-            src="org.vesalainen.parsers.date.InternetDateParser"
-            grammar="org.vesalainen.parsers.date.InternetDateGrammar"
-            destdir="${build.classes.dir}"
-            srcdir="${src.dir}"
-            />
-        <parsercomp
-            src="org.vesalainen.parsers.date.SQLDateParser"
-            grammar="org.vesalainen.parsers.date.SQLDateGrammar"
-            destdir="${build.classes.dir}"
-            srcdir="${src.dir}"
-            />
-        <parsercomp
-            src="org.vesalainen.parsers.date.LocaleDateParser"
-            grammar="org.vesalainen.parsers.date.LocaleDateGrammar"
-            destdir="${build.classes.dir}"
-            language="fi"
-            srcdir="${src.dir}"
-            />
-        <parsercomp
-            src="org.vesalainen.parsers.http.InternetHeaderParser"
-            destdir="${build.classes.dir}"
-            srcdir="${src.dir}"
-            />
-        <parsercomp
-            src="org.vesalainen.parsers.xml.XMLDocumentParser"
-            destdir="${build.classes.dir}"
-            srcdir="${src.dir}"
-            />
-        <parsercomp
-            src="org.vesalainen.parsers.xml.DTDParser"
-            destdir="${build.classes.dir}"
-            debug="false"
-            />
-        <!--
-        <parsercomp
-            src="org.vesalainen.parsers.sql.SqlParser"
-            destdir="${build.classes.dir}"
-            srcdir="${src.dir}"
-            />
-            -->
-        <taskdef
-            name="maptask"
-            classname="org.vesalainen.regex.ant.MapTask"
-            classpath="${run.classpath}"
-            />
-        <maptask
-            destdir="${build.classes.dir}"
-            map="org.vesalainen.parsers.magic.MagicMap"
-            />
-        <maptask
-            destdir="${build.classes.dir}"
-            map="org.vesalainen.parsers.magic.MimeMap"
-            />
+            >
+            <fileset dir="${build.classes.dir}" includes="**/*.class*"/>
+        </genclasscomp>
     </target>
+    -->
     <target name="-post-jar">
         <copy file="${dist.jar}" tofile="../lib/Parsers.jar"/>
         <copy file="${dist.jar}" tofile="../vesalainen-docs/web/parsers/Parsers.jar"/>
