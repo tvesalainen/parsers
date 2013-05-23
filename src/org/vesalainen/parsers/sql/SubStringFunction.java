@@ -40,6 +40,7 @@ public class SubStringFunction extends AbstractFunction
                 break;
             case 1:
                 this.end = this.begin + length[0].intValue();
+                break;
             default:
                 throw new IllegalArgumentException("wrong number of arguments");
         }
