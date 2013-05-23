@@ -62,12 +62,8 @@ public class PlaceholderImpl<R,C> extends LiteralImpl<R,C> implements Placeholde
     {
         if (select != null)
         {
-            DefaultComboBoxModel<C> model = new DefaultComboBoxModel<>();
             FetchResult<R,C> result = select.execute();
-            for (int row=0;row<result.getRowCount();row++)
-            {
-                model.addElement(result.getValueAt(row, 0));
-            }
+            FetchResultComboBoxModel<R,C> model = new FetchResultComboBoxModel<>(result);
             return model;
         }
         return super.getValue();
@@ -76,9 +72,9 @@ public class PlaceholderImpl<R,C> extends LiteralImpl<R,C> implements Placeholde
     @Override
     public void bindValue(C value)
     {
-        if (value instanceof ComboBoxModel)
+        if (value instanceof FetchResultComboBoxModel)
         {
-            ComboBoxModel<C> model = (ComboBoxModel) value;
+            FetchResultComboBoxModel<R,C> model = (FetchResultComboBoxModel) value;
             this.value = (C) model.getSelectedItem();
         }
         else

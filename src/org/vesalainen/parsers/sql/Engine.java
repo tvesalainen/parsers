@@ -318,6 +318,9 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
                         return value != null ? value.toString().toLowerCase() : null;
                     }
                 };
+            case "extract":
+                check(funcName, args.length, 1, 1);
+                return new ExtractFunction(inner, args[0]);
             case "toint":
                 check(funcName, args.length, 0, 0);
                 return new ToFunction(inner, Integer.class);

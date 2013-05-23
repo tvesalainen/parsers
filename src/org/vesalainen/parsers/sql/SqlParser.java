@@ -432,7 +432,7 @@ public abstract class SqlParser<R, C>
         }
     }
 
-    @Rule("identifier '\\(' selectSublist integer ('\\,' integer)* '\\)'")
+    @Rule("identifier '\\(' selectSublist '\\,' integer ('\\,' integer)* '\\)'")
     protected ColumnReference selectSublist(
             String funcName,
             ColumnReference inner,
@@ -828,7 +828,7 @@ public abstract class SqlParser<R, C>
         return placeholder;
     }
     
-    @Rule("':' stringConstant '\\(' querySpecification '\\)'")
+    @Rule(value="':' stringConstant '\\(' querySpecification '\\)'", doc="query 1st column is used in comparison. If more than 1 column, then rest of the columns form the title")
     protected Literal<R, C> placeholder(
             String identifier, 
             Statement query,
@@ -836,10 +836,6 @@ public abstract class SqlParser<R, C>
             )
     {
         SelectStatement select = (SelectStatement) query;
-        if (select.getSelectList().size() != 1)
-        {
-            select.throwException("placeholder query must return one column");
-        }
         Placeholder placeholder = new PlaceholderImpl<>(identifier, select);
         placeholderMap.put(identifier, placeholder);
         return placeholder;
@@ -867,44 +863,42 @@ public abstract class SqlParser<R, C>
         return new LiteralImpl<>(engine.convert(string));
     }
 
-    @Rules(
-    {
-        @Rule(left = "literal", value =
-        {
-            "dateValue"
-        }),
-        @Rule(left = "literal", value =
-        {
-            "timeValue"
-        }),
-        @Rule(left = "literal", value =
-        {
-            "timestampValue"
-        })
+    @Rules({
+        @Rule(left = "literal", value ={"dateValue"}),
+        @Rule(left = "literal", value ={"timeValue"}),
+        @Rule(left = "literal", value ={"timestampValue"}),
+        @Rule(left = "literal", value ={"currentTimestampValue"})
     })
     protected Literal<R, C> dateLiteral(C date, @ParserContext("engine") Engine<R, C> engine)
     {
         return new LiteralImpl<>(date);
     }
 
-    @Rule("date string")
+    @Rule(value="date string", doc="yyyy-MM-dd")
     protected C dateValue(String string, @ParserContext("engine") Engine<R, C> engine)
     {
         Date date = dateParser.parseDate(string);
         return engine.convertDate(date);
     }
 
-    @Rule("time string")
+    @Rule(value="time string", doc="HH:mm:ss or HH:mm:ssZ")
     protected C timeValue(String string, @ParserContext("engine") Engine<R, C> engine)
     {
         Date date = dateParser.parseTime(string);
         return engine.convertTime(date);
     }
 
-    @Rule("timestamp string")
+    @Rule(value="timestamp string", doc="yyyy-MM-dd HH:mm:ss or yyyy-MM-dd HH:mm:ssZ")
     protected C timestampValue(String string, @ParserContext("engine") Engine<R, C> engine)
     {
         Date date = dateParser.parseTimestamp(string);
+        return engine.convertTimestamp(date);
+    }
+
+    @Rule(value="now '\\(' '\\)'", doc="Returns current date")
+    protected C currentTimestampValue(@ParserContext("engine") Engine<R, C> engine)
+    {
+        Date date = new Date();
         return engine.convertTimestamp(date);
     }
 
@@ -968,7 +962,8 @@ public abstract class SqlParser<R, C>
         "time",
         "timestamp",
         "show",
-        "tables"
+        "tables",
+        "now"
     },
     options =
     {
