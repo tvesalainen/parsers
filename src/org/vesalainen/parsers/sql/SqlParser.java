@@ -19,6 +19,7 @@ package org.vesalainen.parsers.sql;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Deque;
@@ -867,6 +868,7 @@ public abstract class SqlParser<R, C>
         @Rule(left = "literal", value ={"dateValue"}),
         @Rule(left = "literal", value ={"timeValue"}),
         @Rule(left = "literal", value ={"timestampValue"}),
+        @Rule(left = "literal", value ={"currentYearValue"}),
         @Rule(left = "literal", value ={"currentTimestampValue"})
     })
     protected Literal<R, C> dateLiteral(C date, @ParserContext("engine") Engine<R, C> engine)
@@ -893,6 +895,13 @@ public abstract class SqlParser<R, C>
     {
         Date date = dateParser.parseTimestamp(string);
         return engine.convertTimestamp(date);
+    }
+
+    @Rule(value="currentyear '\\(' '\\)'", doc="Returns current year")
+    protected C currentYearValue(@ParserContext("engine") Engine<R, C> engine)
+    {
+        Calendar cal = Calendar.getInstance();
+        return engine.convert(cal.get(Calendar.YEAR));
     }
 
     @Rule(value="now '\\(' '\\)'", doc="Returns current date")
@@ -963,7 +972,8 @@ public abstract class SqlParser<R, C>
         "timestamp",
         "show",
         "tables",
-        "now"
+        "now",
+        "currentyear"
     },
     options =
     {
