@@ -62,7 +62,7 @@ public class PlaceholderImpl<R,C> extends LiteralImpl<R,C> implements Placeholde
     {
         if (select != null)
         {
-            FetchResult<R,C> result = select.execute();
+            OrderedFetchResult<R,C> result = select.execute();
             FetchResultComboBoxModel<R,C> model = new FetchResultComboBoxModel<>(result);
             return model;
         }
@@ -75,7 +75,7 @@ public class PlaceholderImpl<R,C> extends LiteralImpl<R,C> implements Placeholde
         if (value instanceof FetchResultComboBoxModel)
         {
             FetchResultComboBoxModel<R,C> model = (FetchResultComboBoxModel) value;
-            this.value = (C) model.getSelectedItem();
+            this.value = (C) model.getOriginalSelectedItem();
         }
         else
         {

@@ -32,6 +32,7 @@ public class Table<R,C> extends ParserLocator2Impl
     protected Set<String> selectListColumns = new HashSet<>();
     protected Set<String> conditionColumns = new HashSet<>();
     protected Set<String> andColumns = new HashSet<>();
+    protected Set<String> sortColumns = new HashSet<>();
     protected Set<ColumnCondition<R,C>> andConditions = new HashSet<>();
     protected Set<ColumnCondition<R,C>> conditions = new HashSet<>();
 
@@ -136,6 +137,16 @@ public class Table<R,C> extends ParserLocator2Impl
     public String toString()
     {
         return name;
+    }
+
+    public void addSortColumn(String column)
+    {
+        sortColumns.add(column);
+    }
+
+    public Set<String> getSortColumns()
+    {
+        return sortColumns;
     }
 
 }

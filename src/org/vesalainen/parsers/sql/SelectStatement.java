@@ -77,6 +77,8 @@ public class SelectStatement<R,C> extends Statement<R,C>
             for (ColumnReference<R,C> cf : subList)
             {
                 resolvColumnReference(cf);
+                Table table = cf.getTable();
+                table.addSelectListColumn(cf.getColumn());
             }
         }
         if (condition != null)
@@ -92,6 +94,8 @@ public class SelectStatement<R,C> extends Statement<R,C>
                 {
                     ColumnReference cf = (ColumnReference) rv;
                     resolvColumnReference(cf);
+                    Table table = cf.getTable();
+                    table.addSortColumn(cf.getColumn());
                 }
             }
         }
@@ -186,7 +190,7 @@ public class SelectStatement<R,C> extends Statement<R,C>
     }
 
     @Override
-    public FetchResult execute()
+    public OrderedFetchResult execute()
     {
         return engine.select(this);
     }
@@ -269,12 +273,16 @@ public class SelectStatement<R,C> extends Statement<R,C>
                 ColumnCondition cc = (ColumnCondition) condition;
                 ColumnReference cf = cc.getColumnReference();
                 resolvColumnReference(cf);
+                Table table = cf.getTable();
+                table.addConditionColumn(cf.getColumn());
             }
             if (condition instanceof JoinCondition)
             {
                 JoinCondition jc = (JoinCondition) condition;
                 ColumnReference cf = jc.getColumnReference2();
                 resolvColumnReference(cf);
+                Table table = cf.getTable();
+                table.addConditionColumn(cf.getColumn());
             }
         }
 

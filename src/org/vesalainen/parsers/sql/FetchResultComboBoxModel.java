@@ -19,6 +19,7 @@ package org.vesalainen.parsers.sql;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -28,7 +29,7 @@ public class FetchResultComboBoxModel<R,C> extends DefaultComboBoxModel<String>
 {
     private FetchResult<R,C> result;
     private Map<String,C> map = new HashMap<>();
-    public FetchResultComboBoxModel(FetchResult<R,C> result)
+    public FetchResultComboBoxModel(OrderedFetchResult<R,C> result)
     {
         this.result = result;
         int count = result.getColumnCount();
@@ -38,16 +39,16 @@ public class FetchResultComboBoxModel<R,C> extends DefaultComboBoxModel<String>
             switch (count)
             {
                 case 1:
-                    key = result.getValueAt(row, 0).toString();
+                    key = Objects.toString(result.getValueAt(row, 0), "");
                     break;
                 case 2:
-                    key = result.getValueAt(row, 1).toString();
+                    key = Objects.toString(result.getValueAt(row, 1), "");
                     break;
                 default:
                     StringBuilder sb = new StringBuilder();
                     for (int ii=1;ii<count;ii++)
                     {
-                        sb.append(result.getValueAt(row, ii).toString()+" ");
+                        sb.append(Objects.toString(result.getValueAt(row, ii), "")+" ");
                     }
                     key = sb.toString().trim();
                     break;
@@ -57,8 +58,7 @@ public class FetchResultComboBoxModel<R,C> extends DefaultComboBoxModel<String>
         }
     }
 
-    @Override
-    public Object getSelectedItem()
+    public Object getOriginalSelectedItem()
     {
         return map.get((String)super.getSelectedItem());
     }

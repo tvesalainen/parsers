@@ -20,6 +20,7 @@ package org.vesalainen.parsers.sql;
 import org.vesalainen.parsers.sql.util.ArrayMap;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -40,6 +41,7 @@ public class OrderedFetchResult<R,C> extends FetchResult<R,C>
         data = new ArrayList<>();
         this.columnReferences = select.getReferencedColumns();
         length = columnReferences.size();
+        columnLength = Arrays.copyOf(columnLength, length);
         sortSpecification = select.getSortSpecification();
     }
     
@@ -60,7 +62,34 @@ public class OrderedFetchResult<R,C> extends FetchResult<R,C>
     }
 
     @Override
+    public void print(PrintStream out)
+    {
+        checkSorting();
+        super.print(out);
+    }
+
+    @Override
+    public C getValueAt(int row, int column)
+    {
+        checkSorting();
+        return super.getValueAt(row, column);
+    }
+
+    @Override
+    public C getValueAt(int row, String column)
+    {
+        checkSorting();
+        return super.getValueAt(row, column);
+    }
+
+    @Override
     public Iterator<C[]> iterator()
+    {
+        checkSorting();
+        return data.iterator();
+    }
+
+    private void checkSorting()
     {
         if (!sorted && sortSpecification != null)
         {
@@ -68,9 +97,7 @@ public class OrderedFetchResult<R,C> extends FetchResult<R,C>
             Collections.sort(data, comparator);
             sorted = true;
         }
-        return data.iterator();
     }
-
     private class ArrayComparator implements Comparator<C[]>
     {
         private Comparator<C> comp;
