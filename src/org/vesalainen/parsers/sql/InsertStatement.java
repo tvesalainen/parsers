@@ -32,7 +32,7 @@ public class InsertStatement<R,C> extends Statement<R,C>
     private InsertColumnsAndSource<R,C> insertColumnsAndSource;
     private FetchResult<R, C> result;
 
-    public InsertStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, Table<R, C> table, InsertColumnsAndSource<R,C> insertColumnsAndSource)
+    public InsertStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap, Table<R, C> table, InsertColumnsAndSource<R,C> insertColumnsAndSource)
     {
         super(engine, placeholderMap);
         this.table = table;

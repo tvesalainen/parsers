@@ -25,7 +25,7 @@ import java.util.LinkedHashMap;
 public class RollbackWorkStatement<R,C,T> extends Statement<R,C>
 {
 
-    public RollbackWorkStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap)
+    public RollbackWorkStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap)
     {
         super(engine, placeholderMap);
     }

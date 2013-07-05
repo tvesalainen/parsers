@@ -26,7 +26,7 @@ public class DescribeStatement<R,C> extends  Statement<R,C>
 {
     private String tablename;
 
-    public DescribeStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, String identifier)
+    public DescribeStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap, String identifier)
     {
         super(engine, placeholderMap);
         this.tablename = identifier;

@@ -25,7 +25,7 @@ import java.util.LinkedHashMap;
 public class CommitWorkStatement<R,C,T> extends Statement<R,C>
 {
 
-    public CommitWorkStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap)
+    public CommitWorkStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap)
     {
         super(engine, placeholderMap);
     }

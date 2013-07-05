@@ -182,7 +182,7 @@ public abstract class SqlParser<R, C>
         @Rule("begin work?")
     })
     protected Statement<R, C> beginWork(
-            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder<R,C>> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -191,7 +191,7 @@ public abstract class SqlParser<R, C>
 
     @Rule("commit work?")
     protected Statement<R, C> commitWork(
-            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder<R,C>> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -200,7 +200,7 @@ public abstract class SqlParser<R, C>
 
     @Rule("rollback work?")
     protected Statement<R, C> rollbackWork(
-            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder<R,C>> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -212,7 +212,7 @@ public abstract class SqlParser<R, C>
             Table<R, C> table, 
             SetClause<R, C> setClause, 
             List<SetClause<R, C>> setClauseList, 
-            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder<R,C>> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
@@ -226,7 +226,7 @@ public abstract class SqlParser<R, C>
             SetClause<R, C> setClause, 
             List<SetClause<R, C>> setClauseList, 
             Condition<R, C> condition, 
-            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder<R,C>> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
             )
@@ -253,7 +253,7 @@ public abstract class SqlParser<R, C>
     @Rule("deleteStart from tableReference")
     protected Statement<R, C> deleteStatementSearched(
             Table<R, C> table, 
-            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder<R,C>> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
             )
@@ -266,7 +266,7 @@ public abstract class SqlParser<R, C>
     protected Statement<R, C> deleteStatementSearched(
             Table<R, C> table, 
             Condition<R, C> condition, 
-            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder<R,C>> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
             )
@@ -287,7 +287,7 @@ public abstract class SqlParser<R, C>
     protected Statement<R, C> insertStatement(
             Table<R, C> table, 
             InsertColumnsAndSource<R, C> insertColumnsAndSource, 
-            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
+            @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder<R,C>> placeholderMap,
             @ParserContext("engine") Engine<R, C> engine,
             @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack
             )
@@ -413,7 +413,7 @@ public abstract class SqlParser<R, C>
         return new ColumnReferenceImpl(list);
     }
 
-    @Rule("identifier '\\(' selectSublist ('\\,' string)* '\\)'")
+    @Rule("function '\\(' selectSublist ('\\,' string)* '\\)'")
     protected ColumnReference selectSublist(
             String funcName,
             ColumnReference inner,
@@ -433,7 +433,7 @@ public abstract class SqlParser<R, C>
         }
     }
 
-    @Rule("identifier '\\(' selectSublist '\\,' integer ('\\,' integer)* '\\)'")
+    @Rule("function '\\(' selectSublist '\\,' integer ('\\,' integer)* '\\)'")
     protected ColumnReference selectSublist(
             String funcName,
             ColumnReference inner,
@@ -454,6 +454,20 @@ public abstract class SqlParser<R, C>
         }
     }
 
+    @Rule(value="identifier", doc=
+            "<p>upper(col), Converts to uppercase"+
+            "<p>lower(col), Converts to lowercase"+
+            "<p>extract(col, day|hour|minute|second|week|year), extracts number from date. E.g extract(column2, 'YEAR')"+
+            "<p>toint(col) Converts column value to integer"+
+            "<p>todouble(col) Converts column value to double"+
+            "<p>toboolean(col) Converts column value to boolean"+
+            "<p>tochar(col) Converts column value to string"+
+            "<p>tostring(col) Converts column value to string"+
+            "<p>todate(col, format) Converts column value to date using java SimpleDateFormat style format"+
+            "<p>substr(col, begin, length) Converts to substring. Note begin starts at 0"+
+            "<p>substring(col, begin, length) Converts to substring. Note begin starts at 0")
+    protected abstract String function(String func);
+    
     @Rule("fromClause whereClause? orderByClause?")
     protected TableExpression tableExpression(
             Condition condition, 

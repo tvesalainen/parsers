@@ -26,22 +26,22 @@ import org.vesalainen.parsers.sql.ErrorReporter.Level;
 public abstract class Statement<R,C> extends ParserLocator2Impl
 {
     protected Engine<R,C> engine;
-    protected LinkedHashMap<String,Placeholder> placeholderMap;
+    protected LinkedHashMap<String,Placeholder<R,C>> placeholderMap;
 
-    public Statement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap)
+    public Statement(Engine<R, C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap)
     {
         this.engine = engine;
         this.placeholderMap = placeholderMap;
     }
 
-    public LinkedHashMap<String, Placeholder> getPlaceholderMap()
+    public LinkedHashMap<String, Placeholder<R,C>> getPlaceholderMap()
     {
         return placeholderMap;
     }
 
     public void bindValue(String name, C value)
     {
-        Placeholder ph = placeholderMap.get(name);
+        Placeholder<R,C> ph = placeholderMap.get(name);
         if (ph == null)
         {
             throw new IllegalArgumentException("Placeholder "+name+" doesn't exist");

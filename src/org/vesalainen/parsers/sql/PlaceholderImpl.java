@@ -70,22 +70,22 @@ public class PlaceholderImpl<R,C> extends LiteralImpl<R,C> implements Placeholde
     }
 
     @Override
-    public void bindValue(C value)
+    public void bindValue(C newValue)
     {
-        if (value instanceof FetchResultComboBoxModel)
+        if (newValue instanceof FetchResultComboBoxModel)
         {
-            FetchResultComboBoxModel<R,C> model = (FetchResultComboBoxModel) value;
+            FetchResultComboBoxModel<R,C> model = (FetchResultComboBoxModel) newValue;
             this.value = (C) model.getOriginalSelectedItem();
         }
         else
         {
-            if (type.isAssignableFrom(value.getClass()))
+            if (type.isAssignableFrom(newValue.getClass()))
             {
-                this.value = value;
+                this.value = newValue;
             }
             else
             {
-                throw new IllegalArgumentException(value+" type is not "+type);
+                throw new IllegalArgumentException(newValue+" type is not "+type);
             }
         }
     }

@@ -37,7 +37,7 @@ public class SelectStatement<R,C> extends Statement<R,C>
 
     public SelectStatement(
             Engine<R, C> engine, 
-            LinkedHashMap<String, Placeholder> placeholderMap, 
+            LinkedHashMap<String, Placeholder<R,C>> placeholderMap, 
             List<ColumnReference<R,C>> selectList, 
             TableExpression tableExpression
             )

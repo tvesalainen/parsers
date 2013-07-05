@@ -18,11 +18,8 @@
 package org.vesalainen.parsers.sql;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import org.vesalainen.parsers.sql.util.ArrayMap;
 
 /**
  * @author Timo Vesalainen
@@ -31,13 +28,13 @@ public class UpdateStatement<R,C> extends WhereStatement<R,C>
 {
     private List<SetClause<R,C>> setClauseList;
 
-    public UpdateStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, Table<R,C> table, List<SetClause<R,C>> setClauseList)
+    public UpdateStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap, Table<R,C> table, List<SetClause<R,C>> setClauseList)
     {
         super(engine, placeholderMap, table);
         this.setClauseList = setClauseList;
     }
 
-    public UpdateStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, Table<R,C> table, List<SetClause<R,C>> setClauseList, Condition<R,C> condition)
+    public UpdateStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap, Table<R,C> table, List<SetClause<R,C>> setClauseList, Condition<R,C> condition)
     {
         super(engine, placeholderMap, table, condition);
         this.setClauseList = setClauseList;

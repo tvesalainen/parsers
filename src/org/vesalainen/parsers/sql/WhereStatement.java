@@ -30,7 +30,7 @@ public abstract class WhereStatement<R, C> extends Statement<R, C> implements Co
     protected Table<R,C> table;
     protected Condition<R,C> condition;
 
-    public WhereStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, Table<R,C> table, Condition<R,C> condition)
+    public WhereStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap, Table<R,C> table, Condition<R,C> condition)
     {
         super(engine, placeholderMap);
         this.table = table;
@@ -38,7 +38,7 @@ public abstract class WhereStatement<R, C> extends Statement<R, C> implements Co
         walk();
     }
 
-    public WhereStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder> placeholderMap, Table<R,C> table)
+    public WhereStatement(Engine<R, C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap, Table<R,C> table)
     {
         super(engine, placeholderMap);
         this.table = table;

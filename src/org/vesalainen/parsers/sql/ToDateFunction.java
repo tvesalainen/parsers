@@ -19,8 +19,6 @@ package org.vesalainen.parsers.sql;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Timo Vesalainen
@@ -38,6 +36,7 @@ public class ToDateFunction extends AbstractFunction
                 break;
             case 1:
                 this.format = new SimpleDateFormat(format[0]);
+                break;
             default:
                 throw new IllegalArgumentException("wrong number of arguments");
         }
@@ -50,7 +49,7 @@ public class ToDateFunction extends AbstractFunction
         {
             try
             {
-                format.parse(value.toString());
+                return format.parse(value.toString());
             }
             catch (ParseException ex)
             {

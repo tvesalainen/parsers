@@ -337,6 +337,9 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
             case "todate":
                 check(funcName, args.length, 1, 1);
                 return new ToDateFunction(inner, args);
+            case "format":
+                check(funcName, args.length, 1, 1);
+                return new FormatFunction(inner, args[0]);
             default:
                 throw new IllegalArgumentException("expected upper, lower, toint, todouble, tochar, tostring got "+funcName);
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Timo Vesalainen
+ * Copyright (C) 2013 Timo Vesalainen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +17,22 @@
 
 package org.vesalainen.parsers.sql;
 
-import java.util.LinkedHashMap;
-
 /**
  * @author Timo Vesalainen
  */
-public class ShowStatement<R,C> extends Statement<R,C>
+public class FormatFunction extends AbstractFunction
 {
-    private String identifier;
-    public ShowStatement(Engine<R,C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap, String identifier)
+    private String format;
+    public FormatFunction(ColumnReference inner, String format)
     {
-        super(engine, placeholderMap);
-        this.identifier = identifier;
+        super(inner);
+        this.format = format;
     }
 
     @Override
-    public FetchResult<R, C> execute()
+    public Object function(Object value)
     {
-        return engine.show(identifier);
-    }
-
-    @Override
-    public void check(Metadata metadata, ErrorReporter reporter)
-    {
+        return String.format(format, value);
     }
 
 }

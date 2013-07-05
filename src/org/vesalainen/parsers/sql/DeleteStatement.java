@@ -25,12 +25,12 @@ import java.util.LinkedHashMap;
  */
 public class DeleteStatement<R,C> extends WhereStatement<R,C>
 {
-    public DeleteStatement(Engine<R,C> engine, LinkedHashMap<String, Placeholder> placeholderMap, Table<R,C> table, Condition<R,C> condition)
+    public DeleteStatement(Engine<R,C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap, Table<R,C> table, Condition<R,C> condition)
     {
         super(engine, placeholderMap, table, condition);
     }
     
-    public DeleteStatement(Engine<R,C> engine, LinkedHashMap<String, Placeholder> placeholderMap, Table<R,C> table)
+    public DeleteStatement(Engine<R,C> engine, LinkedHashMap<String, Placeholder<R,C>> placeholderMap, Table<R,C> table)
     {
         super(engine, placeholderMap, table);
     }
