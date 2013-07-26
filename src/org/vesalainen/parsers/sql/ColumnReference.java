@@ -26,7 +26,21 @@ import org.vesalainen.parsers.sql.util.ArrayMap;
 public interface ColumnReference<R,C> extends RowValue<R, C>
 {
     void associateCondition(Condition<R, C> condition, boolean andPath);
+    /**
+     * Returns columns real name
+     * @return 
+     */
     String getColumn();
+    /**
+     * Returns columns display name.
+     * @return 
+     */
+    String getTitle();
+    /**
+     * Sets the columns display name
+     * @param title 
+     */
+    void setTitle(String title);
     String getCorrelation();
     Table<R, C> getTable();
     void setTable(Table<R, C> table);

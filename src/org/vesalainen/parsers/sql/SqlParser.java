@@ -406,25 +406,28 @@ public abstract class SqlParser<R, C>
     @Rule("columnReference")
     protected abstract ColumnReference selectSublist(ColumnReference columnReference);
 
-    @Rule("identifier ('\\.' identifier)*")
-    protected ColumnReference columnReference(String part, List<String> list)
+    @Rule("identifier ('\\.' identifier)* string?")
+    protected ColumnReference columnReference(String part, List<String> list, String title)
     {
         list.add(0, part);
-        return new ColumnReferenceImpl(list);
+        return new ColumnReferenceImpl(list, title);
     }
 
-    @Rule("function '\\(' selectSublist ('\\,' string)* '\\)'")
+    @Rule("function '\\(' selectSublist ('\\,' string)* '\\)' string?")
     protected ColumnReference selectSublist(
             String funcName,
             ColumnReference inner,
             List<String> args,
+            String title,
             @ParserContext(ParserConstants.INPUTREADER) InputReader reader,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
         try
         {
-            return engine.createFunction(inner, funcName, args.toArray(new String[args.size()]));
+            ColumnReference cf = engine.createFunction(inner, funcName, args.toArray(new String[args.size()]));
+            cf.setTitle(title);
+            return cf;
         }
         catch (IllegalArgumentException ex)
         {
@@ -433,19 +436,22 @@ public abstract class SqlParser<R, C>
         }
     }
 
-    @Rule("function '\\(' selectSublist '\\,' integer ('\\,' integer)* '\\)'")
+    @Rule("function '\\(' selectSublist '\\,' integer ('\\,' integer)* '\\)' string?")
     protected ColumnReference selectSublist(
             String funcName,
             ColumnReference inner,
             Number number,
             List<Number> args,
+            String title,
             @ParserContext(ParserConstants.INPUTREADER) InputReader reader,
             @ParserContext("engine") Engine<R, C> engine
             )
     {
         try
         {
-            return engine.createFunction(inner, funcName, number, args.toArray(new Number[args.size()]));
+            ColumnReference cf = engine.createFunction(inner, funcName, number, args.toArray(new Number[args.size()]));
+            cf.setTitle(title);
+            return cf;
         }
         catch (IllegalArgumentException ex)
         {

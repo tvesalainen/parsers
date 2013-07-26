@@ -51,6 +51,18 @@ public abstract class AbstractFunction<R,C> extends ParserLocator2Impl implement
     }
 
     @Override
+    public String getTitle()
+    {
+        return inner.getTitle();
+    }
+
+    @Override
+    public void setTitle(String title)
+    {
+        inner.setTitle(title);
+    }
+
+    @Override
     public String getCorrelation()
     {
         return inner.getCorrelation();

@@ -31,10 +31,17 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
     protected String tablePart;
     protected String column;
     protected List<String> raw;
+    private String title;
 
     public ColumnReferenceImpl(List<String> raw)
     {
         this.raw = raw;
+    }
+
+    public ColumnReferenceImpl(List<String> raw, String title)
+    {
+        this.raw = raw;
+        this.title = title;
     }
 
     ColumnReferenceImpl(Table<R, C> table, String name)
@@ -42,6 +49,7 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
         this.table = table;
         this.tablePart = table.getName();
         this.column = name;
+        this.title = name;
     }
 
     @Override
@@ -58,7 +66,7 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
             {
                 this.table = table;
                 this.tablePart = first;
-                this.column = toString(raw.subList(1, raw.size()));
+                setColumn(toString(raw.subList(1, raw.size())));
                 raw = null;
                 return true;
             }
@@ -68,7 +76,7 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
                 {
                     this.table = table;
                     this.tablePart = toString(raw.subList(1, 2));
-                    this.column = toString(raw.subList(2, raw.size()));
+                    setColumn(toString(raw.subList(2, raw.size())));
                     raw = null;
                     return true;
                 }
@@ -78,7 +86,7 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
                     {
                         this.table = table;
                         this.tablePart = first;
-                        this.column = toString(raw.subList(1, raw.size()));
+                        setColumn(toString(raw.subList(1, raw.size())));
                         raw = null;
                         return true;
                     }
@@ -89,12 +97,21 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
         {
             this.table = tables.iterator().next();
             this.tablePart = table.getName();
-            this.column = raw.get(0);
+            setColumn(raw.get(0));
             raw = null;
             return true;
         }
         throwException("table not found");
         return false;
+    }
+
+    private void setColumn(String column)
+    {
+        this.column = column;
+        if (this.title == null)
+        {
+            this.title = column;
+        }
     }
 
     private String toString(List<String> sub)
@@ -220,6 +237,18 @@ public class ColumnReferenceImpl<R,C> extends ParserLocator2Impl implements Colu
         {
             return start+column.length();
         }
+    }
+
+    @Override
+    public String getTitle()
+    {
+        return title;
+    }
+
+    @Override
+    public void setTitle(String title)
+    {
+        this.title = title;
     }
 
 }
