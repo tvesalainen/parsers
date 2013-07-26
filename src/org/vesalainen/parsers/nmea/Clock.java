@@ -72,4 +72,9 @@ public interface Clock
      * @param localZoneMinutes 
      */
     public void setZoneMinutes(int localZoneMinutes);
+    /**
+     * returns true if committed ever
+     * @return 
+     */
+    public boolean isCommitted();
 }

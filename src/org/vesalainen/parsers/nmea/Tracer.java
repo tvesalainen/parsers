@@ -62,12 +62,6 @@ public class Tracer implements NMEAObserver, AISObserver
     }
 
     @Override
-    public void setLocation(float latitude, float longitude)
-    {
-        System.err.println("setLocation("+latitude+", "+longitude+")");
-    }
-
-    @Override
     public void setSpeedOverGround(float speedOverGround)
     {
         System.err.println("setSpeedOverGround("+speedOverGround+")");
@@ -95,12 +89,6 @@ public class Tracer implements NMEAObserver, AISObserver
     public void setWaypointToWaypoint(String toWaypoint, String fromWaypoint)
     {
         System.err.println("setWaypointToWaypoint("+toWaypoint+", "+fromWaypoint+")");
-    }
-
-    @Override
-    public void setDestinationWaypointLocation(float latitude, float longitude)
-    {
-        System.err.println("setDestinationWaypointLocation("+latitude+", "+longitude+")");
     }
 
     @Override
@@ -1494,6 +1482,24 @@ public class Tracer implements NMEAObserver, AISObserver
     public void setPrefix(int numberOfSentences, int sentenceNumber, int sequentialMessageID, char channel)
     {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setClock(Clock clock)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setLocation(double latitude, double longitude)
+    {
+        System.err.println("setLocation("+latitude+", "+longitude+")");
+    }
+
+    @Override
+    public void setDestinationWaypointLocation(double latitude, double longitude)
+    {
+        System.err.println("setDestinationWaypointLocation("+latitude+", "+longitude+")");
     }
 
 }

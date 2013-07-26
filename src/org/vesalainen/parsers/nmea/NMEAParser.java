@@ -53,7 +53,7 @@ import org.vesalainen.parsers.nmea.ais.VesselMonitor;
 {
     @Rule(left = "statements", value = "statement*"),
     @Rule(left = "statement", value = "nmeaStatement"),
-    @Rule(left = "nmeaStatement", value = "'\\$' talkerId nmeaSentence '\\*' checksum '\r\n'"),
+    @Rule(left = "nmeaStatement", value = "'\\$' talkerId nmeaSentence '[\\,]*\\*' checksum '\r\n'"),
     @Rule(left = "nmeaStatement", value = "aivdm aisPrefix '[0-5]+\\*' checksum '\r\n'"),
     @Rule(left = "nmeaSentence", value = "'AAM' c arrivalStatus c waypointStatus c arrivalCircleRadius c waypoint"),
     @Rule(left = "nmeaSentence", value = "'ALM' c totalNumberOfMessages c messageNumber c satellitePRNNumber c gpsWeekNumber c svHealth c eccentricity c almanacReferenceTime c inclinationAngle c rateOfRightAscension c rootOfSemiMajorAxis c argumentOfPerigee c longitudeOfAscensionNode c meanAnomaly c f0ClockParameter c f1ClockParameter"),
@@ -77,7 +77,7 @@ import org.vesalainen.parsers.nmea.ais.VesselMonitor;
     @Rule(left = "nmeaSentence", value = "'R00' c waypoints"),
     @Rule(left = "nmeaSentence", value = "'RMA' c status c location c timeDifference c speedOverGround c trackMadeGood c magneticVariation"),
     @Rule(left = "nmeaSentence", value = "'RMB' c status c crossTrackErrorNM c waypointToWaypoint c destinationWaypointLocation c rangeToDestination c bearingToDestination c destinationClosingVelocity c arrivalStatus"),
-    @Rule(left = "nmeaSentence", value = "'RMC' c utc c status c location c speedOverGround c trackMadeGood c date c magneticVariation"),
+    @Rule(left = "nmeaSentence", value = "'RMC' c utc c status c location c speedOverGround c trackMadeGood c date c magneticVariation faaModeIndicator"),
     @Rule(left = "nmeaSentence", value = "'RMM' c horizontalDatum"),
     @Rule(left = "nmeaSentence", value = "'ROT' c rateOfTurn c status"),
     @Rule(left = "nmeaSentence", value = "'RPM' c rpmSource c rpmSourceNumber c rpm c propellerPitch c status"),
@@ -845,6 +845,11 @@ public abstract class NMEAParser implements ParserInfo
         data.setCrossTrackError(crossTrackError, directionToSteer, 'N');
     }
 
+    @Rule("c")
+    protected void magneticVariation()
+    {
+    }
+
     @Rule("decimal c ew")
     protected void magneticVariation(
             float magneticVariation, // degrees
@@ -872,10 +877,10 @@ public abstract class NMEAParser implements ParserInfo
 
     @Rule("latitude c ns c longitude c ew")
     protected void location(
-            float latitude,
-            float ns,
-            float longitude,
-            float ew,
+            double latitude,
+            int ns,
+            double longitude,
+            int ew,
             @ParserContext("data") NMEAObserver data)
     {
         data.setLocation(ns * latitude, ew * longitude);
@@ -883,10 +888,10 @@ public abstract class NMEAParser implements ParserInfo
 
     @Rule("latitude c ns c longitude c ew")
     protected void destinationWaypointLocation(
-            float latitude,
-            float ns,
-            float longitude,
-            float ew,
+            double latitude,
+            int ns,
+            double longitude,
+            int ew,
             @ParserContext("data") NMEAObserver data)
     {
         data.setDestinationWaypointLocation(ns * latitude, ew * longitude);
@@ -927,35 +932,35 @@ public abstract class NMEAParser implements ParserInfo
     }
 
     @Terminal(expression = "[0-9]+\\.[0-9]+")
-    protected float latitude(float lat)
+    protected double latitude(double lat)
     {
-        float degrees = (float) Math.floor(lat / 100);
-        float minutes = lat - 100F * degrees;
-        float latitude = degrees + minutes / 60F;
+        double degrees = (double) Math.floor(lat / 100);
+        double minutes = lat - 100F * degrees;
+        double latitude = degrees + minutes / 60F;
         assert latitude >= 0;
         assert latitude <= 90;
         return latitude;
     }
 
     @Terminal(expression = "[0-9]+\\.[0-9]+")
-    protected float longitude(float lat)
+    protected double longitude(double lat)
     {
-        float degrees = (float) Math.floor(lat / 100);
-        float minutes = lat - 100F * degrees;
-        float longitude = degrees + minutes / 60F;
+        double degrees = (double) Math.floor(lat / 100);
+        double minutes = lat - 100F * degrees;
+        double longitude = degrees + minutes / 60F;
         assert longitude >= 0;
         assert longitude <= 180;
         return longitude;
     }
 
     @Terminal(expression = "[NS]")
-    protected float ns(char c)
+    protected int ns(char c)
     {
         return 'N' == c ? 1 : -1;
     }
 
     @Terminal(expression = "[WE]")
-    protected float ew(char c)
+    protected int ew(char c)
     {
         return 'E' == c ? 1 : -1;
     }
@@ -1034,6 +1039,7 @@ public abstract class NMEAParser implements ParserInfo
     {
         Checksum checksum = new NMEAChecksum();
         Clock clock = new GPSClock();
+        data.setClock(clock);
         CheckedInputStream checkedInputStream = new CheckedInputStream(is, checksum);
         AISContext aisContext = new AISContext(checkedInputStream, aisData);
         parse(checkedInputStream, checksum, clock, data, aisContext);

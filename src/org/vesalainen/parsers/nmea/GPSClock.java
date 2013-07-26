@@ -18,7 +18,6 @@
 package org.vesalainen.parsers.nmea;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -31,6 +30,7 @@ public class GPSClock implements Clock
     private Calendar wc = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.UK);
     private Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.UK);
     private long offset;
+    private boolean committed;
     @Override
     public long getTime()
     {
@@ -99,6 +99,7 @@ public class GPSClock implements Clock
         {
             offset = calendar.getTimeInMillis() - System.currentTimeMillis();
             wc.clear();
+            committed = true;
         }
     }
 
@@ -134,4 +135,9 @@ public class GPSClock implements Clock
         wc.set(Calendar.ZONE_OFFSET, wc.get(Calendar.ZONE_OFFSET)+localZoneMinutes*MinutesAsMillis);
     }
 
+    @Override
+    public boolean isCommitted()
+    {
+        return committed;
+    }
 }

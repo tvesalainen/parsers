@@ -25,6 +25,11 @@ import java.util.List;
 public interface NMEAObserver extends Transactional
 {
     /**
+     * Set the clock
+     * @param clock 
+     */
+    void setClock(Clock clock);
+    /**
      * Talker Id of sending device.
      * @param c1
      * @param c2 
@@ -35,7 +40,7 @@ public interface NMEAObserver extends Transactional
      * @param latitude Latitude. South is negative.
      * @param longitude Longitude West is negative.
      */
-    void setLocation(float latitude, float longitude);
+    void setLocation(double latitude, double longitude);
     /**
      * RMA, RMC
      * @param speedOverGround 
@@ -69,7 +74,7 @@ public interface NMEAObserver extends Transactional
      * @param latitude
      * @param longitude 
      */
-    void setDestinationWaypointLocation(float latitude, float longitude);
+    void setDestinationWaypointLocation(double latitude, double longitude);
     /**
      * RMB
      * @param rangeToDestination 

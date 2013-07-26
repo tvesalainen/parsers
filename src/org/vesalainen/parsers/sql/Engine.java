@@ -340,8 +340,11 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
             case "format":
                 check(funcName, args.length, 1, 1);
                 return new FormatFunction(inner, args[0]);
+            case "creditorreference":
+                check(funcName, args.length, 0, 0);
+                return new CreditorReferenceFunction(inner);
             default:
-                throw new IllegalArgumentException("expected upper, lower, toint, todouble, tochar, tostring got "+funcName);
+                throw new IllegalArgumentException("This version doesn't support "+funcName+" function");
         }
     }
     public ColumnReference createFunction(ColumnReference inner, String funcName, Number number, Number... args)
@@ -353,7 +356,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
                 check(funcName, args.length, 0, 1);
                 return new SubStringFunction(inner, number, args);
             default:
-                throw new IllegalArgumentException("expected substr, substring got "+funcName);
+                throw new IllegalArgumentException("This version doesn't support "+funcName+" function");
         }
     }
     protected void check(String funcName, int len, int min, int max)

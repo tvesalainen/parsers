@@ -24,6 +24,14 @@ import java.util.List;
  */
 public class AbstractNMEAObserver implements NMEAObserver
 {
+    protected Clock clock;
+
+    @Override
+    public void setClock(Clock clock)
+    {
+        this.clock = clock;
+    }
+    
     /**
      * Returns distance in NM from (lat1, lon1) to (lat2, lon2)
      * @param lat1 in degrees
@@ -85,7 +93,7 @@ public class AbstractNMEAObserver implements NMEAObserver
     }
 
     @Override
-    public void setLocation(float latitude, float longitude)
+    public void setLocation(double latitude, double longitude)
     {
         
     }
@@ -121,7 +129,7 @@ public class AbstractNMEAObserver implements NMEAObserver
     }
 
     @Override
-    public void setDestinationWaypointLocation(float latitude, float longitude)
+    public void setDestinationWaypointLocation(double latitude, double longitude)
     {
         
     }
