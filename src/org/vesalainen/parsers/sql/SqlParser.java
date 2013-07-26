@@ -464,6 +464,8 @@ public abstract class SqlParser<R, C>
             "<p>tochar(col) Converts column value to string"+
             "<p>tostring(col) Converts column value to string"+
             "<p>todate(col, format) Converts column value to date using java SimpleDateFormat style format"+
+            "<p>format(col, format) Formats column value using String.format"+
+            "<p>creditorreference(col) Converts string or number to <a href='http://www.europeanpaymentscouncil.eu/knowledge_bank_detail.cfm?documents_id=144'>Creditor Reference</a> adding check digits"+
             "<p>substr(col, begin, length) Converts to substring. Note begin starts at 0"+
             "<p>substring(col, begin, length) Converts to substring. Note begin starts at 0")
     protected abstract String function(String func);
