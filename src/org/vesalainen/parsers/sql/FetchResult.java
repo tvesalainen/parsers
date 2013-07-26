@@ -33,6 +33,7 @@ public class FetchResult<R, C> implements Iterable<C[]>
     protected List<ColumnReference<R,C>> subList;
     protected Map<String,Integer> columnMap = new HashMap<>();
     protected String[] header;
+    protected String[] display;
     protected int[] columnLength;
     protected List<C[]> data;
     protected int length;
@@ -42,13 +43,17 @@ public class FetchResult<R, C> implements Iterable<C[]>
         this.engine = engine;
         this.subList = subList;
         String[] hdr = new String[subList.size()];
+        String[] dspl = new String[subList.size()];
         int index = 0;
         for (ColumnReference cf : subList)
         {
             columnMap.put(cf.getColumn(), index);
-            hdr[index++] = cf.getColumn();
+            hdr[index] = cf.getColumn();
+            dspl[index] = cf.getTitle();
+            index++;
         }
         header = hdr;
+        display = dspl;
         init();
     }
 
@@ -56,6 +61,7 @@ public class FetchResult<R, C> implements Iterable<C[]>
     {
         this.engine = engine;
         this.header = header;
+        this.display = header;
         for (int ii=0;ii<header.length;ii++)
         {
             columnMap.put(header[ii], ii);
@@ -120,7 +126,7 @@ public class FetchResult<R, C> implements Iterable<C[]>
     public void print(PrintStream out)
     {
         int index = 0;
-        for (String h : header)
+        for (String h : display)
         {
             out.printf("%" + columnLength[index++] + "s ", h);
         }
@@ -164,5 +170,9 @@ public class FetchResult<R, C> implements Iterable<C[]>
     public String getColumnName(int columnIndex)
     {
         return header[columnIndex];
+    }
+    public String getDisplayName(int columnIndex)
+    {
+        return display[columnIndex];
     }
 }
