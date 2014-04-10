@@ -47,7 +47,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author tkv
  */
 //@GenClassname("org.vesalainen.parsers.xml.XMLDocumentParserImpl")
-@GrammarDef()
+//@GrammarDef()
 public abstract class XMLDocumentParser extends XMLDTDBaseGrammar implements XMLReader, SAX2Constants, ParserInfo
 {
     private DefaultHandler2 defaultHandler = new DefaultHandler2();

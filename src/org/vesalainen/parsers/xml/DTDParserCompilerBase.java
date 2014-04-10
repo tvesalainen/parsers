@@ -13,7 +13,7 @@ import org.vesalainen.parser.annotation.Rules;
  *
  * @author tkv
  */
-@GrammarDef
+//@GrammarDef
 public abstract class DTDParserCompilerBase extends XMLBaseGrammar
 {
     @Rule({"xmlDecl?", "misc*"})

@@ -6,7 +6,6 @@ package org.vesalainen.parsers.date;
 
 import org.vesalainen.regex.SyntaxErrorException;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -17,7 +16,6 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import org.vesalainen.bcc.model.El;
-import org.vesalainen.grammar.AnnotatedGrammar;
 import org.vesalainen.grammar.Grammar;
 
 /**

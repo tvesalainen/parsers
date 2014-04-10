@@ -15,7 +15,6 @@ import org.vesalainen.parser.annotation.Terminal;
  * DateReducers is an abstract class containing reducer methods for date parsing.
  * @author tkv
  */
-@GrammarDef
 public abstract class DateReducers
 {
 

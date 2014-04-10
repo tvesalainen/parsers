@@ -29,7 +29,7 @@ import org.xml.sax.SAXException;
 /**
  * @author Timo Vesalainen
  */
-@GrammarDef
+//@GrammarDef
 public abstract class XMLParserBase<R extends Element> extends XMLDTDBaseGrammar
 {
     public Document parse(InputStream in, String officialSystemID) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException

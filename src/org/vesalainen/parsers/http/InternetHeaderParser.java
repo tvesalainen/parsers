@@ -39,7 +39,7 @@ import org.vesalainen.parser.annotation.GenClassname;
 @Terminals({
 @Terminal(left="COLON", expression="[ \t]*:[ \t]*"),
 @Terminal(left="CRLF", expression="\r\n"),
-@Terminal(left="LWS", expression="\r\n[ \t]+")
+@Terminal(left="LWS", expression="\r[ \t]+")
 })
 public abstract class InternetHeaderParser
 {

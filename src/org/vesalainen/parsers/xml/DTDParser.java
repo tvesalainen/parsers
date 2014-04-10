@@ -45,7 +45,7 @@ import org.xml.sax.SAXParseException;
  * @author tkv
  */
 //@GenClassname("org.vesalainen.parsers.xml.DTDParserImpl")
-@GrammarDef()
+//@GrammarDef()
 public abstract class DTDParser extends XMLDTDBaseGrammar
 {
     public static final char ELPRF = '#';   // Element prefix in grammar

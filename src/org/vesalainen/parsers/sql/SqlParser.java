@@ -51,7 +51,7 @@ import org.vesalainen.regex.Regex;
  * @see Engine.createFunction
  */
 //@GenClassname("org.vesalainen.parsers.sql.SqlParserImpl")
-@GrammarDef()
+//@GrammarDef()
 public abstract class SqlParser<R, C>
 {
 
