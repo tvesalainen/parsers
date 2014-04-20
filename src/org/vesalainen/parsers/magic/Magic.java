@@ -26,12 +26,14 @@ import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.DFAMap;
 import org.vesalainen.parser.annotation.DFAMapEntry;
 import org.vesalainen.parser.annotation.GenClassname;
+import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.util.InputReader;
 
 /**
  * @author Timo Vesalainen
  */
 @GenClassname("org.vesalainen.parsers.magic.MagicImpl")
+@GrammarDef
 @DFAMap(
         error="Error", 
         eof="Eof",

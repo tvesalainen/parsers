@@ -85,7 +85,6 @@
             <fileset dir="${build.classes.dir}" includes="**/*.class*"/>
         </genclasscomp>
     </target>
-    -->
     <target name="-post-jar">
         <copy file="${dist.jar}" tofile="../lib/Parsers.jar"/>
         <copy file="${dist.jar}" tofile="../vesalainen-docs/web/parsers/Parsers.jar"/>
@@ -95,4 +94,5 @@
             <fileset dir="dist/javadoc"/>
         </move>
     </target>
+    -->
 </project>
