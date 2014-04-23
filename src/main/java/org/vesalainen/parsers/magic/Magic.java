@@ -33,7 +33,6 @@ import org.vesalainen.parser.util.InputReader;
  * @author Timo Vesalainen
  */
 @GenClassname("org.vesalainen.parsers.magic.MagicImpl")
-@GrammarDef
 @DFAMap(
         error="Error", 
         eof="Eof",
