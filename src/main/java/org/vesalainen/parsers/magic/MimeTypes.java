@@ -25,6 +25,7 @@ import org.vesalainen.parser.annotation.DFAMap;
 import org.vesalainen.parser.annotation.DFAMapEntry;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
+import org.vesalainen.parser.util.Input;
 import org.vesalainen.parser.util.InputReader;
 import org.vesalainen.parsers.magic.Magic.MagicResult;
 import org.vesalainen.regex.ant.MapParser;
@@ -201,7 +202,7 @@ public abstract class MimeTypes implements MapParser
     static final String EOF = "Eof";
     
     private static Magic magic;
-    private final InputReader reader = new InputReader("");
+    private final InputReader reader = Input.getInstance("");
     private final ReentrantLock lock = new ReentrantLock();
 
     public MimeTypes()

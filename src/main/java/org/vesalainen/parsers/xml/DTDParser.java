@@ -5,22 +5,11 @@
 
 package org.vesalainen.parsers.xml;
 
-import java.net.URISyntaxException;
-import org.vesalainen.parser.annotation.GrammarDef;
-import org.vesalainen.parser.annotation.Rule;
-import org.vesalainen.parser.annotation.Rules;
-import org.vesalainen.parser.annotation.Terminal;
-import org.vesalainen.parsers.xml.attr.AttDef;
-import org.vesalainen.parsers.xml.attr.NSAttDef;
-import org.vesalainen.parsers.xml.attr.NormalAttDef;
-import org.vesalainen.parsers.xml.attr.AttType;
-import org.vesalainen.parsers.xml.attr.AttType.NotationType;
-import org.vesalainen.parsers.xml.attr.DefaultDecl;
-import org.vesalainen.parsers.xml.attr.DefaultDecl.DefaultValue;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Member;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,7 +22,19 @@ import org.vesalainen.grammar.AnnotatedGrammar;
 import org.vesalainen.grammar.Grammar;
 import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
+import org.vesalainen.parser.annotation.GrammarDef;
+import org.vesalainen.parser.annotation.Rule;
+import org.vesalainen.parser.annotation.Rules;
+import org.vesalainen.parser.annotation.Terminal;
+import org.vesalainen.parser.util.Input;
 import org.vesalainen.parser.util.InputReader;
+import org.vesalainen.parsers.xml.attr.AttDef;
+import org.vesalainen.parsers.xml.attr.AttType;
+import org.vesalainen.parsers.xml.attr.AttType.NotationType;
+import org.vesalainen.parsers.xml.attr.DefaultDecl;
+import org.vesalainen.parsers.xml.attr.DefaultDecl.DefaultValue;
+import org.vesalainen.parsers.xml.attr.NSAttDef;
+import org.vesalainen.parsers.xml.attr.NormalAttDef;
 import org.vesalainen.parsers.xml.model.Attribute;
 import org.vesalainen.parsers.xml.model.Element;
 import org.xml.sax.InputSource;
@@ -79,7 +80,7 @@ public abstract class DTDParser extends XMLDTDBaseGrammar
         try
         {
             this.input = input;
-            inputReader = InputReader.getInstance(input, BUFFERSIZE);
+            inputReader = Input.getInstance(input, BUFFERSIZE);
             locator = new XMLLocator(inputReader);
             parseExtSubset(inputReader);
             inputReader.close();

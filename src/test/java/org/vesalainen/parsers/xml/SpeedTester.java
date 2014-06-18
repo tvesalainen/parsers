@@ -64,10 +64,10 @@ public class SpeedTester implements SAX2Constants
     }
     public static void test(XMLReader xmlReader, File out) throws FileNotFoundException, SAXNotRecognizedException, SAXNotSupportedException, IOException, SAXException
     {
-        //File f = new File ("C:\\Users\\tkv\\Documents\\NetBeansProjects\\KML\\src\\fi\\sw_nets\\kml\\kml21.xsd");
+        File f = new File ("C:\\Users\\tkv\\Documents\\NetBeansProjects\\KML\\src\\org\\vesalainen\\kml\\kml21.xsd");
         //File f = new File ("C:\\Users\\tkv\\Documents\\NetBeansProjects\\KML\\nbproject\\build-impl.xml");
         //File f = new File ("C:\\temp\\US-ASCII.xml");
-        File f = new File ("C:\\temp\\xhtml1-20020801\\DTD\\US-ASCII.xml");
+        //File f = new File ("C:\\temp\\xhtml1-20020801\\DTD\\US-ASCII.xml");
         InputSource input = new InputSource(f.toURI().toString());
         try (PrintStream out1 = new PrintStream(out))
         {
@@ -90,7 +90,7 @@ public class SpeedTester implements SAX2Constants
         {
 
             XMLReader reader1 = configure(true);
-            File f1 = new File("c:\\temp\\out1.txt");
+            File f1 = File.createTempFile("out1", "txt");
             long startOriginal = System.nanoTime();
             test(reader1, f1);
             long endOriginal = System.nanoTime();
@@ -98,7 +98,7 @@ public class SpeedTester implements SAX2Constants
             System.gc();
             
             reader1 = configure(true);
-            f1 = new File("c:\\temp\\out1.txt");
+            f1 = File.createTempFile("out2", "txt");
             startOriginal = System.nanoTime();
             test(reader1, f1);
             endOriginal = System.nanoTime();

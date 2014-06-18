@@ -17,7 +17,6 @@
 
 package org.vesalainen.parsers.magic;
 
-import org.vesalainen.regex.ant.MapParser;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +26,9 @@ import org.vesalainen.parser.annotation.DFAMap;
 import org.vesalainen.parser.annotation.DFAMapEntry;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
+import org.vesalainen.parser.util.Input;
 import org.vesalainen.parser.util.InputReader;
+import org.vesalainen.regex.ant.MapParser;
 
 /**
  * @author Timo Vesalainen
@@ -401,7 +402,7 @@ public abstract class Magic implements MapParser
         if (bytes != null && bytes.length > 0)
         {
             ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-            InputReader reader = new InputReader(bais, 64, "US-ASCII");
+            InputReader reader = Input.getInstance(bais, 64, "US-ASCII");
             String result = input(reader);
             return getResult(result);
         }
@@ -412,7 +413,7 @@ public abstract class Magic implements MapParser
     }
     public MagicResult guess(InputStream is) throws IOException
     {
-        try (InputReader reader = new InputReader(is, 64, "US-ASCII"))
+        try (InputReader reader = Input.getInstance(is, 64, "US-ASCII"))
         {
             String result = input(reader);
             return getResult(result);
@@ -420,7 +421,7 @@ public abstract class Magic implements MapParser
     }
     public MagicResult guess(File file) throws IOException
     {
-        try (InputReader reader = new InputReader(file, 64, "US-ASCII"))
+        try (InputReader reader = Input.getInstance(file, 64, "US-ASCII"))
         {
             String result = input(reader);
             return getResult(result);

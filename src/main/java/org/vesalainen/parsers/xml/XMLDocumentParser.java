@@ -4,26 +4,27 @@
  */
 package org.vesalainen.parsers.xml;
 
-import java.net.URISyntaxException;
-import org.vesalainen.parser.ParserInfo;
-import org.vesalainen.parser.Trace;
-import org.vesalainen.parser.TraceHelper;
-import org.vesalainen.parser.annotation.GrammarDef;
-import org.vesalainen.parser.annotation.ParseMethod;
-import org.vesalainen.parser.annotation.ParserContext;
-import org.vesalainen.parser.annotation.Rule;
-import org.vesalainen.parser.annotation.Rules;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.ParserConstants;
+import org.vesalainen.parser.ParserInfo;
+import org.vesalainen.parser.Trace;
+import org.vesalainen.parser.TraceHelper;
 import org.vesalainen.parser.annotation.GenClassname;
+import org.vesalainen.parser.annotation.GrammarDef;
+import org.vesalainen.parser.annotation.ParseMethod;
+import org.vesalainen.parser.annotation.ParserContext;
+import org.vesalainen.parser.annotation.Rule;
+import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
+import org.vesalainen.parser.util.Input;
 import org.vesalainen.parser.util.InputReader;
 import org.vesalainen.regex.Regex;
 import org.xml.sax.ContentHandler;
@@ -92,7 +93,7 @@ public abstract class XMLDocumentParser extends XMLDTDBaseGrammar implements XML
         try
         {
             this.input = input;
-            inputReader = InputReader.getInstance(input, BUFFERSIZE);
+            inputReader = Input.getInstance(input, BUFFERSIZE);
             locator = new XMLLocator(inputReader);
             if (contentHandler != null && !external)
             {
@@ -355,44 +356,18 @@ public abstract class XMLDocumentParser extends XMLDTDBaseGrammar implements XML
      * [14]   	CharData	   ::=   	[^<&]* - ([^<&]* ']]>' [^<&]*)
      */
     @Terminal(expression="[^<\\&\\x0d\\x85\\u2028]+")
-    protected void charData(InputReader reader) throws SAXException
+    protected void charData(String str) throws SAXException
     {
-        char[] array = reader.getArray();
-        int start = reader.getStart();
-        int end = reader.getEnd();
-        int ms = start % array.length;
-        int me = end % array.length;
-        if (ms <= me)
-        {
-            contentHandler.characters(array, ms, me-ms);
-        }
-        else
-        {
-            contentHandler.characters(array, ms, array.length-ms);
-            contentHandler.characters(array, 0, me);
-        }
+        contentHandler.characters(str.toCharArray(), 0, str.length());
     }
 
     /**
      * [15]   	Comment	   ::=   	'<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'
      */
     @Terminal(expression="<!\\-\\-["+Char+"]*\\-\\->", options={Regex.Option.FIXED_ENDER})
-    protected void comment(InputReader reader) throws SAXException
+    protected void comment(String str) throws SAXException
     {
-        char[] array = reader.getArray();
-        int start = reader.getStart()+4;
-        int end = reader.getEnd()-3;
-        int ms = start % array.length;
-        int me = end % array.length;
-        if (ms <= me)
-        {
-            lexicalHandler.comment(array, ms, me-ms);
-        }
-        else
-        {
-            lexicalHandler.comment(array, ms, array.length-ms);
-            lexicalHandler.comment(array, 0, me);
-        }
+        lexicalHandler.comment(str.toCharArray(), 0, str.length());
     }
 
     @Rule({"'<!DOCTYPE'","qName", "optExternalID"})
