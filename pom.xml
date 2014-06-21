@@ -9,8 +9,14 @@
     <groupId>org.vesalainen.lpg</groupId>
     <artifactId>parsers</artifactId>
     <version>1.1.1</version>
-    <packaging>jar</packaging>
-
+    <packaging>pom</packaging>
+    <modules>
+        <module>date</module>
+        <module>http</module>
+        <module>magic</module>
+        <module>sql</module>
+        <module>xml</module>
+    </modules>
     <name>Utility parsers</name>
     <description>
         Parsers using javalpg

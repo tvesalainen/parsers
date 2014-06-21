@@ -6,3 +6,8 @@ dist/
 *.jasm
 doc-files/
 /target/
+/date/target/
+/magic/target/
+/http/target/
+/xml/target/
+/sql/target/
