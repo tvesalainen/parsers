@@ -16,6 +16,7 @@
  */
 package org.vesalainen.parsers.xml;
 
+import static org.vesalainen.parsers.xml.SAX2Constants.*;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
@@ -23,7 +24,7 @@ import org.xml.sax.SAXNotSupportedException;
 /**
  * @author Timo Vesalainen
  */
-public class SAXFeatures implements SAX2Constants, Cloneable
+public class SAXFeatures implements Cloneable
 {
     private boolean isNamespaceAware = false;
     private boolean supportNameSpacePrefixes = false;

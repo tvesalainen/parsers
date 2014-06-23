@@ -229,7 +229,7 @@ public abstract class XMLBaseGrammar
         return "";
     }
     @Rules({
-        @Rule({"quotEntityValue", "notQuotValue"}),
+        @Rule({"quotEntityValue", "notQuotEntityValue"}),
         @Rule({"quotEntityValue", "reference"})
     })
     protected String quotEntityValue(String str, String value)
@@ -238,7 +238,7 @@ public abstract class XMLBaseGrammar
     }
 
     @Rules({
-        @Rule({"aposEntityValue", "notAposValue"}),
+        @Rule({"aposEntityValue", "notAposEntityValue"}),
         @Rule({"aposEntityValue", "reference"})
     })
     protected String aposEntityValue(String str, String value)
@@ -295,7 +295,7 @@ public abstract class XMLBaseGrammar
         return "";
     }
     @Rules({
-        @Rule({"quotAttValue", "notQuotValue"}),
+        @Rule({"quotAttValue", "notQuotAttValue"}),
         @Rule({"quotAttValue", "reference"})
     })
     protected String quotAttValue(String str, String value)
@@ -304,7 +304,7 @@ public abstract class XMLBaseGrammar
     }
 
     @Rules({
-        @Rule({"aposAttValue", "notAposValue"}),
+        @Rule({"aposAttValue", "notAposAttValue"}),
         @Rule({"aposAttValue", "reference"})
     })
     protected String aposAttValue(String str, String value)
@@ -337,10 +337,15 @@ public abstract class XMLBaseGrammar
     })
     protected abstract String pubidLiteral(String literal);
 
+    @Terminal(expression="[^\\&\"]+")
+    protected abstract String notQuotAttValue(String value);
+    @Terminal(expression="[^\\&']+")
+    protected abstract String notAposAttValue(String value);
+
     @Terminal(expression="[^%\\&\"]+")
-    protected abstract String notQuotValue(String value);
+    protected abstract String notQuotEntityValue(String value);
     @Terminal(expression="[^%\\&']+")
-    protected abstract String notAposValue(String value);
+    protected abstract String notAposEntityValue(String value);
 
     @Terminal(expression="[^\"]+")
     protected abstract String notQuot(String value);

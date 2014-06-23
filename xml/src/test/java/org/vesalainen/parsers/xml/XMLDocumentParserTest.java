@@ -18,10 +18,14 @@
 package org.vesalainen.parsers.xml;
 
 import java.io.InputStream;
+import java.net.URL;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.vesalainen.parser.util.InputReader;
 import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 /**
  *
@@ -38,12 +42,26 @@ public class XMLDocumentParserTest
      * Test of parse method, of class XMLDocumentParser.
      */
     @Test
-    public void testParse_InputSource() throws Exception
+    public void testParse_InputSourceXSD() throws Exception
     {
         XMLDocumentParser parser = XMLDocumentParser.getInstance();
         InputStream ras = XMLDocumentParserTest.class.getClassLoader().getResourceAsStream("xhtml1-strict.xsd");
         InputSource is = new InputSource(ras);
         parser.parse(is);
+    }
+
+    /**
+     * Test of parse method, of class XMLDocumentParser.
+     */
+    @Test
+    public void testParse_InputSourceDTD() throws Exception
+    {
+        SAXParserFactory factory = SAXParserFactoryImpl.newInstance("org.vesalainen.parsers.xml.SAXParserFactoryImpl", null);
+        SAXParser parser = factory.newSAXParser();
+        XMLReader xmlReader = parser.getXMLReader();
+        URL ras = XMLDocumentParserTest.class.getClassLoader().getResource("test.xml");
+        InputSource is = new InputSource(ras.toURI().toString());
+        xmlReader.parse(is);
     }
 
 }

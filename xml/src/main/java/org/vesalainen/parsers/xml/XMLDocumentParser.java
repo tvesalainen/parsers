@@ -51,7 +51,7 @@ import org.xml.sax.helpers.AttributesImpl;
 @GrammarDef()
 public abstract class XMLDocumentParser extends XMLDTDBaseGrammar implements XMLReader, SAX2Constants, ParserInfo
 {
-    private DefaultHandler2 defaultHandler = new DefaultHandler2();
+    private final DefaultHandler2 defaultHandler = new DefaultHandler2();
     private ContentHandler contentHandler = defaultHandler;
     private DTDHandler dtdHandler = defaultHandler;
     private EntityResolver entityResolver = defaultHandler;
@@ -60,12 +60,12 @@ public abstract class XMLDocumentParser extends XMLDTDBaseGrammar implements XML
     private LexicalHandler lexicalHandler = defaultHandler;
 
     // Features
-    private SAXFeatures features;
+    private SAXFeatures features = new SAXFeatures();
 
     private AttributesImpl attributes = new AttributesImpl();
     private int level;
-    private Map<Integer,List<String>> nsScope = new HashMap<>();
-    private Map<String,String> nameSpaces;
+    private final Map<Integer,List<String>> nsScope = new HashMap<>();
+    private final Map<String,String> nameSpaces;
 
     public XMLDocumentParser()
     {
