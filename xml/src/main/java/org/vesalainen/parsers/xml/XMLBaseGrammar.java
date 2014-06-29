@@ -5,7 +5,6 @@
 
 package org.vesalainen.parsers.xml;
 
-import org.vesalainen.parser.annotation.GenRegex;
 import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
@@ -874,7 +873,7 @@ public abstract class XMLBaseGrammar
     private void setEncoding(String charset)
     {
         input.setEncoding(charset);
-        inputReader.setEncoding(charset);
+        inputReader.setCharset(charset);
     }
 
     public String getPublicId()
