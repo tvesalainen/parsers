@@ -397,7 +397,7 @@ public abstract class Magic implements MapParser
     static final String UNKNOWN = ":unknown";
     private static final MimeMap mimeMap = new MimeMap();
     
-    public MagicResult guess(byte[] bytes)
+    public MagicResult guess(byte[] bytes) throws IOException
     {
         if (bytes != null && bytes.length > 0)
         {
