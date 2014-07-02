@@ -445,7 +445,7 @@ public abstract class XMLBaseGrammar
     {
         try
         {
-            setEncoding("UTF-32BE");
+            setEncoding("UTF-32BE", false);
         }
         catch (IllegalArgumentException ex)
         {
@@ -457,7 +457,7 @@ public abstract class XMLBaseGrammar
     {
         try
         {
-            setEncoding("UTF-32LE");
+            setEncoding("UTF-32LE", false);
         }
         catch (IllegalArgumentException ex)
         {
@@ -469,7 +469,7 @@ public abstract class XMLBaseGrammar
     {
         try
         {
-            setEncoding("UTF-16BE");
+            setEncoding("UTF-16BE", false);
         }
         catch (IllegalArgumentException ex)
         {
@@ -481,7 +481,7 @@ public abstract class XMLBaseGrammar
     {
         try
         {
-            setEncoding("UTF-16LE");
+            setEncoding("UTF-16LE", false);
         }
         catch (IllegalArgumentException ex)
         {
@@ -493,7 +493,7 @@ public abstract class XMLBaseGrammar
     {
         try
         {
-                 input.setEncoding("UTF-8");
+                 setEncoding("UTF-8", false);
         }
         catch (IllegalArgumentException ex)
         {
@@ -514,7 +514,7 @@ public abstract class XMLBaseGrammar
     {
         try
         {
-            setEncoding("UTF-32BE");
+            setEncoding("UTF-32BE", false);
         }
         catch (IllegalArgumentException ex)
         {
@@ -526,7 +526,7 @@ public abstract class XMLBaseGrammar
     {
         try
         {
-            setEncoding("UTF-32LE");
+            setEncoding("UTF-32LE", false);
         }
         catch (IllegalArgumentException ex)
         {
@@ -538,7 +538,7 @@ public abstract class XMLBaseGrammar
     {
         try
         {
-            setEncoding("UTF-16BE");
+            setEncoding("UTF-16BE", false);
         }
         catch (IllegalArgumentException ex)
         {
@@ -550,7 +550,7 @@ public abstract class XMLBaseGrammar
     {
         try
         {
-            setEncoding("UTF-16LE");
+            setEncoding("UTF-16LE", false);
         }
         catch (IllegalArgumentException ex)
         {
@@ -787,7 +787,7 @@ public abstract class XMLBaseGrammar
     })
     protected void encodingDecl(String charset)
     {
-        setEncoding(charset);
+        setEncoding(charset, true);
     }
     /**
      * [81]   	EncName	   ::=   	[A-Za-z] ([A-Za-z0-9._] | '-')*
@@ -882,10 +882,10 @@ public abstract class XMLBaseGrammar
     }
 
 
-    private void setEncoding(String charset)
+    private void setEncoding(String charset, boolean fixed)
     {
         input.setEncoding(charset);
-        inputReader.setCharset(charset);
+        inputReader.setCharset(charset, fixed);
     }
 
     public String getPublicId()

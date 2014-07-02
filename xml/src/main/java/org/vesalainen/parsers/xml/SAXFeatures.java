@@ -23,6 +23,7 @@ import org.xml.sax.SAXNotSupportedException;
 
 /**
  * @author Timo Vesalainen
+ * @see <a href="http://www.saxproject.org/apidoc/org/xml/sax/package-summary.html#package_description" />The complete list of standard SAX2 features and properties</a>
  */
 public class SAXFeatures implements Cloneable
 {
