@@ -44,10 +44,23 @@ public class XMLDocumentParserTest
     @Test
     public void testParse_InputSourceXSD() throws Exception
     {
-        XMLDocumentParser parser = XMLDocumentParser.getInstance();
-        InputStream ras = XMLDocumentParserTest.class.getClassLoader().getResourceAsStream("xhtml1-strict.xsd");
-        InputSource is = new InputSource(ras);
-        parser.parse(is);
+        SAXParserFactory factory = SAXParserFactoryImpl.newInstance("org.vesalainen.parsers.xml.SAXParserFactoryImpl", null);
+        SAXParser parser = factory.newSAXParser();
+        XMLReader xmlReader = parser.getXMLReader();
+        URL ras = XMLDocumentParserTest.class.getClassLoader().getResource("xhtml1-strict.xsd");
+        InputSource is = new InputSource(ras.toURI().toString());
+        xmlReader.parse(is);
+    }
+
+    @Test
+    public void testParse_InputSourceXSD_SAXImpl() throws Exception
+    {
+        SAXParserFactory factory = SAXParserFactoryImpl.newInstance();
+        SAXParser parser = factory.newSAXParser();
+        XMLReader xmlReader = parser.getXMLReader();
+        URL ras = XMLDocumentParserTest.class.getClassLoader().getResource("xhtml1-strict.xsd");
+        InputSource is = new InputSource(ras.toURI().toString());
+        xmlReader.parse(is);
     }
 
     /**
