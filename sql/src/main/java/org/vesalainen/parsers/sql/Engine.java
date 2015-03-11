@@ -183,7 +183,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         {
             tableIndex[ii] = rowCandidate.getIndexOf(resultArray[ii].getTable());
         }
-        while (iterator[0].hasNext())
+        while (level >= 0)
         {
             while (iterator[level].hasNext())
             {
