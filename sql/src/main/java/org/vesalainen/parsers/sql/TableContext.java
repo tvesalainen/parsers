@@ -106,8 +106,11 @@ public class TableContext<R,C>
                 }
             }
             NavigableMap<C,Set<R>> map = indexes.get(column);
-            for (R row : rows)
+            int rowCount = rows.size();
+            Iterator<R> iterator = rows.iterator();
+            while (iterator.hasNext())
             {
+                R row = iterator.next();
                 C value = selector.get(row, column);
                 if (value != null)
                 {
@@ -126,6 +129,16 @@ public class TableContext<R,C>
                     }
                     set.add(row);
                 }
+                else
+                {
+                    iterator.remove();
+                    all.remove(row);
+                }
+            }
+            int nrowCount = rows.size();
+            if (rowCount != nrowCount)
+            {
+                System.err.println("removed because null "+column+" from "+rowCount+" to "+nrowCount);
             }
         }
         for (ColumnCondition cc : table.getAndConditions())
