@@ -57,5 +57,10 @@ public abstract class Statement<R,C> extends ParserLocator2Impl
     {
         return false;
     }
+
+    public Engine<R, C> getEngine()
+    {
+        return engine;
+    }
     
 }
