@@ -138,7 +138,7 @@ public class TableContext<R,C>
             int nrowCount = rows.size();
             if (rowCount != nrowCount)
             {
-                System.err.println("removed because null "+column+" from "+rowCount+" to "+nrowCount);
+                selector.progressNote("removed because null "+column+" from "+rowCount+" to "+nrowCount);
             }
         }
         for (ColumnCondition cc : table.getAndConditions())
@@ -176,8 +176,8 @@ public class TableContext<R,C>
                             {
                                 joinMaps.put(table, mergeMaps[1]);
                             }
-                            System.err.println("merged "+table+" to "+this.all.size());
-                            System.err.println("merged "+otherTable+" to "+otherCtx.all.size());
+                            selector.progressNote("merged "+table+" to "+this.all.size());
+                            selector.progressNote("merged "+otherTable+" to "+otherCtx.all.size());
                         }
                     }
                 }

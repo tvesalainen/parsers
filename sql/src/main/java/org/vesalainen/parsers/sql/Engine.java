@@ -21,7 +21,6 @@ import org.vesalainen.parsers.sql.util.ArrayMap;
 import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
@@ -129,6 +128,8 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
     }
     private void select(SelectStatement<R,C> select, OrderedFetchResult<R,C> result, boolean update)
     {
+        startProgressMonitor(0, select.getTableCount()*3+1);
+        int progress = 0;
         others = new ArrayMap<>(select.getTables());
         TableContextComparator tableContextComparator = getTableContextComparator();
         ArrayMap<Table<R,C>,TableContext<R,C>> tableResults = new ArrayMap<>(select.getTables());
@@ -149,18 +150,22 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         TableContext[] resultArray = new TableContext[index];
         while (!tableList.isEmpty())
         {
+            updateProgressMonitor(++progress);
             index--;
             Collections.sort(tableList, tableContextComparator);
             TableContext<R,C> currentTable = tableList.get(0);
             Collection<R> rows = fetch(currentTable, update);
+            updateProgressMonitor(++progress);
             resultArray[index] = currentTable;
             currentTable.setData(rows);
+            updateProgressMonitor(++progress);
             tableList.remove(currentTable);
             currentTable.updateHints(tableList);
         }
         sort(resultArray);
         ArrayMap<Table<R,C>,R> rowCandidate = new ArrayMap<>(select.getTables());
         cartesian(condition, result, resultArray, rowCandidate);
+        stopProgressMonitor();
     }
     
     private void cartesian(
@@ -439,6 +444,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         }
         return best;
     }
+
     private class OptRes
     {
         private ArrayDeque<TableContext> stack;
@@ -450,5 +456,34 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
             this.min = min;
         }
         
+    }
+    /**
+     * Start progress monitoring for execution. Default implementation does nothing.
+     * @param min
+     * @param max 
+     */
+    protected void startProgressMonitor(int min, int max)
+    {
+    }
+    /**
+     * Update progress.  Default implementation does nothing.
+     * @param now 
+     */
+    protected void updateProgressMonitor(int now)
+    {
+    }
+    /**
+     * Sets progress note. Default implementation prints to stderr.
+     * @param note 
+     */
+    protected void progressNote(String note)
+    {
+        System.err.println(note);
+    }
+    /**
+     * Stops progress monitoring. Default implementation does nothing.
+     */
+    private void stopProgressMonitor()
+    {
     }
 }

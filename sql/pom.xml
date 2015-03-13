@@ -16,5 +16,10 @@
             <artifactId>date</artifactId>
             <version>1.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.vesalainen.lpg</groupId>
+            <artifactId>javalpg</artifactId>
+            <version>1.1.1</version>
+        </dependency>
     </dependencies>
 </project>
