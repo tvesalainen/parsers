@@ -26,10 +26,10 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import org.vesalainen.parser.ParserConstants;
-import org.vesalainen.parser.annotation.GrammarDef;
+import static org.vesalainen.parser.ParserFeature.*;
 import org.vesalainen.parser.annotation.ParseMethod;
 import org.vesalainen.parser.annotation.ParserContext;
 import org.vesalainen.parser.annotation.ReservedWords;
@@ -37,6 +37,7 @@ import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.parser.util.InputReader;
+import org.vesalainen.parser.util.OffsetLocatorException;
 import org.vesalainen.parsers.date.SQLDateParser;
 import org.vesalainen.regex.Regex;
 
@@ -74,28 +75,42 @@ public abstract class SqlParser<R, C>
      * @param locator 
      * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
      */
-    @ParseMethod(start = "batchStatement", syntaxOnly = true, useOffsetLocatorException = true, whiteSpace =
+    @ParseMethod(start = "batchStatement", features={SyntaxOnly, UseOffsetLocatorException}, whiteSpace =
     {
         "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
     })
     protected abstract void check(
             String sql,
             @ParserContext("locator") SQLLocator locator
-            );
+            ) throws OffsetLocatorException;
     /**
      * 
      * @param reader
      * @param locator 
      * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
      */
-    @ParseMethod(start = "batchStatement", syntaxOnly = true, useOffsetLocatorException = true, size = 1024, whiteSpace =
+    @ParseMethod(start = "batchStatement", features={SyntaxOnly, UseOffsetLocatorException}, size = 1024, whiteSpace =
+    {
+        "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
+    })
+    protected abstract void check(
+            InputStream is,
+            @ParserContext("locator") SQLLocator locator
+            ) throws OffsetLocatorException;
+    /**
+     * 
+     * @param reader
+     * @param locator 
+     * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
+     */
+    @ParseMethod(start = "batchStatement", features={SyntaxOnly, UseOffsetLocatorException}, size = 1024, whiteSpace =
     {
         "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
     })
     protected abstract void check(
             InputReader reader,
             @ParserContext("locator") SQLLocator locator
-            );
+            ) throws OffsetLocatorException;
     /**
      * 
      * @param sql
@@ -105,7 +120,7 @@ public abstract class SqlParser<R, C>
      * @return 
      * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
      */
-    @ParseMethod(start = "batchStatement", useOffsetLocatorException = true, wideIndex= true, whiteSpace =
+    @ParseMethod(start = "batchStatement", features={WideIndex, UseOffsetLocatorException}, whiteSpace =
     {
         "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
     })
@@ -115,7 +130,7 @@ public abstract class SqlParser<R, C>
             @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack,
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("locator") SQLLocator locator
-            );
+            ) throws OffsetLocatorException;
     /**
      * 
      * @param is
@@ -125,7 +140,7 @@ public abstract class SqlParser<R, C>
      * @return 
      * @see <a href="doc-files/SqlParser-statement.html#BNF">BNF Syntax for SQL-statement</a>
      */
-    @ParseMethod(start = "batchStatement", useOffsetLocatorException = true, size = 1024, wideIndex= true, whiteSpace =
+    @ParseMethod(start = "batchStatement", features={WideIndex, UseOffsetLocatorException}, size = 1024, whiteSpace =
     {
         "whiteSpace", "doubleSlashComment", "hashComment", "cComment"
     })
@@ -135,7 +150,7 @@ public abstract class SqlParser<R, C>
             @ParserContext("tableListStack") Deque<List<Table<R, C>>> tableListStack,
             @ParserContext("placeholderMap") LinkedHashMap<String,Placeholder> placeholderMap,
             @ParserContext("locator") SQLLocator locator
-            );
+            ) throws OffsetLocatorException;
 
     @Rules(
     {
