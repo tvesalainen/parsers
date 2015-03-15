@@ -82,23 +82,44 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
     {
         FetchResult fr = new FetchResult<>(this, "Column", "Count", "Indexed", "Unique");
         TableMetadata tm = getTableMetadata(tablename);
-        for (ColumnMetadata cm : tm.getColumns())
+        if (tm != null)
         {
-            fr.addRowArray(cm.getName(), cm.getCount(), cm.isIndexed(), cm.isUnique());
+            for (ColumnMetadata cm : tm.getColumns())
+            {
+                fr.addRowArray(cm.getName(), cm.getCount(), cm.isIndexed(), cm.isUnique());
+            }
         }
         return fr;
     }
-
+    /**
+     * Check the sql statement without executing it.
+     * @param sql 
+     */
     public void check(String sql)
     {
         parser.check(sql, null);
     }
-    
+    /**
+     * Check the sql statement without executing it.
+     * @param sql 
+     */
+    public void check(InputStream sql)
+    {
+        parser.check(sql, null);
+    }
+    /**
+     * 
+     * @param reader 
+     */
     public void check(InputReader reader)
     {
         parser.check(reader, null);
     }
-    
+    /**
+     * 
+     * @param reader
+     * @param locator 
+     */
     public void check(InputReader reader, SQLLocator locator)
     {
         parser.check(reader, locator);
@@ -165,7 +186,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         sort(resultArray);
         ArrayMap<Table<R,C>,R> rowCandidate = new ArrayMap<>(select.getTables());
         cartesian(condition, result, resultArray, rowCandidate);
-        stopProgressMonitor();
+        destroyProgressMonitor();
     }
     
     private void cartesian(
@@ -458,6 +479,13 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
         
     }
     /**
+     * Creates progress monitor. Default implementation does nothing.
+     * @param parent
+     */
+    public void createProgressMonitor(Object parent)
+    {
+    }
+    /**
      * Start progress monitoring for execution. Default implementation does nothing.
      * @param min
      * @param max 
@@ -483,7 +511,7 @@ public abstract class Engine<R,C> implements SQLConverter<R, C>, Metadata
     /**
      * Stops progress monitoring. Default implementation does nothing.
      */
-    private void stopProgressMonitor()
+    public void destroyProgressMonitor()
     {
     }
 }
