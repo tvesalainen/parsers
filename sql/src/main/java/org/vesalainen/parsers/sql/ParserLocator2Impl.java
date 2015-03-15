@@ -43,16 +43,19 @@ public class ParserLocator2Impl implements ParserLocator2
         this.end = end;
     }
 
+    @Override
     public int getEnd()
     {
         return end;
     }
 
+    @Override
     public String getSource()
     {
         return source;
     }
 
+    @Override
     public int getStart()
     {
         return start;
