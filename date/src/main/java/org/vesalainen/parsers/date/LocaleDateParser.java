@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import org.vesalainen.parser.GenClassFactory;
+import static org.vesalainen.parser.ParserFeature.*;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
@@ -214,7 +215,7 @@ public abstract class LocaleDateParser extends DateReducers
      * @throws IOException 
      * @see <a href="doc-files/LocaleDateParser-dateTime.html#BNF">BNF Syntax for locale datetime</a>
      */
-    @ParseMethod(start = "dateTime", wideIndex = true)
+    @ParseMethod(start = "dateTime", features={SingleThread, WideIndex})
     protected abstract void parseDateTime(String text, @ParserContext Calendar calendar) throws IOException;
     /**
      * 
@@ -223,7 +224,7 @@ public abstract class LocaleDateParser extends DateReducers
      * @throws IOException 
      * @see <a href="doc-files/LocaleDateParser-date.html#BNF">BNF Syntax for locale date</a>
      */
-    @ParseMethod(start = "date", wideIndex = true)
+    @ParseMethod(start = "date", features={SingleThread, WideIndex})
     protected abstract void parseDate(String text, @ParserContext Calendar calendar) throws IOException;
     /**
      * 
@@ -232,7 +233,7 @@ public abstract class LocaleDateParser extends DateReducers
      * @throws IOException 
      * @see <a href="doc-files/LocaleDateParser-time.html#BNF">BNF Syntax for locale time</a>
      */
-    @ParseMethod(start = "time", wideIndex = true)
+    @ParseMethod(start = "time", features={SingleThread, WideIndex})
     protected abstract void parseTime(String text, @ParserContext Calendar calendar) throws IOException;
 
     public static LocaleDateParser newInstance() throws IOException

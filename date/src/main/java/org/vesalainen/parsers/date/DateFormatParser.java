@@ -26,6 +26,7 @@ import javax.lang.model.element.ExecutableElement;
 import org.vesalainen.bcc.model.El;
 import org.vesalainen.grammar.Grammar;
 import org.vesalainen.parser.GenClassFactory;
+import static org.vesalainen.parser.ParserFeature.*;
 import org.vesalainen.parser.annotation.GenClassname;
 
 /**
@@ -61,7 +62,7 @@ public abstract class DateFormatParser
      * @see <a href="doc-files/DateFormatParser-rhs.html#BNF">BNF Syntax for DateFormat patterns</a>
      * @see java.text.SimpleDateFormat
      */
-    @ParseMethod(start="rhs")
+    @ParseMethod(start="rhs", features={SingleThread})
     public abstract List<String> parse(
             String pattern,
             @ParserContext("GRAMMAR") Grammar grammar,

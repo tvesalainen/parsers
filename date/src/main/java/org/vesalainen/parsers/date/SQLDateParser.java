@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import org.vesalainen.parser.GenClassFactory;
+import static org.vesalainen.parser.ParserFeature.SingleThread;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
@@ -93,7 +94,7 @@ public abstract class SQLDateParser extends DateReducers
      * @param calendar 
      * @see <a href="doc-files/SQLDateParser-sqlDate.html#BNF">BNF Syntax for SQL Date</a>
      */
-    @ParseMethod(start = "sqlDate")
+    @ParseMethod(start = "sqlDate", features={SingleThread})
     protected abstract void parseDate(String text, @ParserContext Calendar calendar);
     /**
      * 
@@ -101,7 +102,7 @@ public abstract class SQLDateParser extends DateReducers
      * @param calendar 
      * @see <a href="doc-files/SQLDateParser-sqlTime.html#BNF">BNF Syntax for SQL Time</a>
      */
-    @ParseMethod(start = "sqlTime")
+    @ParseMethod(start = "sqlTime", features={SingleThread})
     protected abstract void parseTime(String text, @ParserContext Calendar calendar);
     /**
      * 
@@ -109,7 +110,7 @@ public abstract class SQLDateParser extends DateReducers
      * @param calendar 
      * @see <a href="doc-files/SQLDateParser-sqlTimestamp.html#BNF">BNF Syntax for SQL Timestamp</a>
      */
-    @ParseMethod(start = "sqlTimestamp")
+    @ParseMethod(start = "sqlTimestamp", features={SingleThread})
     protected abstract void parseTimestamp(String text, @ParserContext Calendar calendar);
     
     private Calendar getInstance()

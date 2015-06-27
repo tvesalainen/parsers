@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import org.vesalainen.parser.GenClassFactory;
+import static org.vesalainen.parser.ParserFeature.*;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
@@ -355,7 +356,7 @@ public abstract class InternetDateParser extends DateReducers
      * @throws IOException 
      * @see <a href="doc-files/InternetDateParser-date.html#BNF">BNF Syntax for RFC1123 or RFC850 or AscTime or ISO8601 date</a>
      */
-    @ParseMethod(start = "date", wideIndex = true)
+    @ParseMethod(start = "date", features={WideIndex, SingleThread})
     protected abstract void parse(String text, @ParserContext Calendar calendar) throws IOException;
     /**
      * 
@@ -364,7 +365,7 @@ public abstract class InternetDateParser extends DateReducers
      * @throws IOException 
      * @see <a href="doc-files/InternetDateParser-rfc1123.html#BNF">BNF Syntax for RFC1123 date</a>
      */
-    @ParseMethod(start = "rfc1123", wideIndex = true)
+    @ParseMethod(start = "rfc1123", features={WideIndex, SingleThread})
     protected abstract void parseRFC1123(String text, @ParserContext Calendar calendar) throws IOException;
     /**
      * 
@@ -373,7 +374,7 @@ public abstract class InternetDateParser extends DateReducers
      * @throws IOException 
      * @see <a href="doc-files/InternetDateParser-rfc850.html#BNF">BNF Syntax for RFC850 date</a>
      */
-    @ParseMethod(start = "rfc850", wideIndex = true)
+    @ParseMethod(start = "rfc850", features={WideIndex, SingleThread})
     protected abstract void parseRFC850(String text, @ParserContext Calendar calendar) throws IOException;
     /**
      * 
@@ -382,7 +383,7 @@ public abstract class InternetDateParser extends DateReducers
      * @throws IOException 
      * @see <a href="doc-files/InternetDateParser-ascTime.html#BNF">BNF Syntax for AscTime date</a>
      */
-    @ParseMethod(start = "ascTime", wideIndex = true)
+    @ParseMethod(start = "ascTime", features={WideIndex, SingleThread})
     protected abstract void parseAscTime(String text, @ParserContext Calendar calendar) throws IOException;
     /**
      * 
@@ -391,7 +392,7 @@ public abstract class InternetDateParser extends DateReducers
      * @throws IOException 
      * @see <a href="doc-files/InternetDateParser-iso8601.html#BNF">BNF Syntax for ISO8601 date</a>
      */
-    @ParseMethod(start = "iso8601", wideIndex = true)
+    @ParseMethod(start = "iso8601", features={WideIndex, SingleThread})
     protected abstract void parseISO8601(String text, @ParserContext Calendar calendar) throws IOException;
 
 @Terminal(expression="EGST|Eastern Greenland Summer Time|AZOST|Azores Summer Time|CVST|Cape Verde Summer Time|Africa/Abidjan|GMT|Greenwich Mean Time|Africa/Accra|Ghana Mean Time|Africa/Bamako|Africa/Banjul|Africa/Bissau|Africa/Casablanca|WET|Western European Time|Africa/Conakry|Africa/Dakar|Africa/El_Aaiun|Africa/Freetown|Africa/Lome|Africa/Monrovia|Africa/Nouakchott|Africa/Ouagadougou|Africa/Sao_Tome|Africa/Timbuktu|America/Danmarkshavn|Atlantic/Canary|Atlantic/Faeroe|Atlantic/Faroe|Atlantic/Madeira|Atlantic/Reykjavik|Atlantic/St_Helena|Eire|Etc/GMT|Etc/GMT\\+0|Etc/GMT\\-0|Etc/GMT0|Etc/Greenwich|Etc/UCT|UTC|Coordinated Universal Time|Etc/UTC|Etc/Universal|Etc/Zulu|Europe/Belfast|Europe/Dublin|Europe/Guernsey|Europe/Isle_of_Man|Europe/Jersey|Europe/Lisbon|Europe/London|GB|GB\\-Eire|GMT0|Greenwich|Iceland|Portugal|UCT|Universal|Zulu|Z")
