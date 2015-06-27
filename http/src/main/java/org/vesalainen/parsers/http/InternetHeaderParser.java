@@ -5,7 +5,6 @@
 
 package org.vesalainen.parsers.http;
 
-import org.vesalainen.parser.ParserCompiler;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
 import org.vesalainen.parser.annotation.ParserContext;
@@ -63,7 +62,7 @@ public abstract class InternetHeaderParser
      * @see <a href="doc-files/InternetHeaderParser-messageHeader.html#BNF">BNF Syntax for Message Header</a>
      */
     @ParseMethod(start="messageHeader", size=80)
-    protected abstract Map<String,List<String>> parse(String str, @ParserContext Map<String,List<String>> hdr);
+    protected abstract void parse(String str, @ParserContext Map<String,List<String>> hdr);
     /**
      * 
      * @param is
@@ -72,7 +71,7 @@ public abstract class InternetHeaderParser
      * @see <a href="doc-files/InternetHeaderParser-messageHeader.html#BNF">BNF Syntax for Message Header</a>
      */
     @ParseMethod(start="messageHeader", size=80)
-    protected abstract Map<String,List<String>> parse(InputStream is, @ParserContext Map<String,List<String>> hdr);
+    protected abstract void parse(InputStream is, @ParserContext Map<String,List<String>> hdr);
 
     @Rule({"messageHeaders", "CRLF"})
     protected void messageHeader(@ParserContext Map<String,List<String>> hdr)
