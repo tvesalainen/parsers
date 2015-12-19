@@ -17,13 +17,10 @@
 
 package org.vesalainen.parsers.xml;
 
-import java.io.InputStream;
 import java.net.URL;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import static org.junit.Assert.*;
 import org.junit.Test;
-import org.vesalainen.parser.util.InputReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 

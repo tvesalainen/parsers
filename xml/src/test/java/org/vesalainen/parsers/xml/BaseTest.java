@@ -7,7 +7,6 @@ package org.vesalainen.parsers.xml;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
