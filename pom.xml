@@ -16,6 +16,7 @@
         <module>magic</module>
         <module>sql</module>
         <module>xml</module>
+        <module>unit-parser</module>
     </modules>
     <name>Utility parsers</name>
     <description>

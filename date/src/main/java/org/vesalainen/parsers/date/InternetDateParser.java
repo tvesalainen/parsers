@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import org.vesalainen.parser.GenClassFactory;
 import static org.vesalainen.parser.ParserFeature.*;
 import org.vesalainen.parser.annotation.GenClassname;
@@ -174,7 +175,7 @@ import org.vesalainen.parser.annotation.Terminals;
 })
 public abstract class InternetDateParser extends DateReducers
 {
-    public static InternetDateParser newInstance() throws NoSuchMethodException, IOException, NoSuchFieldException, ClassNotFoundException, InstantiationException, IllegalAccessException
+    public static InternetDateParser newInstance()
     {
         return (InternetDateParser) GenClassFactory.getGenInstance(InternetDateParser.class);
     }
@@ -345,8 +346,7 @@ public abstract class InternetDateParser extends DateReducers
     {
         Calendar cal = Calendar.getInstance();
         cal.clear();
-        cal.set(Calendar.ZONE_OFFSET, 0);
-        cal.set(Calendar.DST_OFFSET, 0);
+        cal.setTimeZone(TimeZone.getTimeZone("UTC"));
         return cal;
     }
     /**
