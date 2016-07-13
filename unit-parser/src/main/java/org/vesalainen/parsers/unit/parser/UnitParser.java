@@ -6,7 +6,6 @@
 package org.vesalainen.parsers.unit.parser;
 
 import java.util.concurrent.TimeUnit;
-import org.vesalainen.lang.Primitives;
 import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
@@ -123,7 +122,7 @@ public abstract class UnitParser
         return 1e12;
     }
     @ParseMethod(start="value")
-    protected abstract double parse(CharSequence text);
+    public abstract double parse(CharSequence text);
     
     public static UnitParser getInstance()
     {
