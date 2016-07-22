@@ -133,6 +133,18 @@ public abstract class UnitParser
     {
         return 1e12;
     }
+    public long parseDays(CharSequence text)
+    {
+        return parseHours(text)/24;
+    }
+    public long parseHours(CharSequence text)
+    {
+        return parseMinutes(text)/60;
+    }
+    public long parseMinutes(CharSequence text)
+    {
+        return parseSeconds(text)/60;
+    }
     /**
      * Parses string 'number prefix' and returns number multiplied according to
      * prefix.

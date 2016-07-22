@@ -44,4 +44,10 @@ public class UnitParserTest
         assertEquals(30*24*60*60, up.parseSeconds("1 months"), Epsilon);
         assertEquals(365*24*60*60, up.parseSeconds("1 years"), Epsilon);
     }
+    @Test
+    public void test3()
+    {
+        UnitParser up = UnitParser.getInstance();
+        assertEquals(730, up.parseDays("2 years"), Epsilon);
+    }
 }
