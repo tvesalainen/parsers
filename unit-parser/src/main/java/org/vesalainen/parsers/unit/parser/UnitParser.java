@@ -16,7 +16,7 @@ import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.regex.Regex;
 
 /**
- * Parser that parses numbers with units. Units are hours, minutes, seconds, 
+ * Parser that parses numbers with units. Units are years, months, hours, minutes, seconds, 
  * pico, nano, micro, milli, kilo, mega and tera. Parser is case-insensitive.
  * @author tkv
  */
@@ -43,6 +43,8 @@ public abstract class UnitParser
     protected abstract void sp();
 
     @Rules({
+        @Rule("years"),
+        @Rule("months"),
         @Rule("days"),
         @Rule("hours"),
         @Rule("minutes"),
@@ -61,66 +63,104 @@ public abstract class UnitParser
     {
         return multiplier;
     }
-    @Terminal(expression="days", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="years?", options={Regex.Option.CASE_INSENSITIVE})
+    protected double years()
+    {
+        return TimeUnit.DAYS.toMillis(1)*365;
+    }
+    @Terminal(expression="months?", options={Regex.Option.CASE_INSENSITIVE})
+    protected double months()
+    {
+        return TimeUnit.DAYS.toMillis(1)*30;
+    }
+    @Terminal(expression="days?", options={Regex.Option.CASE_INSENSITIVE})
     protected double days()
     {
         return TimeUnit.DAYS.toMillis(1);
     }
-    @Terminal(expression="hours", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="hours?", options={Regex.Option.CASE_INSENSITIVE})
     protected double hours()
     {
         return TimeUnit.HOURS.toMillis(1);
     }
-    @Terminal(expression="minutes", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="minutes?", options={Regex.Option.CASE_INSENSITIVE})
     protected double minutes()
     {
         return TimeUnit.MINUTES.toMillis(1);
     }
-    @Terminal(expression="seconds", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="seconds?", options={Regex.Option.CASE_INSENSITIVE})
     protected double seconds()
     {
         return TimeUnit.SECONDS.toMillis(1);
     }
-    @Terminal(expression="pico", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="picos?", options={Regex.Option.CASE_INSENSITIVE})
     protected double pico()
     {
         return 1e-12;
     }
-    @Terminal(expression="nano", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="nanos?", options={Regex.Option.CASE_INSENSITIVE})
     protected double nano()
     {
         return 1e-9;
     }
-    @Terminal(expression="micro", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="micros?", options={Regex.Option.CASE_INSENSITIVE})
     protected double micro()
     {
         return 1e-6;
     }
-    @Terminal(expression="milli", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="millis?", options={Regex.Option.CASE_INSENSITIVE})
     protected double milli()
     {
         return 1e-3;
     }
-    @Terminal(expression="kilo", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="kilos?", options={Regex.Option.CASE_INSENSITIVE})
     protected double kilo()
     {
         return 1e3;
     }
-    @Terminal(expression="mega", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="megas?", options={Regex.Option.CASE_INSENSITIVE})
     protected double mega()
     {
         return 1e6;
     }
-    @Terminal(expression="giga", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="gigas?", options={Regex.Option.CASE_INSENSITIVE})
     protected double giga()
     {
         return 1e9;
     }
-    @Terminal(expression="tera", options={Regex.Option.CASE_INSENSITIVE})
+    @Terminal(expression="teras?", options={Regex.Option.CASE_INSENSITIVE})
     protected double tera()
     {
         return 1e12;
     }
+    /**
+     * Parses string 'number prefix' and returns number multiplied according to
+     * prefix.
+     * <p>Divides parseMillis with 1000.
+     * @param text
+     * @return 
+     */
+    public long parseSeconds(CharSequence text)
+    {
+        return parseMillis(text)/1000;
+    }
+    /**
+     * Parses string 'number prefix' and returns number multiplied according to
+     * prefix.
+     * <p>This actually casts double returned from parse method to long.
+     * @param text
+     * @return 
+     */
+    public long parseMillis(CharSequence text)
+    {
+        return (long) parse(text);
+    }
+    /**
+     * Parses string 'number prefix' and returns number multiplied according to
+     * prefix.
+     * @param text
+     * @return 
+     */
     @ParseMethod(start="value")
     public abstract double parse(CharSequence text);
     
