@@ -5,6 +5,8 @@
  */
 package org.vesalainen.parsers.coordinates;
 
+import java.io.File;
+import java.util.List;
 import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.ParserConstants;
 import org.vesalainen.parser.annotation.GenClassname;
@@ -41,6 +43,18 @@ public abstract class CoordinatesParser<T>
     
     @ParseMethod(start="coordinate", whiteSpace ="whiteSpace")
     public abstract T parseCoordinate(String text);
+
+    @ParseMethod(start="coordinates", whiteSpace ="whiteSpace")
+    public abstract List<T> parseCoordinates(String text);
+
+    @ParseMethod(start="coordinates", whiteSpace ="whiteSpace", size=4096, charSet="US-ASCII")
+    public abstract List<T> parseCoordinates(File file);
+
+    @Rule("coordinate+")
+    protected List<T> coordinates(List<T> list)
+    {
+        return list;
+    }
 
     @Rule("decimal decimal")
     protected T coordinate(double lat, double lon)
