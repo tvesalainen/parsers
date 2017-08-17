@@ -18,7 +18,7 @@ import org.vesalainen.regex.Regex;
 /**
  * Parser that parses numbers with units. Units are years, months, hours, minutes, seconds, 
  * pico, nano, micro, milli, kilo, mega and tera. Parser is case-insensitive.
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 @GenClassname("org.vesalainen.parsers.unit.parser.UnitParserImpl")
 @GrammarDef()

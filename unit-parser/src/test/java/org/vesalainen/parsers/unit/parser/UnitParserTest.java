@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class UnitParserTest
 {
