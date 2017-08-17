@@ -27,7 +27,7 @@ import org.xml.sax.ext.DefaultHandler2;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class PrintingHandler extends DefaultHandler2
 {

@@ -18,7 +18,7 @@ package org.vesalainen.parsers.xml.attr;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class DefaultDecl
 {

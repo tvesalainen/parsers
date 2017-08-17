@@ -7,7 +7,7 @@ package org.vesalainen.parsers.coordinates;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 @FunctionalInterface
 public interface CoordinateSupplier<T>

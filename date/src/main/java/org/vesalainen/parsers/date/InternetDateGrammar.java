@@ -29,7 +29,7 @@ import java.util.Locale;
  * or
  * ASC Time EEE, MMM dd HH:mm:ss yyyy
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class InternetDateGrammar extends SimpleDateGrammar
 {

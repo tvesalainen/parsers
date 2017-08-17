@@ -55,7 +55,7 @@ import org.xml.sax.SAXParseException;
 
 /**
  * @deprecated Not migrated to annotation processor
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 //@GenClassname("org.vesalainen.parsers.xml.DTDParserImpl")
 //@GrammarDef()

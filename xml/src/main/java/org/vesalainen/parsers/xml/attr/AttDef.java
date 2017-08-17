@@ -21,7 +21,7 @@ import org.vesalainen.grammar.Nonterminal;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public abstract class AttDef
 {

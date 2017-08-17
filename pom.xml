@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.vesalainen</groupId>
         <artifactId>parent</artifactId>
-        <version>1.8.0</version>
+        <version>1.8.1</version>
     </parent>    
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.vesalainen.parsers</groupId>
@@ -17,6 +17,7 @@
         <module>sql</module>
         <module>xml</module>
         <module>unit-parser</module>
+        <module>coordinates</module>
     </modules>
     <name>Utility parsers</name>
     <description>

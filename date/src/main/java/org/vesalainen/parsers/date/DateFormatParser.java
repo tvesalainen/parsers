@@ -33,7 +33,7 @@ import org.vesalainen.parser.annotation.GenClassname;
  * DateFormatParser is an abstract base class for DateFormatParserImpl. Generated
  * DateFormatParser parses java.text.SimpleDateFormat style patterns and creates
  * grammar rules for actual date parser.
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  * @see <a href="doc-files/DateFormatParser-rhs.html#BNF">BNF Syntax for DateFormat patterns</a>
  * @see java.text.SimpleDateFormat
  */

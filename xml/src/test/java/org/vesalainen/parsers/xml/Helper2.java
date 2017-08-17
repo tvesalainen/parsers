@@ -7,7 +7,7 @@ package org.vesalainen.parsers.xml;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class Helper2
 {

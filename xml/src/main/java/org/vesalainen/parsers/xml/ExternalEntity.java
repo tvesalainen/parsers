@@ -29,7 +29,7 @@ import org.xml.sax.ext.Locator2;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class ExternalEntity
 {

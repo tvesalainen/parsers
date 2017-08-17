@@ -20,7 +20,7 @@ import org.vesalainen.grammar.Grammar;
 
 /**
  * SimpleDateGrammar is build by using same patterns as in java.text.SimpleDateFormat. 
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class SimpleDateGrammar extends Grammar
 {

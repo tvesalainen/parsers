@@ -22,7 +22,7 @@ import org.vesalainen.regex.Regex;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public abstract class AttType
 {

@@ -37,7 +37,7 @@ import org.xml.sax.SAXParseException;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 //@GrammarDef(start="document")
 public abstract class XMLBaseGrammar

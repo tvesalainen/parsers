@@ -13,7 +13,7 @@ import java.net.URL;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class BaseTest
 {

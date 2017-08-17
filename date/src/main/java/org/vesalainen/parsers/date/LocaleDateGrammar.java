@@ -12,7 +12,7 @@ import java.util.Locale;
 
 /**
  * LocaleDateGrammar creates rules for date parsing in locale-sensitive way.
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class LocaleDateGrammar extends SimpleDateGrammar
 {

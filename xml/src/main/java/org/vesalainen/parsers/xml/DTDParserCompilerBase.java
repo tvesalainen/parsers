@@ -23,7 +23,7 @@ import org.vesalainen.parser.annotation.Rules;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 //@GrammarDef
 public abstract class DTDParserCompilerBase extends XMLBaseGrammar

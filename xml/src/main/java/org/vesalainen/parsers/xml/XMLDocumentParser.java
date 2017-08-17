@@ -57,7 +57,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 @GenClassname("org.vesalainen.parsers.xml.XMLDocumentParserImpl")
 @GrammarDef()

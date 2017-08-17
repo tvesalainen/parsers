@@ -28,7 +28,7 @@ import java.nio.charset.CoderResult;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class InputStreamDecoderReader extends Reader
 {

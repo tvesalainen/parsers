@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public abstract class XMLDTDBaseGrammar extends XMLBaseGrammar
 {

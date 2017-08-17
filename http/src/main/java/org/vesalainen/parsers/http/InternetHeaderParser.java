@@ -30,7 +30,7 @@ import org.vesalainen.parser.annotation.GenClassname;
  * <p>fieldValue ::= line LWS fieldValue
  *
  * <p>
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  * @see <a href="doc-files/InternetHeaderParser-messageHeader.html#BNF">BNF Syntax for Message Header</a>
  */
 @GenClassname("org.vesalainen.parsers.http.InternetHeaderParserImpl")
