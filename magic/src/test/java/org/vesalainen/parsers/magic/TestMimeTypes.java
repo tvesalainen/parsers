@@ -16,10 +16,10 @@
  */
 package org.vesalainen.parsers.magic;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -36,26 +36,13 @@ public class TestMimeTypes
     {
     }
 
-    @BeforeClass
-    public static void setUpClass()
+    @Test
+    public void testFileTypeDetector() throws IOException
     {
+        Path pom = Paths.get("pom.xml");
+        assertEquals("text/xml", Files.probeContentType(pom));
     }
-
-    @AfterClass
-    public static void tearDownClass()
-    {
-    }
-
-    @Before
-    public void setUp()
-    {
-    }
-
-    @After
-    public void tearDown()
-    {
-    }
-
+    
     /**
      * Test of getType method, of class MimeTypes.
      */
