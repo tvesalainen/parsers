@@ -25,7 +25,6 @@ import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.DFAMap;
 import org.vesalainen.parser.annotation.DFAMapEntry;
 import org.vesalainen.parser.annotation.GenClassname;
-import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.util.Input;
 import org.vesalainen.parser.util.InputReader;
 import org.vesalainen.regex.ant.MapParser;
