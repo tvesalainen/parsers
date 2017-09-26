@@ -17,7 +17,10 @@
 package org.vesalainen.parsers.date;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
+import org.vesalainen.time.MutableDateTime;
 import java.util.Date;
 import org.vesalainen.parser.GenClassFactory;
 import static org.vesalainen.parser.ParserFeature.*;
@@ -29,6 +32,7 @@ import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.parser.annotation.Terminals;
+import org.vesalainen.time.SimpleMutableDateTime;
 
 /**
  * LocaleDateParser parses dates in locale-sensitive way.
@@ -71,33 +75,33 @@ import org.vesalainen.parser.annotation.Terminals;
 ,@Terminal(left="'ma|maa|maan|maana|maanan|maanant|maananta|maanantai'", expression="ma|maa|maan|maana|maanan|maanant|maananta|maanantai")
 })
 @Rules({
-@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month4(java.util.Calendar)", value={"'huhti|huhtik|huhtiku|huhtikuu'"})
-,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month12(java.util.Calendar)", value={"'joulu|jouluk|jouluku|joulukuu'"})
-,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month7(java.util.Calendar)", value={"'heinä|heinäk|heinäku|heinäkuu'"})
-,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month11(java.util.Calendar)", value={"'marras|marrask|marrasku|marraskuu'"})
-,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month2(java.util.Calendar)", value={"'helmi|helmik|helmiku|helmikuu'"})
-,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month1(java.util.Calendar)", value={"'tammi|tammik|tammiku|tammikuu'"})
-,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month6(java.util.Calendar)", value={"'kesä|kesäk|kesäku|kesäkuu'"})
-,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month9(java.util.Calendar)", value={"'syys|syysk|syysku|syyskuu'"})
-,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month10(java.util.Calendar)", value={"'loka|lokak|lokaku|lokakuu'"})
-,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month3(java.util.Calendar)", value={"'maalis|maalisk|maalisku|maaliskuu'"})
-,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month8(java.util.Calendar)", value={"'elo|elok|eloku|elokuu'"})
-,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month5(java.util.Calendar)", value={"'touko|toukok|toukoku|toukokuu'"})
+@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month4(org.vesalainen.time.MutableDateTime)", value={"'huhti|huhtik|huhtiku|huhtikuu'"})
+,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month12(org.vesalainen.time.MutableDateTime)", value={"'joulu|jouluk|jouluku|joulukuu'"})
+,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month7(org.vesalainen.time.MutableDateTime)", value={"'heinä|heinäk|heinäku|heinäkuu'"})
+,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month11(org.vesalainen.time.MutableDateTime)", value={"'marras|marrask|marrasku|marraskuu'"})
+,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month2(org.vesalainen.time.MutableDateTime)", value={"'helmi|helmik|helmiku|helmikuu'"})
+,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month1(org.vesalainen.time.MutableDateTime)", value={"'tammi|tammik|tammiku|tammikuu'"})
+,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month6(org.vesalainen.time.MutableDateTime)", value={"'kesä|kesäk|kesäku|kesäkuu'"})
+,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month9(org.vesalainen.time.MutableDateTime)", value={"'syys|syysk|syysku|syyskuu'"})
+,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month10(org.vesalainen.time.MutableDateTime)", value={"'loka|lokak|lokaku|lokakuu'"})
+,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month3(org.vesalainen.time.MutableDateTime)", value={"'maalis|maalisk|maalisku|maaliskuu'"})
+,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month8(org.vesalainen.time.MutableDateTime)", value={"'elo|elok|eloku|elokuu'"})
+,@Rule(left="MMM", reducer="org.vesalainen.parsers.date.DateReducers month5(org.vesalainen.time.MutableDateTime)", value={"'touko|toukok|toukoku|toukokuu'"})
 ,@Rule(left="mm", value={"minute"})
 ,@Rule(left="d", value={"dayInMonth"})
 ,@Rule(left="dateTime", value={"MM", "'/'", "d", "'/'", "yy", "' '", "h", "':'", "mm", "' '", "a"})
 ,@Rule(left="dateTime", value={"EEEE", "'\\, '", "MMM", "' '", "d", "'\\, '", "yyyy", "' '", "h", "':'", "mm", "':'", "ss", "' '", "a", "' '", "z"})
 ,@Rule(left="dateTime", value={"MMM", "' '", "d", "'\\, '", "yyyy", "' '", "h", "':'", "mm", "':'", "ss", "' '", "a"})
 ,@Rule(left="dateTime", value={"MMM", "' '", "d", "'\\, '", "yyyy", "' '", "h", "':'", "mm", "':'", "ss", "' '", "a", "' '", "z"})
-,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday3(java.util.Calendar)", value={"'ti|tii|tiis|tiist|tiista|tiistai'"})
-,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday7(java.util.Calendar)", value={"'la|lau|laua|lauan|lauant|lauanta|lauantai'"})
-,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday5(java.util.Calendar)", value={"'to|tor|tors|torst|torsta|torstai'"})
-,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday2(java.util.Calendar)", value={"'ma|maa|maan|maana|maanan|maanant|maananta|maanantai'"})
-,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday1(java.util.Calendar)", value={"'su|sun|sunn|sunnu|sunnun|sunnunt|sunnunta|sunnuntai'"})
-,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday6(java.util.Calendar)", value={"'pe|per|perj|perja|perjan|perjant|perjanta|perjantai'"})
-,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday4(java.util.Calendar)", value={"'ke|kes|kesk|keski|keskiv|keskivi|keskivii|keskiviik|keskiviikk|keskiviikko'"})
-,@Rule(left="a", reducer="org.vesalainen.parsers.date.DateReducers am(java.util.Calendar)", value={"'ap\\.'"})
-,@Rule(left="a", reducer="org.vesalainen.parsers.date.DateReducers pm(java.util.Calendar)", value={"'ip\\.'"})
+,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday3(org.vesalainen.time.MutableDateTime)", value={"'ti|tii|tiis|tiist|tiista|tiistai'"})
+,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday7(org.vesalainen.time.MutableDateTime)", value={"'la|lau|laua|lauan|lauant|lauanta|lauantai'"})
+,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday5(org.vesalainen.time.MutableDateTime)", value={"'to|tor|tors|torst|torsta|torstai'"})
+,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday2(org.vesalainen.time.MutableDateTime)", value={"'ma|maa|maan|maana|maanan|maanant|maananta|maanantai'"})
+,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday1(org.vesalainen.time.MutableDateTime)", value={"'su|sun|sunn|sunnu|sunnun|sunnunt|sunnunta|sunnuntai'"})
+,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday6(org.vesalainen.time.MutableDateTime)", value={"'pe|per|perj|perja|perjan|perjant|perjanta|perjantai'"})
+,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday4(org.vesalainen.time.MutableDateTime)", value={"'ke|kes|kesk|keski|keskiv|keskivi|keskivii|keskiviik|keskiviikk|keskiviikko'"})
+,@Rule(left="a", reducer="org.vesalainen.parsers.date.DateReducers am(org.vesalainen.time.MutableDateTime)", value={"'ap\\.'"})
+,@Rule(left="a", reducer="org.vesalainen.parsers.date.DateReducers pm(org.vesalainen.time.MutableDateTime)", value={"'ip\\.'"})
 ,@Rule(left="MM", value={"month"})
 ,@Rule(left="yy", value={"year2"})
 ,@Rule(left="date", value={"MMM", "' '", "d", "'\\, '", "yyyy"})
@@ -109,55 +113,55 @@ import org.vesalainen.parser.annotation.Terminals;
 ,@Rule(left="time", value={"h", "':'", "mm", "':'", "ss", "' '", "a"})
 ,@Rule(left="time", value={"h", "':'", "mm", "':'", "ss", "' '", "a", "' '", "z"})
 ,@Rule(left="time", value={"h", "':'", "mm", "' '", "a"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset54000000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset20700000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset50400000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_28800000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset24300000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_43200000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset19800000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_12600000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset35100000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_7200000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_14400000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset39600000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset10800000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset36000000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset32400000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset0"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset3600000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset18000000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_32400000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset43200000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset16200000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset27000000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset14400000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_3600000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_36000000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset7200000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_21600000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset23400000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_39600000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_10800000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset12600000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset25200000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_25200000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset45000000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset11224000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset31500000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset34200000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset41400000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset49500000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset37800000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_16200000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset21600000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_30600000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset45900000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_34200000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_9000000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset28800000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset46800000"})
-,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,java.util.Calendar)", value={"tzOffset_18000000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset54000000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset20700000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset50400000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_28800000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset24300000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_43200000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset19800000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_12600000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset35100000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_7200000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_14400000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset39600000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset10800000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset36000000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset32400000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset0"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset3600000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset18000000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_32400000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset43200000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset16200000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset27000000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset14400000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_3600000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_36000000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset7200000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_21600000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset23400000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_39600000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_10800000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset12600000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset25200000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_25200000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset45000000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset11224000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset31500000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset34200000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset41400000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset49500000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset37800000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_16200000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset21600000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_30600000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset45900000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_34200000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_9000000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset28800000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset46800000"})
+,@Rule(left="generalTZ", reducer="org.vesalainen.parsers.date.DateReducers generalTZ(int,org.vesalainen.time.MutableDateTime)", value={"tzOffset_18000000"})
 ,@Rule(left="yyyy", value={"year4"})
 ,@Rule(left="ss", value={"second"})
 ,@Rule(left="z", value={"generalTZ"})
@@ -171,70 +175,82 @@ public abstract class LocaleDateParser extends DateReducers
 
     public Calendar parseCalendarDate(String text) throws IOException
     {
-        Calendar cal = Calendar.getInstance();
-        cal.clear();
-        cal.set(Calendar.ZONE_OFFSET, 0);
-        cal.set(Calendar.DST_OFFSET, 0);
+        return parseMutableDateTimeDate(text).getGregorianCalendar();
+    }
+    public ZonedDateTime parseZonedDateTimeDate(String text) throws IOException
+    {
+        return parseMutableDateTimeDate(text).zonedDateTime();
+    }
+    private SimpleMutableDateTime parseMutableDateTimeDate(String text) throws IOException
+    {
+        SimpleMutableDateTime cal = new SimpleMutableDateTime();
         parseDate(text, cal);
         return cal;
     }
 
     public Date parseDateTime(String text) throws IOException
     {
-        return parseCalendarDate(text).getTime();
+        return parseCalendarDateTime(text).getTime();
     }
 
     public Calendar parseCalendarDateTime(String text) throws IOException
     {
-        Calendar cal = Calendar.getInstance();
-        cal.clear();
-        cal.set(Calendar.ZONE_OFFSET, 0);
-        cal.set(Calendar.DST_OFFSET, 0);
+        return parseMutableDateTime(text).getGregorianCalendar();
+    }
+    public ZonedDateTime parseZonedDateTime(String text) throws IOException
+    {
+        return parseMutableDateTime(text).zonedDateTime();
+    }
+    private SimpleMutableDateTime parseMutableDateTime(String text) throws IOException
+    {
+        SimpleMutableDateTime cal = new SimpleMutableDateTime();
         parseDateTime(text, cal);
         return cal;
     }
 
     public Date parseTime(String text) throws IOException
     {
-        return parseCalendarDate(text).getTime();
+        return parseCalendarTime(text).getTime();
     }
 
     public Calendar parseCalendarTime(String text) throws IOException
     {
-        Calendar cal = Calendar.getInstance();
-        cal.clear();
-        cal.set(Calendar.ZONE_OFFSET, 0);
-        cal.set(Calendar.DST_OFFSET, 0);
+        return parseMutableTime(text).getGregorianCalendar();
+    }
+    public LocalTime parseLocalTime(String text) throws IOException
+    {
+        return LocalTime.from(parseMutableTime(text));
+    }
+    private SimpleMutableDateTime parseMutableTime(String text) throws IOException
+    {
+        SimpleMutableDateTime cal = new SimpleMutableDateTime();
         parseTime(text, cal);
         return cal;
     }
     /**
      * 
      * @param text
-     * @param calendar
-     * @throws IOException 
+     * @param dateTime 
      * @see <a href="doc-files/LocaleDateParser-dateTime.html#BNF">BNF Syntax for locale datetime</a>
      */
     @ParseMethod(start = "dateTime", features={SingleThread, WideIndex})
-    protected abstract void parseDateTime(String text, @ParserContext Calendar calendar) throws IOException;
+    protected abstract void parseDateTime(String text, @ParserContext MutableDateTime dateTime);
     /**
      * 
      * @param text
-     * @param calendar
-     * @throws IOException 
+     * @param dateTime 
      * @see <a href="doc-files/LocaleDateParser-date.html#BNF">BNF Syntax for locale date</a>
      */
     @ParseMethod(start = "date", features={SingleThread, WideIndex})
-    protected abstract void parseDate(String text, @ParserContext Calendar calendar) throws IOException;
+    protected abstract void parseDate(String text, @ParserContext MutableDateTime dateTime);
     /**
      * 
      * @param text
-     * @param calendar
-     * @throws IOException 
+     * @param dateTime 
      * @see <a href="doc-files/LocaleDateParser-time.html#BNF">BNF Syntax for locale time</a>
      */
     @ParseMethod(start = "time", features={SingleThread, WideIndex})
-    protected abstract void parseTime(String text, @ParserContext Calendar calendar) throws IOException;
+    protected abstract void parseTime(String text, @ParserContext MutableDateTime dateTime);
 
     public static LocaleDateParser newInstance() throws IOException
     {

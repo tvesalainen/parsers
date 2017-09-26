@@ -69,7 +69,7 @@ public class TestInternetDateGrammar
         long bound = System.currentTimeMillis();
         ThreadLocalRandom rand = ThreadLocalRandom.current();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        //sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         for (int ii=0;ii<TESTCYCLES;ii++)
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
@@ -218,8 +218,8 @@ public class TestInternetDateGrammar
     {
         long bound = System.currentTimeMillis();
         ThreadLocalRandom rand = ThreadLocalRandom.current();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+        //sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         for (int ii=0;ii<TESTCYCLES;ii++)
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));

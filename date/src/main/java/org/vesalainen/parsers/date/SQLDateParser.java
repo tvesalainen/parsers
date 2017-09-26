@@ -18,7 +18,6 @@
 package org.vesalainen.parsers.date;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 import org.vesalainen.parser.GenClassFactory;
 import static org.vesalainen.parser.ParserFeature.SingleThread;
@@ -30,6 +29,8 @@ import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.parser.annotation.Terminals;
+import org.vesalainen.time.MutableDateTime;
+import org.vesalainen.time.SimpleMutableDateTime;
 
 /**
  * @author Timo Vesalainen
@@ -72,53 +73,45 @@ public abstract class SQLDateParser extends DateReducers
     }
     public Date parseDate(String text)
     {
-        Calendar calendar = getInstance();
+        SimpleMutableDateTime calendar = new SimpleMutableDateTime();
         parseDate(text, calendar);
-        return calendar.getTime();
+        return calendar.getGregorianCalendar().getTime();
     }
     public Date parseTime(String text)
     {
-        Calendar calendar = getInstance();
+        SimpleMutableDateTime calendar = new SimpleMutableDateTime();
         parseTime(text, calendar);
-        return calendar.getTime();
+        return calendar.getGregorianCalendar().getTime();
     }
     public Date parseTimestamp(String text)
     {
-        Calendar calendar = getInstance();
+        SimpleMutableDateTime calendar = new SimpleMutableDateTime();
         parseTimestamp(text, calendar);
-        return calendar.getTime();
+        return calendar.getGregorianCalendar().getTime();
     }
     /**
      * 
      * @param text
-     * @param calendar 
+     * @param dateTime 
      * @see <a href="doc-files/SQLDateParser-sqlDate.html#BNF">BNF Syntax for SQL Date</a>
      */
     @ParseMethod(start = "sqlDate", features={SingleThread})
-    protected abstract void parseDate(String text, @ParserContext Calendar calendar);
+    protected abstract void parseDate(String text, @ParserContext MutableDateTime dateTime);
     /**
      * 
      * @param text
-     * @param calendar 
+     * @param dateTime 
      * @see <a href="doc-files/SQLDateParser-sqlTime.html#BNF">BNF Syntax for SQL Time</a>
      */
     @ParseMethod(start = "sqlTime", features={SingleThread})
-    protected abstract void parseTime(String text, @ParserContext Calendar calendar);
+    protected abstract void parseTime(String text, @ParserContext MutableDateTime dateTime);
     /**
      * 
      * @param text
-     * @param calendar 
+     * @param dateTime 
      * @see <a href="doc-files/SQLDateParser-sqlTimestamp.html#BNF">BNF Syntax for SQL Timestamp</a>
      */
     @ParseMethod(start = "sqlTimestamp", features={SingleThread})
-    protected abstract void parseTimestamp(String text, @ParserContext Calendar calendar);
+    protected abstract void parseTimestamp(String text, @ParserContext MutableDateTime dateTime);
     
-    private Calendar getInstance()
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.clear();
-        cal.set(Calendar.ZONE_OFFSET, 0);
-        cal.set(Calendar.DST_OFFSET, 0);
-        return cal;
-    }
 }

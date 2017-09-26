@@ -4,12 +4,12 @@
  */
 package org.vesalainen.parsers.date;
 
+import java.time.temporal.ChronoField;
 import org.vesalainen.parser.annotation.ParserContext;
-import java.util.Calendar;
-import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
+import org.vesalainen.time.MutableDateTime;
 
 /**
  * DateReducers is an abstract class containing reducer methods for date parsing.
@@ -18,222 +18,215 @@ import org.vesalainen.parser.annotation.Terminal;
 public abstract class DateReducers
 {
 
-    protected void ad(@ParserContext Calendar cal)
+    protected void ad(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.ERA, 0);
+        cal.set(ChronoField.ERA, 0);
     }
 
-    protected void bc(@ParserContext Calendar cal)
+    protected void bc(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.ERA, 1);
+        cal.set(ChronoField.ERA, 1);
     }
 
     @Rule("digit12")
-    protected void year2(int y, @ParserContext Calendar cal)
+    protected void year2(int y, @ParserContext MutableDateTime cal)
     {
-        if (y > 70)
-        {
-            cal.set(Calendar.YEAR, 1900 + y);
-        }
-        else
-        {
-            cal.set(Calendar.YEAR, 2000 + y);
-        }
+        cal.setYear(y);
     }
 
     @Terminal(expression = "[0-9]{4}")
-    protected void year4(int y, @ParserContext Calendar cal)
+    protected void year4(int y, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.YEAR, y);
+        cal.setYear(y);
     }
 
     @Rule("digit12")
-    protected void month(int m, @ParserContext Calendar cal)
+    protected void month(int m, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, m - 1);
+        cal.setMonth(m);
     }
 
-    protected void month1(@ParserContext Calendar cal)
+    protected void month1(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.JANUARY);
+        cal.setMonth(1);
     }
 
-    protected void month2(@ParserContext Calendar cal)
+    protected void month2(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.FEBRUARY);
+        cal.setMonth(2);
     }
 
-    protected void month3(@ParserContext Calendar cal)
+    protected void month3(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.MARCH);
+        cal.setMonth(3);
     }
 
-    protected void month4(@ParserContext Calendar cal)
+    protected void month4(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.APRIL);
+        cal.setMonth(4);
     }
 
-    protected void month5(@ParserContext Calendar cal)
+    protected void month5(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.MAY);
+        cal.setMonth(5);
     }
 
-    protected void month6(@ParserContext Calendar cal)
+    protected void month6(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.JUNE);
+        cal.setMonth(6);
     }
 
-    protected void month7(@ParserContext Calendar cal)
+    protected void month7(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.JULY);
+        cal.setMonth(7);
     }
 
-    protected void month8(@ParserContext Calendar cal)
+    protected void month8(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.AUGUST);
+        cal.setMonth(8);
     }
 
-    protected void month9(@ParserContext Calendar cal)
+    protected void month9(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        cal.setMonth(9);
     }
 
-    protected void month10(@ParserContext Calendar cal)
+    protected void month10(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.OCTOBER);
+        cal.setMonth(10);
     }
 
-    protected void month11(@ParserContext Calendar cal)
+    protected void month11(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.NOVEMBER);
+        cal.setMonth(11);
     }
 
-    protected void month12(@ParserContext Calendar cal)
+    protected void month12(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MONTH, Calendar.DECEMBER);
+        cal.setMonth(12);
     }
 
     @Rule("digit13")
-    protected void weekInYear(int w, @ParserContext Calendar cal)
+    protected void weekInYear(int w, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.WEEK_OF_YEAR, w);
+        cal.set(ChronoField.ALIGNED_WEEK_OF_YEAR, w);
     }
 
     @Rule("digit1")
-    protected void weekInMonth(int w, @ParserContext Calendar cal)
+    protected void weekInMonth(int w, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.WEEK_OF_MONTH, w);
+        cal.set(ChronoField.ALIGNED_WEEK_OF_MONTH, w);
     }
 
     @Rule("digit13")
-    protected void dayInYear(int d, @ParserContext Calendar cal)
+    protected void dayInYear(int d, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.DAY_OF_YEAR, d);
+        cal.set(ChronoField.DAY_OF_YEAR, d);
     }
 
     @Rule("digit12")
-    protected void dayInMonth(int d, @ParserContext Calendar cal)
+    protected void dayInMonth(int d, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.DAY_OF_MONTH, d);
+        cal.set(ChronoField.DAY_OF_MONTH, d);
     }
 
     @Rule("digit1")
-    protected void dayInWeekInMonth(int d, @ParserContext Calendar cal)
+    protected void dayInWeekInMonth(int d, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.DAY_OF_WEEK_IN_MONTH, d);
+        cal.set(ChronoField.ALIGNED_DAY_OF_WEEK_IN_MONTH, d);
     }
 
-    protected void weekday1(@ParserContext Calendar cal)
+    protected void weekday1(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        cal.set(ChronoField.DAY_OF_WEEK, 1);
     }
 
-    protected void weekday2(@ParserContext Calendar cal)
+    protected void weekday2(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        cal.set(ChronoField.DAY_OF_WEEK, 2);
     }
 
-    protected void weekday3(@ParserContext Calendar cal)
+    protected void weekday3(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+        cal.set(ChronoField.DAY_OF_WEEK, 3);
     }
 
-    protected void weekday4(@ParserContext Calendar cal)
+    protected void weekday4(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+        cal.set(ChronoField.DAY_OF_WEEK, 4);
     }
 
-    protected void weekday5(@ParserContext Calendar cal)
+    protected void weekday5(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+        cal.set(ChronoField.DAY_OF_WEEK, 5);
     }
 
-    protected void weekday6(@ParserContext Calendar cal)
+    protected void weekday6(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+        cal.set(ChronoField.DAY_OF_WEEK, 6);
     }
 
-    protected void weekday7(@ParserContext Calendar cal)
+    protected void weekday7(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+        cal.set(ChronoField.DAY_OF_WEEK, 7);
     }
 
-    protected void am(@ParserContext Calendar cal)
+    protected void am(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.AM_PM, Calendar.AM);
+        cal.set(ChronoField.AMPM_OF_DAY, 0);
     }
 
-    protected void pm(@ParserContext Calendar cal)
+    protected void pm(@ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.AM_PM, Calendar.PM);
-    }
-
-    @Rule("digit12")
-    protected void hour23(int h, @ParserContext Calendar cal)
-    {
-        cal.set(Calendar.HOUR_OF_DAY, h);
+        cal.set(ChronoField.AMPM_OF_DAY, 1);
     }
 
     @Rule("digit12")
-    protected void hour24(int h, @ParserContext Calendar cal)
+    protected void hour23(int h, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.HOUR_OF_DAY, h + 1);
+        cal.set(ChronoField.HOUR_OF_DAY, h);
     }
 
     @Rule("digit12")
-    protected void hour11(int h, @ParserContext Calendar cal)
+    protected void hour24(int h, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.HOUR, h);
+        cal.set(ChronoField.HOUR_OF_DAY, h - 1);
     }
 
     @Rule("digit12")
-    protected void hour12(int h, @ParserContext Calendar cal)
+    protected void hour11(int h, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.HOUR, h + 1);
+        cal.set(ChronoField.CLOCK_HOUR_OF_AMPM, h + 1);
     }
 
     @Rule("digit12")
-    protected void minute(int m, @ParserContext Calendar cal)
+    protected void hour12(int h, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MINUTE, m);
+        cal.set(ChronoField.CLOCK_HOUR_OF_AMPM, h);
     }
 
     @Rule("digit12")
-    protected void second(int s, @ParserContext Calendar cal)
+    protected void minute(int m, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.SECOND, s);
+        cal.setMinute(m);
+    }
+
+    @Rule("digit12")
+    protected void second(int s, @ParserContext MutableDateTime cal)
+    {
+        cal.setSecond(s);
     }
 
     @Rule("digit3")
-    protected void milliSecond(int m, @ParserContext Calendar cal)
+    protected void milliSecond(int m, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.MILLISECOND, m);
+        cal.setMilliSecond(m);
     }
     
     //@Rule("tzName")
-    protected void generalTZ(int offset, @ParserContext Calendar cal)
+    protected void generalTZ(int offset, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.ZONE_OFFSET, offset);
+        cal.set(ChronoField.OFFSET_SECONDS, offset);
     }
 
     @Terminal(expression="GMT[\\+\\-][0-9]{2}:[0-9]{2}")    
@@ -244,11 +237,11 @@ public abstract class DateReducers
         int m = Integer.parseInt(s.substring(7, 9));
         if (sign == '+')
         {
-            return h * 3600000 + m * 60000;
+            return h * 3600 + m * 60;
         }
         else
         {
-            return -(h * 3600000 + m * 60000);
+            return -(h * 3600 + m * 60);
         }
     }
     
@@ -260,11 +253,11 @@ public abstract class DateReducers
         int m = Integer.parseInt(s.substring(6, 8));
         if (sign == '+')
         {
-            return h * 3600000 + m * 60000;
+            return h * 3600 + m * 60;
         }
         else
         {
-            return -(h * 3600000 + m * 60000);
+            return -(h * 3600 + m * 60);
         }
     }
     
@@ -276,11 +269,11 @@ public abstract class DateReducers
         int m = Integer.parseInt(s.substring(4, 6));
         if (sign == '+')
         {
-            return h * 3600000 + m * 60000;
+            return h * 3600 + m * 60;
         }
         else
         {
-            return -(h * 3600000 + m * 60000);
+            return -(h * 3600 + m * 60);
         }
     }
     
@@ -292,11 +285,11 @@ public abstract class DateReducers
         int m = Integer.parseInt(s.substring(3, 5));
         if (sign == '+')
         {
-            return h * 3600000 + m * 60000;
+            return h * 3600 + m * 60;
         }
         else
         {
-            return -(h * 3600000 + m * 60000);
+            return -(h * 3600 + m * 60);
         }
     }
     @Rules({
@@ -305,9 +298,9 @@ public abstract class DateReducers
     @Rule("rfc822String3"),
     @Rule("rfc822String4")
     })
-    protected void rfc822(int offset, @ParserContext Calendar cal)
+    protected void rfc822(int offset, @ParserContext MutableDateTime cal)
     {
-        cal.set(Calendar.ZONE_OFFSET, offset);
+        cal.set(ChronoField.OFFSET_SECONDS, offset);
     }
 
     @Terminal(expression = "[a-zA-Z]")
