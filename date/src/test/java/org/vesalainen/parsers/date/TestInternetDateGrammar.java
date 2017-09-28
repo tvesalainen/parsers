@@ -74,7 +74,7 @@ public class TestInternetDateGrammar
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
             String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
+            Date d2 = dp.parseZonedDate(exp);
             String got = sdf.format(d2);
             assertEquals(exp, got);
         }
@@ -91,7 +91,7 @@ public class TestInternetDateGrammar
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
             String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
+            Date d2 = dp.parseZonedDate(exp);
             String got = sdf.format(d2);
             assertEquals(exp, got);
         }
@@ -108,7 +108,7 @@ public class TestInternetDateGrammar
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
             String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
+            Date d2 = dp.parseZonedDate(exp);
             String got = sdf.format(d2);
             assertEquals(exp, got);
         }
@@ -125,7 +125,7 @@ public class TestInternetDateGrammar
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
             String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
+            Date d2 = dp.parseZonedDate(exp);
             String got = sdf.format(d2);
             assertEquals(exp, got);
         }
@@ -142,7 +142,7 @@ public class TestInternetDateGrammar
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
             String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
+            Date d2 = dp.parseZonedDate(exp);
             String got = sdf.format(d2);
             assertEquals(exp, got);
         }
@@ -159,7 +159,7 @@ public class TestInternetDateGrammar
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
             String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
+            Date d2 = dp.parseZonedDate(exp);
             String got = sdf.format(d2);
             assertEquals(exp, got);
         }
@@ -175,7 +175,7 @@ public class TestInternetDateGrammar
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
             String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
+            Date d2 = dp.parseZonedDate(exp);
             String got = sdf.format(d2);
             assertEquals(exp, got);
         }
@@ -191,7 +191,7 @@ public class TestInternetDateGrammar
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
             String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
+            Date d2 = dp.parseZonedDate(exp);
             String got = sdf.format(d2);
             assertEquals(exp, got);
         }
@@ -207,7 +207,7 @@ public class TestInternetDateGrammar
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
             String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
+            Date d2 = dp.parseZonedDate(exp);
             String got = sdf.format(d2);
             assertEquals(exp, got);
         }
@@ -224,7 +224,7 @@ public class TestInternetDateGrammar
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
             String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
+            Date d2 = dp.parseZonedDate(exp);
             String got = sdf.format(d2);
             assertEquals(exp, got);
         }
@@ -241,24 +241,7 @@ public class TestInternetDateGrammar
         {
             Date d1 = new Date(rand.nextLong(bound/2, bound));
             String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
-            String got = sdf.format(d2);
-            assertEquals(exp, got);
-        }
-    }
-
-    @Test
-    public void testASCTime() throws Exception
-    {
-        long bound = System.currentTimeMillis();
-        ThreadLocalRandom rand = ThreadLocalRandom.current();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd HH:mm:ss yyyy");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        for (int ii=0;ii<TESTCYCLES;ii++)
-        {
-            Date d1 = new Date(rand.nextLong(bound/2, bound));
-            String exp = sdf.format(d1);
-            Date d2 = dp.parseDate(exp);
+            Date d2 = dp.parseZonedDate(exp);
             String got = sdf.format(d2);
             assertEquals(exp, got);
         }
@@ -267,56 +250,48 @@ public class TestInternetDateGrammar
     @Test
     public void testTZ1() throws Exception
     {
-        Date d1 = dp.parseDate("1997-05-08T12:00:00EEST");
-        Date d2 = dp.parseDate("1997-05-08T12:00:00GMT+0300");
+        Date d1 = dp.parseZonedDate("1997-05-08T12:00:00EEST");
+        Date d2 = dp.parseZonedDate("1997-05-08T12:00:00GMT+0300");
         assertEquals(d1, d2);
     }
 
     @Test
     public void testTZ2() throws Exception
     {
-        Date d1 = dp.parseDate("1997-12-08T12:00:00Europe/Helsinki");
-        Date d2 = dp.parseDate("1997-12-08T12:00:00GMT+0200");
+        Date d1 = dp.parseZonedDate("1997-12-08T12:00:00Europe/Helsinki");
+        Date d2 = dp.parseZonedDate("1997-12-08T12:00:00GMT+0200");
         assertEquals(d1, d2);
     }
 
     @Test
     public void testTZ3() throws Exception
     {
-        Date d1 = dp.parseDate("1997-12-08T12:00:00B");
-        Date d2 = dp.parseDate("1997-12-08T12:00:00GMT+0200");
+        Date d1 = dp.parseZonedDate("1997-12-08T12:00:00B");
+        Date d2 = dp.parseZonedDate("1997-12-08T12:00:00GMT+0200");
         assertEquals(d1, d2);
     }
 
     @Test
     public void testTZ4() throws Exception
     {
-        Date d1 = dp.parseDate("1997-12-08T12:00:00B");
-        Date d2 = dp.parseDate("1997-12-08T12:00:00GMT+02:00");
+        Date d1 = dp.parseZonedDate("1997-12-08T12:00:00B");
+        Date d2 = dp.parseZonedDate("1997-12-08T12:00:00GMT+02:00");
         assertEquals(d1, d2);
     }
 
     @Test
     public void testTZ5() throws Exception
     {
-        Date d1 = dp.parseDate("1997-12-08T12:00:00B");
-        Date d2 = dp.parseDate("1997-12-08T12:00:00+0200");
+        Date d1 = dp.parseZonedDate("1997-12-08T12:00:00B");
+        Date d2 = dp.parseZonedDate("1997-12-08T12:00:00+0200");
         assertEquals(d1, d2);
     }
 
     @Test
     public void testTZ6() throws Exception
     {
-        Date d1 = dp.parseDate("1997-12-08T12:00:00B");
-        Date d2 = dp.parseDate("1997-12-08T12:00:00+02:00");
-        assertEquals(d1, d2);
-    }
-
-    @Test
-    public void testTZ7() throws Exception
-    {
-        Date d1 = dp.parseDate("2011-12-08T12:00:00Lord Howe Summer Time");
-        Date d2 = dp.parseDate("2011-12-08T12:00:00+11:00");
+        Date d1 = dp.parseZonedDate("1997-12-08T12:00:00B");
+        Date d2 = dp.parseZonedDate("1997-12-08T12:00:00+02:00");
         assertEquals(d1, d2);
     }
 

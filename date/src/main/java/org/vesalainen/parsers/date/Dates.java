@@ -16,6 +16,11 @@
  */
 package org.vesalainen.parsers.date;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Year;
+import java.time.YearMonth;
 import java.time.ZonedDateTime;
 
 /**
@@ -26,7 +31,7 @@ public final class Dates
 {
     private static final InternetDateParser parser = InternetDateParser.newInstance();
     /**
-     * Parses date in either ISO8601, RFC1123, RFC850 or asctime format.
+     * Parses date in either ISO8601, RFC1123 or RFC850.
      * @param text
      * @return 
      */
@@ -35,24 +40,82 @@ public final class Dates
         return parser.parseZonedDateTime(text);
     }
     /**
-     * Parses date in ISO8601 format.
+     * Parses date in ISO8601 zoned format.
      * <PRE>
      * yyyy-MM-dd'T'HH:mm:ss.SSSz
      * yyyy-MM-dd'T'HH:mm:ssz
-     * yyyy-MM-dd'T'HH:mmz
-     * yyyy-MM-dd'T'HH:mm:ss.SSSZ
-     * yyyy-MM-dd'T'HH:mm:ssZ
      * yyyy-MM-dd'T'HH:mmZ
+     * </PRE>
+     * @param text
+     * @return 
+     */
+    public static final ZonedDateTime parseISO8601Zoned(String text)
+    {
+        return parser.parseISO8601ZonedDateTime(text);
+    }
+    /**
+     * Parses date in ISO8601 format without zone.
+     * <PRE>
+     * yyyy-MM-dd'T'HH:mm:ss.SSS
+     * yyyy-MM-dd'T'HH:mm:ss
+     * yyyy-MM-dd'T'HH:mm
+     * </PRE>
+     * @param text
+     * @return 
+     */
+    public static final LocalDateTime parseISO8601LocalDateTime(String text)
+    {
+        return parser.parseISO8601LocalDateTime(text);
+    }
+    /**
+     * Parses date in ISO8601 format.
+     * <PRE>
      * yyyy-MM-dd
+     * </PRE>
+     * @param text
+     * @return 
+     */
+    public static final LocalDate parseISO8601LocalDate(String text)
+    {
+        return parser.parseISO8601LocalDate(text);
+    }
+    /**
+     * Parses date in ISO8601 format.
+     * <PRE>
      * yyyy-MM
+     * </PRE>
+     * @param text
+     * @return 
+     */
+    public static final YearMonth parseISO8601YearMonth(String text)
+    {
+        return parser.parseISO8601YearMonth(text);
+    }
+    /**
+     * Parses date in ISO8601 format.
+     * <PRE>
      * yyyy
      * </PRE>
      * @param text
      * @return 
      */
-    public static final ZonedDateTime parseISO8601(String text)
+    public static final Year parseISO8601Year(String text)
     {
-        return parser.parseISO8601ZonedDateTime(text);
+        return parser.parseISO8601Year(text);
+    }
+    /**
+     * Parses date in ISO8601 format.
+     * <PRE>
+     * HH:mm:ss.SSS
+     * HH:mm:ss
+     * HH:mm
+     * </PRE>
+     * @param text
+     * @return 
+     */
+    public static final LocalTime parseISO8601LocalTime(String text)
+    {
+        return parser.parseISO8601LocalTime(text);
     }
     /**
      * Parses date in RFC1123 format EEE, dd MMM yyyy HH:mm:ss z
@@ -77,8 +140,8 @@ public final class Dates
      * @param text
      * @return 
      */
-    public static final ZonedDateTime parseAscTime(String text)
+    public static final LocalDateTime parseAscTime(String text)
     {
-        return parser.parseAscTimeZonedDateTime(text);
+        return parser.parseAscTimeLocalDateTime(text);
     }
 }

@@ -17,10 +17,15 @@
 package org.vesalainen.parsers.date;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
+import java.time.Year;
+import java.time.YearMonth;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -33,6 +38,7 @@ public class DatesTest
     
     public DatesTest()
     {
+        //ZoneId.getAvailableZoneIds().stream().forEach((z)->System.err.println(z));
     }
 
     @Test
@@ -64,7 +70,19 @@ public class DatesTest
     @Test
     public void testAscTime()
     {
-        ZonedDateTime d = Dates.parseAscTime("Sat, Jul 16 02:03:55 1994");
+        LocalDateTime d = Dates.parseAscTime("Sat, Jul 16 02:03:55 1994");
+        assertEquals(DayOfWeek.SATURDAY, d.getDayOfWeek());
+        assertEquals(16, d.getDayOfMonth());
+        assertEquals(Month.JULY, d.getMonth());
+        assertEquals(1994, d.getYear());
+        assertEquals(2, d.getHour());
+        assertEquals(3, d.getMinute());
+        assertEquals(55, d.getSecond());
+    }
+    @Test
+    public void testISO8601()
+    {
+        ZonedDateTime d = Dates.parseISO8601Zoned("1994-07-16T02:03:55Z");
         assertEquals(DayOfWeek.SATURDAY, d.getDayOfWeek());
         assertEquals(16, d.getDayOfMonth());
         assertEquals(Month.JULY, d.getMonth());
@@ -75,9 +93,9 @@ public class DatesTest
         assertEquals(ZoneOffset.UTC, d.getOffset());
     }
     @Test
-    public void testISO8601()
+    public void testISO8601LocalDateTime()
     {
-        ZonedDateTime d = Dates.parseISO8601("1994-07-16T02:03:55Z");
+        LocalDateTime d = Dates.parseISO8601LocalDateTime("1994-07-16T02:03:55");
         assertEquals(DayOfWeek.SATURDAY, d.getDayOfWeek());
         assertEquals(16, d.getDayOfMonth());
         assertEquals(Month.JULY, d.getMonth());
@@ -85,7 +103,36 @@ public class DatesTest
         assertEquals(2, d.getHour());
         assertEquals(3, d.getMinute());
         assertEquals(55, d.getSecond());
-        assertEquals(ZoneOffset.UTC, d.getOffset());
+    }
+    @Test
+    public void testISO8601LocalDate()
+    {
+        LocalDate d = Dates.parseISO8601LocalDate("1994-07-16");
+        assertEquals(DayOfWeek.SATURDAY, d.getDayOfWeek());
+        assertEquals(16, d.getDayOfMonth());
+        assertEquals(Month.JULY, d.getMonth());
+        assertEquals(1994, d.getYear());
+    }
+    @Test
+    public void testISO8601YearMonth()
+    {
+        YearMonth d = Dates.parseISO8601YearMonth("1994-07");
+        assertEquals(Month.JULY, d.getMonth());
+        assertEquals(1994, d.getYear());
+    }
+    @Test
+    public void testISO8601Year()
+    {
+        Year d = Dates.parseISO8601Year("1994");
+        assertEquals(1994, d.getValue());
+    }
+    @Test
+    public void testISO8601LocalTime()
+    {
+        LocalTime d = Dates.parseISO8601LocalTime("02:03:55");
+        assertEquals(2, d.getHour());
+        assertEquals(3, d.getMinute());
+        assertEquals(55, d.getSecond());
     }
     @Test
     public void testRFC1123All()
@@ -112,18 +159,6 @@ public class DatesTest
         assertEquals(14, d.getMinute());
         assertEquals(55, d.getSecond());
         assertEquals(ZoneOffset.of("-5"), d.getOffset());
-    }
-    public void testAscTimeAll()
-    {
-        ZonedDateTime d = Dates.parse("Sat, Jul 16 02:03:55 1994");
-        assertEquals(DayOfWeek.SATURDAY, d.getDayOfWeek());
-        assertEquals(16, d.getDayOfMonth());
-        assertEquals(Month.JULY, d.getMonth());
-        assertEquals(1994, d.getYear());
-        assertEquals(2, d.getHour());
-        assertEquals(3, d.getMinute());
-        assertEquals(55, d.getSecond());
-        assertEquals(ZoneOffset.UTC, d.getOffset());
     }
     @Test
     public void testISO8601All()

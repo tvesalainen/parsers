@@ -4,6 +4,8 @@
  */
 package org.vesalainen.parsers.date;
 
+import java.time.ZoneId;
+import static java.time.ZoneId.SHORT_IDS;
 import java.time.temporal.ChronoField;
 import org.vesalainen.parser.annotation.ParserContext;
 import org.vesalainen.parser.annotation.Rule;
@@ -223,84 +225,11 @@ public abstract class DateReducers
         cal.setMilliSecond(m);
     }
     
-    //@Rule("tzName")
-    protected void generalTZ(int offset, @ParserContext MutableDateTime cal)
+    @Terminal(expression = "[A-Za-z\\+\\-][A-Za-z0-9~/._\\+\\-]*")
+    protected void zoneId(String zone, @ParserContext MutableDateTime cal)
     {
-        cal.set(ChronoField.OFFSET_SECONDS, offset);
-    }
-
-    @Terminal(expression="GMT[\\+\\-][0-9]{2}:[0-9]{2}")    
-    protected int rfc822String1(String s)
-    {
-        char sign = s.charAt(3);
-        int h = Integer.parseInt(s.substring(4, 6));
-        int m = Integer.parseInt(s.substring(7, 9));
-        if (sign == '+')
-        {
-            return h * 3600 + m * 60;
-        }
-        else
-        {
-            return -(h * 3600 + m * 60);
-        }
-    }
-    
-    @Terminal(expression="GMT[\\+\\-][0-9]{2}[0-9]{2}")    
-    protected int rfc822String2(String s)
-    {
-        char sign = s.charAt(3);
-        int h = Integer.parseInt(s.substring(4, 6));
-        int m = Integer.parseInt(s.substring(6, 8));
-        if (sign == '+')
-        {
-            return h * 3600 + m * 60;
-        }
-        else
-        {
-            return -(h * 3600 + m * 60);
-        }
-    }
-    
-    @Terminal(expression="[\\+\\-][0-9]{2}:[0-9]{2}")    
-    protected int rfc822String3(String s)
-    {
-        char sign = s.charAt(0);
-        int h = Integer.parseInt(s.substring(1, 3));
-        int m = Integer.parseInt(s.substring(4, 6));
-        if (sign == '+')
-        {
-            return h * 3600 + m * 60;
-        }
-        else
-        {
-            return -(h * 3600 + m * 60);
-        }
-    }
-    
-    @Terminal(expression="[\\+\\-][0-9]{2}[0-9]{2}")    
-    protected int rfc822String4(String s)
-    {
-        char sign = s.charAt(0);
-        int h = Integer.parseInt(s.substring(1, 3));
-        int m = Integer.parseInt(s.substring(3, 5));
-        if (sign == '+')
-        {
-            return h * 3600 + m * 60;
-        }
-        else
-        {
-            return -(h * 3600 + m * 60);
-        }
-    }
-    @Rules({
-    @Rule("rfc822String1"),
-    @Rule("rfc822String2"),
-    @Rule("rfc822String3"),
-    @Rule("rfc822String4")
-    })
-    protected void rfc822(int offset, @ParserContext MutableDateTime cal)
-    {
-        cal.set(ChronoField.OFFSET_SECONDS, offset);
+        ZoneId zoneId = ZoneId.of(zone, ShortIds.SHORT_IDS);
+        cal.setZone(zoneId);
     }
 
     @Terminal(expression = "[a-zA-Z]")

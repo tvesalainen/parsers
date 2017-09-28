@@ -18,6 +18,7 @@
 package org.vesalainen.parsers.date;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Date;
 import org.vesalainen.parser.GenClassFactory;
 import static org.vesalainen.parser.ParserFeature.SingleThread;
@@ -53,7 +54,7 @@ import org.vesalainen.time.SimpleMutableDateTime;
 ,@Rule(left="dd", value={"dayInMonth"})
 ,@Rule(left="HH", value={"hour23"})
 ,@Rule(left="sqlTime", value={"HH", "':'", "mm", "':'", "ss"})
-,@Rule(left="sqlTime", value={"HH", "':'", "mm", "':'", "ss", "Z"})
+,@Rule(left="sqlTime", value={"HH", "':'", "mm", "':'", "ss", "z"})
 ,@Rule(left="MM", value={"month"})
 ,@Rule(left="yyyy", value={"year4"})
 ,@Rule(left="ss", value={"second"})
@@ -61,9 +62,9 @@ import org.vesalainen.time.SimpleMutableDateTime;
 ,@Rule(left="date", value={"sqlTimestamp"})
 ,@Rule(left="date", value={"sqlTime"})
 ,@Rule(left="sqlDate", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd"})
-,@Rule(left="sqlTimestamp", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd", "' '", "HH", "':'", "mm", "':'", "ss", "Z"})
+,@Rule(left="sqlTimestamp", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd", "' '", "HH", "':'", "mm", "':'", "ss", "z"})
 ,@Rule(left="sqlTimestamp", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd", "' '", "HH", "':'", "mm", "':'", "ss"})
-,@Rule(left="Z", value={"rfc822"})
+,@Rule(left="z", value={"zoneId"})
 })
 public abstract class SQLDateParser extends DateReducers
 {
@@ -75,19 +76,19 @@ public abstract class SQLDateParser extends DateReducers
     {
         SimpleMutableDateTime calendar = new SimpleMutableDateTime();
         parseDate(text, calendar);
-        return calendar.getGregorianCalendar().getTime();
+        return Date.from(Instant.from(calendar));
     }
     public Date parseTime(String text)
     {
         SimpleMutableDateTime calendar = new SimpleMutableDateTime();
         parseTime(text, calendar);
-        return calendar.getGregorianCalendar().getTime();
+        return Date.from(Instant.from(calendar));
     }
     public Date parseTimestamp(String text)
     {
         SimpleMutableDateTime calendar = new SimpleMutableDateTime();
         parseTimestamp(text, calendar);
-        return calendar.getGregorianCalendar().getTime();
+        return Date.from(Instant.from(calendar));
     }
     /**
      * 
