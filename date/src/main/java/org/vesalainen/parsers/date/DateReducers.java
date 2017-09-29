@@ -249,6 +249,11 @@ public abstract class DateReducers
         cal.setZone(zoneId);
     }
 
+    @Terminal(expression = "[ ]+")
+    protected void whiteSpace()
+    {
+    }
+
     @Terminal(expression = "[a-zA-Z]")
     protected char character(char d)
     {

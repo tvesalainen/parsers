@@ -100,7 +100,7 @@ import org.vesalainen.time.SimpleMutableDateTime;
 ,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday3(org.vesalainen.time.MutableDateTime)", value={"'Tue|Tues|Tuesd|Tuesda|Tuesday'"})
 ,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday1(org.vesalainen.time.MutableDateTime)", value={"'Sun|Sund|Sunda|Sunday'"})
 ,@Rule(left="EEEE", reducer="org.vesalainen.parsers.date.DateReducers weekday6(org.vesalainen.time.MutableDateTime)", value={"'Fri|Frid|Frida|Friday'"})
-,@Rule(left="rfc1123", value={"EEE", "'\\, '", "dd", "' '", "MMM", "' '", "yyyy", "' '", "HH", "':'", "mm", "':'", "ss", "' '", "z"})
+,@Rule(left="rfc1123", value={"EEE", "('\\,')?", "dd", "MMM", "yyyy", "HH", "':'", "mm", "':'", "ss", "z"})
 ,@Rule(left="MM", value={"month"})
 ,@Rule(left="yy", value={"year2"})
 ,@Rule(left="dateZ", value={"rfc850"})
@@ -108,12 +108,12 @@ import org.vesalainen.time.SimpleMutableDateTime;
 ,@Rule(left="dateZ", value={"rfc1123"})
 ,@Rule(left="dateDT", value={"ascTime"})
 ,@Rule(left="dateDT", value={"iso8601DT"})
-,@Rule(left="ascTime", value={"EEE", "'\\, '", "MMM", "' '", "dd", "' '", "HH", "':'", "mm", "':'", "ss", "' '", "yyyy"})
+,@Rule(left="ascTime", value={"EEE", "('\\,')?", "MMM", "dd", "HH", "':'", "mm", "':'", "ss", "yyyy"})
 ,@Rule(left="dd", value={"dayInMonth"})
-,@Rule(left="rfc850", value={"EEEE", "'\\, '", "dd", "'\\-'", "MMM", "'\\-'", "yy", "' '", "HH", "':'", "mm", "':'", "ss", "' '", "z"})
+,@Rule(left="rfc850", value={"EEEE", "('\\,')?", "dd", "'\\-'", "MMM", "'\\-'", "yy", "HH", "':'", "mm", "':'", "ss", "z"})
 ,@Rule(left="iso8601D", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd"})
 ,@Rule(left="iso8601Y", value={"yyyy"})
-,@Rule(left="iso8601YM", value={"yyyy", "'\\-'", "MM"})
+,@Rule(left="iso8601YM", value={"yyyy", "('\\-')?", "MM"})
 
 ,@Rule(left="iso8601T", value={"HH", "':'", "mm"})
 ,@Rule(left="iso8601T", value={"HH", "':'", "mm", "':'", "ss"})
@@ -393,9 +393,9 @@ public abstract class InternetDateParser extends DateReducers
      * @param dateTime 
      * @see <a href="doc-files/InternetDateParser-date.html#BNF">BNF Syntax for RFC1123 or RFC850 or AscTime or ISO8601 date</a>
      */
-    @ParseMethod(start = "dateZ", features={WideIndex, SingleThread})
+    @ParseMethod(start = "dateZ", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseZ(String text, @ParserContext MutableDateTime dateTime);
-    @ParseMethod(start = "dateDT", features={WideIndex, SingleThread})
+    @ParseMethod(start = "dateDT", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseDT(String text, @ParserContext MutableDateTime dateTime);
     /**
      * 
@@ -403,7 +403,7 @@ public abstract class InternetDateParser extends DateReducers
      * @param dateTime 
      * @see <a href="doc-files/InternetDateParser-rfc1123.html#BNF">BNF Syntax for RFC1123 date</a>
      */
-    @ParseMethod(start = "rfc1123", features={WideIndex, SingleThread})
+    @ParseMethod(start = "rfc1123", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseRFC1123(String text, @ParserContext MutableDateTime dateTime);
     /**
      * 
@@ -411,7 +411,7 @@ public abstract class InternetDateParser extends DateReducers
      * @param dateTime 
      * @see <a href="doc-files/InternetDateParser-rfc850.html#BNF">BNF Syntax for RFC850 date</a>
      */
-    @ParseMethod(start = "rfc850", features={WideIndex, SingleThread})
+    @ParseMethod(start = "rfc850", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseRFC850(String text, @ParserContext MutableDateTime dateTime);
     /**
      * 
@@ -419,7 +419,7 @@ public abstract class InternetDateParser extends DateReducers
      * @param dateTime 
      * @see <a href="doc-files/InternetDateParser-ascTime.html#BNF">BNF Syntax for AscTime date</a>
      */
-    @ParseMethod(start = "ascTime", features={WideIndex, SingleThread})
+    @ParseMethod(start = "ascTime", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseAscTime(String text, @ParserContext MutableDateTime dateTime);
     /**
      * 
@@ -427,17 +427,17 @@ public abstract class InternetDateParser extends DateReducers
      * @param dateTime 
      * @see <a href="doc-files/InternetDateParser-iso8601.html#BNF">BNF Syntax for ISO8601 date</a>
      */
-    @ParseMethod(start = "iso8601Z", features={WideIndex, SingleThread})
+    @ParseMethod(start = "iso8601Z", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseISO8601Z(String text, @ParserContext MutableDateTime dateTime);
-    @ParseMethod(start = "iso8601DT", features={WideIndex, SingleThread})
+    @ParseMethod(start = "iso8601DT", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseISO8601DT(String text, @ParserContext MutableDateTime dateTime);
-    @ParseMethod(start = "iso8601D", features={WideIndex, SingleThread})
+    @ParseMethod(start = "iso8601D", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseISO8601D(String text, @ParserContext MutableDateTime dateTime);
-    @ParseMethod(start = "iso8601Y", features={WideIndex, SingleThread})
+    @ParseMethod(start = "iso8601Y", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseISO8601Y(String text, @ParserContext MutableDateTime dateTime);
-    @ParseMethod(start = "iso8601YM", features={WideIndex, SingleThread})
+    @ParseMethod(start = "iso8601YM", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseISO8601YM(String text, @ParserContext MutableDateTime dateTime);
-    @ParseMethod(start = "iso8601T", features={WideIndex, SingleThread})
+    @ParseMethod(start = "iso8601T", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseISO8601T(String text, @ParserContext MutableDateTime dateTime);
 
 }
