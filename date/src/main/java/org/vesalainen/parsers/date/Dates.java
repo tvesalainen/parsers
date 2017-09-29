@@ -22,14 +22,27 @@ import java.time.LocalTime;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 /**
- *
+ * Dates class contains convenient static methods to InternetDateParser
  * @author Timo Vesalainen <timo.vesalainen@iki.fi>
+ * @see org.vesalainen.parsers.date.InternetDateParser
  */
 public final class Dates
 {
     private static final InternetDateParser parser = InternetDateParser.newInstance();
+    /**
+     * Sets zone id map to another from default or to default if null.
+     * <p>
+     * Note! This is static and therefore can have side effects.
+     * @param shortIds 
+     * @see java.time.ZoneId#SHORT_IDS
+     */
+    public static final void setShortIds(Map<String,String> shortIds)
+    {
+        InternetDateParser.setShortIds(shortIds);
+    }
     /**
      * Parses date in either ISO8601, RFC1123 or RFC850.
      * @param text

@@ -16,10 +16,11 @@
  */
 package org.vesalainen.parsers.date;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ThreadLocalRandom;
 import org.junit.AfterClass;
@@ -39,6 +40,9 @@ public class TestInternetDateGrammar
     {
         dp = InternetDateParser.newInstance();
         Locale.setDefault(Locale.US);
+        Map<String,String> shortIds = new HashMap<>(ShortIdsWithMilitaryZones.SHORT_IDS);
+        shortIds.put("EEST", "EET");
+        InternetDateParser.setShortIds(shortIds);
     }
 
     @BeforeClass

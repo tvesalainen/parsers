@@ -5,11 +5,10 @@
 package org.vesalainen.parsers.date;
 
 import java.time.ZoneId;
-import static java.time.ZoneId.SHORT_IDS;
 import java.time.temporal.ChronoField;
+import java.util.Map;
 import org.vesalainen.parser.annotation.ParserContext;
 import org.vesalainen.parser.annotation.Rule;
-import org.vesalainen.parser.annotation.Rules;
 import org.vesalainen.parser.annotation.Terminal;
 import org.vesalainen.time.MutableDateTime;
 
@@ -19,7 +18,25 @@ import org.vesalainen.time.MutableDateTime;
  */
 public abstract class DateReducers
 {
-
+    private static Map<String,String> SHORT_IDS = ZoneId.SHORT_IDS;
+    /**
+     * Sets zone id map to another from default or to default if null.
+     * <p>
+     * Note! This is static and therefore can have side effects.
+     * @param shortIds 
+     * @see java.time.ZoneId#SHORT_IDS
+     */
+    public static final void setShortIds(Map<String,String> shortIds)
+    {
+        if (shortIds != null)
+        {
+            SHORT_IDS = shortIds;
+        }
+        else
+        {
+            SHORT_IDS = ZoneId.SHORT_IDS;
+        }
+    }
     protected void ad(@ParserContext MutableDateTime cal)
     {
         cal.set(ChronoField.ERA, 0);
@@ -228,7 +245,7 @@ public abstract class DateReducers
     @Terminal(expression = "[A-Za-z\\+\\-][A-Za-z0-9~/._\\+\\-]*")
     protected void zoneId(String zone, @ParserContext MutableDateTime cal)
     {
-        ZoneId zoneId = ZoneId.of(zone, ZoneId.SHORT_IDS);
+        ZoneId zoneId = ZoneId.of(zone, SHORT_IDS);
         cal.setZone(zoneId);
     }
 

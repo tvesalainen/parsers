@@ -19,6 +19,9 @@ package org.vesalainen.parsers.date;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import org.vesalainen.parser.GenClassFactory;
 import static org.vesalainen.parser.ParserFeature.SingleThread;
@@ -35,9 +38,7 @@ import org.vesalainen.time.SimpleMutableDateTime;
 
 /**
  * @author Timo Vesalainen
- * @see <a href="http://savage.net.au/SQL/sql-2003-2.bnf.html#date string">BNF Syntax for SQL Date</a>
- * @see <a href="http://savage.net.au/SQL/sql-2003-2.bnf.html#time string">BNF Syntax for SQL Time</a>
- * @see <a href="http://savage.net.au/SQL/sql-2003-2.bnf.html#timestamp string">BNF Syntax for SQL Timestamp</a>
+ * @see <a href="https://ronsavage.github.io/SQL/sql-2003-2.bnf.html">BNF Syntax for SQL</a>
  * @see <a href="doc-files/SQLDateParser-sqlDate.html#BNF">Implemented BNF Syntax for SQL Date</a>
  * @see <a href="doc-files/SQLDateParser-sqlTime.html#BNF">Implemented BNF Syntax for SQL Time</a>
  * @see <a href="doc-files/SQLDateParser-sqlTimestamp.html#BNF">Implemented BNF Syntax for SQL Timestamp</a>
@@ -72,23 +73,50 @@ public abstract class SQLDateParser extends DateReducers
     {
         return (SQLDateParser) GenClassFactory.getGenInstance(SQLDateParser.class);
     }
+    /**
+     * @deprecated Use parseZonedTimestamp
+     * @param text
+     * @return 
+     */
     public Date parseDate(String text)
     {
-        SimpleMutableDateTime calendar = new SimpleMutableDateTime();
+        SimpleMutableDateTime calendar = new SimpleMutableDateTime(0, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
         parseDate(text, calendar);
-        return Date.from(Instant.from(calendar));
+        return Date.from(Instant.from(ZonedDateTime.from(calendar)));
     }
+    /**
+     * @deprecated Use parseLocalTime
+     * @param text
+     * @return 
+     */
     public Date parseTime(String text)
     {
-        SimpleMutableDateTime calendar = new SimpleMutableDateTime();
+        SimpleMutableDateTime calendar = new SimpleMutableDateTime(0, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
         parseTime(text, calendar);
-        return Date.from(Instant.from(calendar));
+        return Date.from(Instant.from(ZonedDateTime.from(calendar)));
     }
+    public LocalTime parseLocalTime(String text)
+    {
+        SimpleMutableDateTime calendar = new SimpleMutableDateTime(0, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+        parseTime(text, calendar);
+        return LocalTime.from(calendar);
+    }
+    /**
+     * @deprecated Use parseZonedTimestamp
+     * @param text
+     * @return 
+     */
     public Date parseTimestamp(String text)
+    {
+        SimpleMutableDateTime calendar = new SimpleMutableDateTime(0, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+        parseTimestamp(text, calendar);
+        return Date.from(Instant.from(ZonedDateTime.from(calendar)));
+    }
+    public ZonedDateTime parseZonedTimestamp(String text)
     {
         SimpleMutableDateTime calendar = new SimpleMutableDateTime();
         parseTimestamp(text, calendar);
-        return Date.from(Instant.from(calendar));
+        return ZonedDateTime.from(calendar);
     }
     /**
      * 
