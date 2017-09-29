@@ -228,7 +228,7 @@ public abstract class DateReducers
     @Terminal(expression = "[A-Za-z\\+\\-][A-Za-z0-9~/._\\+\\-]*")
     protected void zoneId(String zone, @ParserContext MutableDateTime cal)
     {
-        ZoneId zoneId = ZoneId.of(zone, ShortIds.SHORT_IDS);
+        ZoneId zoneId = ZoneId.of(zone, ZoneId.SHORT_IDS);
         cal.setZone(zoneId);
     }
 
