@@ -5,6 +5,7 @@
 package org.vesalainen.parsers.date;
 
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
 import java.util.Map;
 import org.vesalainen.parser.annotation.ParserContext;
@@ -241,8 +242,26 @@ public abstract class DateReducers
     {
         cal.setMilliSecond(m);
     }
-    
-    @Terminal(expression = "[A-Za-z\\+\\-][A-Za-z0-9~/._\\+\\-]*")
+    @Rule("military")
+    @Rule("zoneOffset")
+    @Rule("zoneId")
+    @Rule("zoneOffset '\\[' zoneId '\\]'")
+    protected void z()
+    {
+        
+    }
+    @Terminal(expression = "[A-Z]")
+    protected void military(String zone, @ParserContext MutableDateTime cal)
+    {
+        ZoneId zoneId = ZoneId.of(zone, SHORT_IDS);
+        cal.setZone(zoneId);
+    }
+    @Terminal(expression = "[\\+\\-][:0-9]+")
+    protected void zoneOffset(String offset, @ParserContext MutableDateTime cal)
+    {
+        cal.setZone(ZoneOffset.of(offset));
+    }
+    @Terminal(expression = "[A-Za-z][A-Za-z0-9~/\\._\\+\\-:]+")
     protected void zoneId(String zone, @ParserContext MutableDateTime cal)
     {
         ZoneId zoneId = ZoneId.of(zone, SHORT_IDS);

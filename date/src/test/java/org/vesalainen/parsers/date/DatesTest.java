@@ -173,5 +173,33 @@ public class DatesTest
         assertEquals(55, d.getSecond());
         assertEquals(ZoneOffset.UTC, d.getOffset());
     }
+    @Test
+    public void testISO8601All_2()
+    {
+        ZonedDateTime d = Dates.parse("1994-07-16T02:03:55GMT-04:00");
+        assertEquals(DayOfWeek.SATURDAY, d.getDayOfWeek());
+        assertEquals(16, d.getDayOfMonth());
+        assertEquals(Month.JULY, d.getMonth());
+        assertEquals(1994, d.getYear());
+        assertEquals(2, d.getHour());
+        assertEquals(3, d.getMinute());
+        assertEquals(55, d.getSecond());
+        assertEquals(ZoneOffset.ofHours(-4), d.getOffset());
+    }
+    @Test
+    public void testZonedDateTime()
+    {
+        ZonedDateTime zdt = ZonedDateTime.of(1994, 7, 16, 2, 3, 55, 0, ZoneId.of("Europe/Helsinki"));
+        String exp = zdt.toString();
+        ZonedDateTime d = Dates.parse(exp);
+        assertEquals(DayOfWeek.SATURDAY, d.getDayOfWeek());
+        assertEquals(16, d.getDayOfMonth());
+        assertEquals(Month.JULY, d.getMonth());
+        assertEquals(1994, d.getYear());
+        assertEquals(2, d.getHour());
+        assertEquals(3, d.getMinute());
+        assertEquals(55, d.getSecond());
+        assertEquals(ZoneOffset.ofHours(3), d.getOffset());
+    }
     
 }

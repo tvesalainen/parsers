@@ -65,7 +65,6 @@ import org.vesalainen.time.SimpleMutableDateTime;
 ,@Rule(left="sqlDate", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd"})
 ,@Rule(left="sqlTimestamp", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd", "' '", "HH", "':'", "mm", "':'", "ss", "z"})
 ,@Rule(left="sqlTimestamp", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd", "' '", "HH", "':'", "mm", "':'", "ss"})
-,@Rule(left="z", value={"zoneId"})
 })
 public abstract class SQLDateParser extends DateReducers
 {

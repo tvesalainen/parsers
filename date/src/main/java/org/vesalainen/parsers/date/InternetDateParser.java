@@ -137,7 +137,6 @@ import org.vesalainen.time.SimpleMutableDateTime;
 ,@Rule(left="yyyy", value={"year4"})
 ,@Rule(left="SSS", value={"milliSecond"})
 ,@Rule(left="ss", value={"second"})
-,@Rule(left="z", value={"zoneId"})
 })
 public abstract class InternetDateParser extends DateReducers
 {
