@@ -54,20 +54,7 @@ public abstract class CoordinatesParser<T>
     
     @ParseMethod(start="coordinate", whiteSpace ="whiteSpace")
     public abstract T parseCoordinate(String text);
-
-    @ParseMethod(start="coordinates", whiteSpace ="whiteSpace")
-    public abstract List<T> parseCoordinates(String text);
-
-    @ParseMethod(start="coordinates", whiteSpace ="whiteSpace", size=4096, charSet="US-ASCII")
-    public abstract List<T> parseCoordinates(File file);
-
-    @Rule("coordinate+")
-    protected List<T> coordinates(List<T> list)
-    {
-        return list;
-    }
-
-    @Rule("decimal decimal")
+    @Rule("number number")
     protected T coordinate(double lat, double lon)
     {
         return supplier.supply(null, lat, lon);
@@ -85,8 +72,8 @@ public abstract class CoordinatesParser<T>
         return supplier.supply(name, ns*lat, we*lon);
     }
     
-    @Rule("integer degreeChar? decimal secondChar?")
-    protected double latitude(int deg, double min,
+    @Rule("number degreeChar? number secondChar?")
+    protected double latitude(double deg, double min,
             @ParserContext(ParserConstants.INPUTREADER) InputReader reader)
     {
         double d = deg + min/60.0;
@@ -97,8 +84,8 @@ public abstract class CoordinatesParser<T>
         return new Double(d);
     }
     
-    @Rule("integer degreeChar? integer secondChar? integer minuteChar?")
-    protected double latitude(int deg, int min, int sec,
+    @Rule("number degreeChar? number secondChar? number minuteChar?")
+    protected double latitude(double deg, double min, double sec,
             @ParserContext(ParserConstants.INPUTREADER) InputReader reader)
     {
         double d = deg + min/60.0 + sec/3600.0;
@@ -109,8 +96,8 @@ public abstract class CoordinatesParser<T>
         return d;
     }
     
-    @Rule("integer degreeChar? decimal secondChar?")
-    protected double longitude(int deg, double min,
+    @Rule("number degreeChar? number secondChar?")
+    protected double longitude(double deg, double min,
             @ParserContext(ParserConstants.INPUTREADER) InputReader reader)
     {
         double d = deg + min/60.0;
@@ -121,8 +108,8 @@ public abstract class CoordinatesParser<T>
         return d;
     }
     
-    @Rule("integer degreeChar? integer secondChar? integer minuteChar?")
-    protected double longitude(int deg, int min, int sec,
+    @Rule("number degreeChar? number secondChar? number minuteChar?")
+    protected double longitude(double deg, double min, double sec,
             @ParserContext(ParserConstants.INPUTREADER) InputReader reader)
     {
         double d = deg + min/60.0 + sec/3600.0;
@@ -181,11 +168,8 @@ public abstract class CoordinatesParser<T>
     @Terminal(expression = "[A-Za-z][A-Za-z0-9]+")
     protected abstract String string(String value);
 
-    @Terminal(expression = "[\\+\\-]?[0-9]+")
-    protected abstract int integer(int value);
-
-    @Terminal(expression = "[\\+\\-]?[0-9]+\\.[0-9]+")
-    protected abstract double decimal(double value);
+    @Terminal(expression = "[\\+\\-]?[0-9]+(\\.[0-9]+)?")
+    protected abstract double number(double value);
 
     @Terminal(expression = "[ \t\r\n\\,\\-–]+")
     protected abstract void whiteSpace();
