@@ -52,19 +52,19 @@ public class PrintfParserTest
     {
         PrintfParser parser = PrintfParser.getInstance();
         FormatFactory factory = new FormatFactory();
-        String format = "foo%4dbar";
+        String format = "foo%8dbar";
         List<FormatPart> list = parser.parse(format, factory);
         assertEquals(3, list.size());
-        Object[] res = factory.parse(list, String.format(format, 1234578));
+        Object[] res = factory.parse(list, String.format(format, 12345678));
         assertEquals(1, res.length);
-        assertEquals(1234578L, res[0]);
+        assertEquals(12345678L, res[0]);
     }
     @Test
     public void testFloat()
     {
         PrintfParser parser = PrintfParser.getInstance();
         FormatFactory factory = new FormatFactory();
-        String format = "foo%fbar";
+        String format = "foo%8.3fbar";
         List<FormatPart> list = parser.parse(format, factory);
         assertEquals(3, list.size());
         Object[] res = factory.parse(list, String.format(US, format, 1234.578));
@@ -76,7 +76,7 @@ public class PrintfParserTest
     {
         PrintfParser parser = PrintfParser.getInstance();
         FormatFactory factory = new FormatFactory();
-        List<FormatPart> list = parser.parse("  %3.3s    %d          SSN =%f                Minimum Angle=%f degrees", factory);
+        List<FormatPart> list = parser.parse("  %3.3s    %4d          SSN =  %3f                Minimum Angle= %5.3f degrees", factory);
         Object[] res = factory.parse(list, "  Feb    2018          SSN =  22.                Minimum Angle= 5.000 degrees");
     }
 }

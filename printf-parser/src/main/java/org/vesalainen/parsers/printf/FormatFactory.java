@@ -17,10 +17,8 @@
 package org.vesalainen.parsers.printf;
 
 import java.util.List;
-import java.util.function.IntPredicate;
 import java.util.function.ObjIntConsumer;
 import org.vesalainen.lang.Primitives;
-import org.vesalainen.util.CharSequences;
 
 /**
  *
@@ -28,18 +26,6 @@ import org.vesalainen.util.CharSequences;
  */
 public class FormatFactory
 {
-    private IntPredicate isWhiteSpace;
-
-    public FormatFactory()
-    {
-        this(Character::isWhitespace);
-    }
-
-    public FormatFactory(IntPredicate isWhiteSpace)
-    {
-        this.isWhiteSpace = isWhiteSpace;
-    }
-
     public Object[] parse(List<FormatPart> parts, String text)
     {
         int size = 0;
@@ -60,96 +46,12 @@ public class FormatFactory
         int index = 0;
         for (FormatPart p : parts)
         {
-            pos = scanWhiteSpace(text, pos);
-            pos = p.parse(text, pos);
+            Object value = p.parse(text, pos);
             if (!p.isLiteral())
             {
-                func.accept(p.getValue(), index++);
+                func.accept(value, index++);
             }
-        }
-    }
-    protected int scanWhiteSpace(String text, int start)
-    {
-        int len = text.length()-start;
-        for (int ii=0;ii<len;ii++)
-        {
-            if (!isWhiteSpace.test(text.charAt(start+ii)))
-            {
-                return start+ii;
-            }
-        }
-        return start+len;
-    }
-    private static boolean isFloat(int cc)
-    {
-        return isDigit(cc) || cc == '.';
-    }
-    private static boolean isDigit(int cc)
-    {
-        switch (cc)
-        {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                return true;
-            default:
-                return false;
-        }
-    }
-    private static boolean isHex(int cc)
-    {
-        switch (cc)
-        {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-                return true;
-            default:
-                return false;
-        }
-    }
-    private static boolean isOctal(int cc)
-    {
-        switch (cc)
-        {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-                return true;
-            default:
-                return false;
+            pos += p.getWidth();
         }
     }
     public FormatPart getInstance(String lit)
@@ -177,40 +79,27 @@ public class FormatFactory
     }
     public abstract class FormatPart<T>
     {
-        protected char flags;
         protected int width;
-        protected int precision;
-        protected char conversion;
-        protected T value;
         protected boolean literal;
 
         public FormatPart()
         {
         }
 
-        public FormatPart(char flags, int width, int precision, char conversion)
+        public FormatPart(int width)
         {
-            this.flags = flags;
             this.width = width;
-            this.precision = precision;
-            this.conversion = conversion;
+            if (width <= 0)
+            {
+                throw new IllegalArgumentException(width+" is illegal");
+            }
         }
 
-        public abstract int parse(String text, int start);
-
-        public T getValue()
-        {
-            return value;
-        }
+        public abstract T parse(String text, int start);
 
         public boolean isLiteral()
         {
             return literal;
-        }
-
-        public char getFlags()
-        {
-            return flags;
         }
 
         public int getWidth()
@@ -218,31 +107,23 @@ public class FormatFactory
             return width;
         }
 
-        public int getPrecision()
-        {
-            return precision;
-        }
-
-        public char getConversion()
-        {
-            return conversion;
-        }
     }
     public class DoublePart extends FormatPart<Double>
     {
 
         public DoublePart(char flags, int width, int precision, char conversion)
         {
-            super(flags, width, precision, conversion);
+            super(width);
+            if (width+2 < precision)
+            {
+                throw new IllegalArgumentException("precision="+precision+" doesn't fit");
+            }
         }
 
         @Override
-        public int parse(String text, int start)
+        public Double parse(String text, int start)
         {
-            int begin = CharSequences.indexOf(text, FormatFactory::isDigit, start);
-            int end = CharSequences.indexOf(text, (c)->!FormatFactory.isFloat(c), begin);
-            value = Primitives.parseDouble(text, begin, end);
-            return end;
+            return Primitives.findDouble(text.subSequence(start, start+width));
         }
         
     }
@@ -251,16 +132,13 @@ public class FormatFactory
 
         public LongPart(char flags, int width, int precision, char conversion)
         {
-            super(flags, width, precision, conversion);
+            super(width);
         }
 
         @Override
-        public int parse(String text, int start)
+        public Long parse(String text, int start)
         {
-            int begin = CharSequences.indexOf(text, FormatFactory::isDigit, start);
-            int end = CharSequences.indexOf(text, (c)->!FormatFactory.isDigit(c), begin);
-            value = Primitives.parseLong(text, begin, end);
-            return end;
+            return Primitives.findLong(text.subSequence(start, start+width));
         }
         
     }
@@ -269,47 +147,34 @@ public class FormatFactory
 
         public StringPart(char flags, int width, int precision, char conversion)
         {
-            super(flags, width, precision, conversion);
+            super(Math.max(width, precision));
         }
 
         @Override
-        public int parse(String text, int start)
+        public String parse(String text, int start)
         {
-            if (precision != -1)
-            {
-                value = text.substring(start, Math.min(start+precision, text.length()));
-                return start+precision;
-            }
-            else
-            {
-                int end = CharSequences.indexOf(text, isWhiteSpace, start);
-                value = text.substring(start, end != -1 ? end : text.length());
-                return start+value.length();
-            }
+            return text.substring(start, Math.min(start+width, text.length())).trim();
         }
         
     }
     public class LiteralPart extends FormatPart<String>
     {
-        private int length;
+        private String value;
         public LiteralPart(String literal)
         {
-            this.value = CharSequences.trim(literal, isWhiteSpace).toString();
-            this.length = value.length();
+            super(literal.length());
+            this.value = literal;
             this.literal = true;
         }
 
         @Override
-        public int parse(String text, int start)
+        public String parse(String text, int start)
         {
-            if (text.regionMatches(start, value, 0, length))
+            if (!text.startsWith(value, start))
             {
-                return start+length;
+                throw new IllegalArgumentException(text.substring(start)+" at "+start+" not starting with "+value);
             }
-            else
-            {
-                throw new IllegalArgumentException(text.substring(start)+" not starting with "+value);
-            }
+            return value;
         }
         
     }
