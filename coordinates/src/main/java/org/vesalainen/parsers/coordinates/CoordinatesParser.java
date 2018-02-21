@@ -16,8 +16,6 @@
  */
 package org.vesalainen.parsers.coordinates;
 
-import java.io.File;
-import java.util.List;
 import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.ParserConstants;
 import org.vesalainen.parser.annotation.GenClassname;
@@ -123,7 +121,7 @@ public abstract class CoordinatesParser<T>
     @Terminal(expression="[\u00b0oO]")
     protected abstract void degreeChar();
     
-    @Terminal(expression="\"")
+    @Terminal(expression="(\"|'')")
     protected abstract void minuteChar();
     
     @Terminal(expression="'")
