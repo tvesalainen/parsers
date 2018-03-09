@@ -70,6 +70,17 @@ public abstract class CoordinatesParser<T>
         return supplier.supply(name, ns*lat, we*lon);
     }
     
+    @Rule("number degreeChar?")
+    protected double latitude(double deg,
+            @ParserContext(ParserConstants.INPUTREADER) InputReader reader)
+    {
+        double d = deg;
+        if (d < 0 || d > 90)
+        {
+            reader.throwSyntaxErrorException("latitude coordinate", String.valueOf(d));
+        }
+        return new Double(d);
+    }
     @Rule("number degreeChar? number secondChar?")
     protected double latitude(double deg, double min,
             @ParserContext(ParserConstants.INPUTREADER) InputReader reader)
@@ -90,6 +101,18 @@ public abstract class CoordinatesParser<T>
         if (d < 0 || d > 90 || min < 0 || min > 60 || sec < 0 || sec > 60)
         {
             reader.throwSyntaxErrorException("latitude coordinate", String.valueOf(d));
+        }
+        return d;
+    }
+    
+    @Rule("number degreeChar?")
+    protected double longitude(double deg,
+            @ParserContext(ParserConstants.INPUTREADER) InputReader reader)
+    {
+        double d = deg;
+        if (d < 0 || d > 180)
+        {
+            reader.throwSyntaxErrorException("longitude coordinate", String.valueOf(d));
         }
         return d;
     }
