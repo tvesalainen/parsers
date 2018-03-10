@@ -18,6 +18,7 @@ package org.vesalainen.parsers.coordinates;
 
 import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.ParserConstants;
+import org.vesalainen.parser.ParserInfo;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
@@ -36,7 +37,7 @@ import org.vesalainen.regex.Regex;
  */
 @GenClassname("org.vesalainen.parsers.coordinates.CoordinatesParserImpl")
 @GrammarDef()
-public abstract class CoordinatesParser<T>
+public abstract class CoordinatesParser<T> implements ParserInfo
 {
     private CoordinateSupplier<T> supplier;
 

@@ -16,7 +16,6 @@
  */
 package org.vesalainen.parsers.coordinates;
 
-import java.util.List;
 import java.util.Locale;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -43,6 +42,7 @@ public class CoordinatesParserTest
         assertEquals("D02 12.074567 -68.857867", parser.parseCoordinate("D02 – 12o 04.474 N 68o 51.472 W"));
         assertEquals("null 3.866667 30.233333", parser.parseCoordinate("03 52 N   30 14 E"));
         assertEquals("null -10.000000 -120.000000", parser.parseCoordinate("10S120W"));
+        assertEquals("null 55.100000 199.400000", parser.parseCoordinate("55.1N199.4E"));
     }
 
 }
