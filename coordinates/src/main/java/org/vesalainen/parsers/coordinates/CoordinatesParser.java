@@ -190,7 +190,7 @@ public abstract class CoordinatesParser<T> implements ParserInfo
     @Terminal(expression = "[A-Za-z][A-Za-z0-9]+")
     protected abstract String string(String value);
 
-    @Terminal(expression = "[\\+\\-]?[0-9]+(\\.[0-9]+)?")
+    @Terminal(expression = "[0-9]+(\\.[0-9]+)?")
     protected abstract double number(double value);
 
     @Terminal(expression = "[ \t\r\n\\,\\-–]+")
