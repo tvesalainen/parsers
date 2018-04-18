@@ -157,4 +157,8 @@ public final class Dates
     {
         return parser.parseAscTimeLocalDateTime(text);
     }
+    public static final ZonedDateTime parseRMSExpress(String text)
+    {
+        return parser.parseRMSExpressZonedDateTime(text);
+    }
 }

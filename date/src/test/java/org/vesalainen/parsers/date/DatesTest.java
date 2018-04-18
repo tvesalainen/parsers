@@ -201,5 +201,9 @@ public class DatesTest
         assertEquals(55, d.getSecond());
         assertEquals(ZoneOffset.ofHours(3), d.getOffset());
     }
-    
+    @Test
+    public void testRMSExpress()
+    {
+        ZonedDateTime d = Dates.parseRMSExpress("2018-04-18 18:34:28Z");
+    }    
 }

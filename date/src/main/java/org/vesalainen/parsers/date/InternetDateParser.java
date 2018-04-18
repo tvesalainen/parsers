@@ -127,6 +127,8 @@ import org.vesalainen.time.SimpleMutableDateTime;
 ,@Rule(left="iso8601Z", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd", "'T'", "HH", "':'", "mm", "':'", "ss", "z"})
 ,@Rule(left="iso8601Z", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd", "'T'", "HH", "':'", "mm", "':'", "ss", "'\\.'", "SSS", "z"})
         
+,@Rule(left="rmsExpress", value={"yyyy", "'\\-'", "MM", "'\\-'", "dd", "' '", "HH", "':'", "mm", "':'", "ss", "z"})
+
 ,@Rule(left="EEE", reducer="org.vesalainen.parsers.date.DateReducers weekday7(org.vesalainen.time.MutableDateTime)", value={"'Sat|Satu|Satur|Saturd|Saturda|Saturday'"})
 ,@Rule(left="EEE", reducer="org.vesalainen.parsers.date.DateReducers weekday4(org.vesalainen.time.MutableDateTime)", value={"'Wed|Wedn|Wedne|Wednes|Wednesd|Wednesda|Wednesday'"})
 ,@Rule(left="EEE", reducer="org.vesalainen.parsers.date.DateReducers weekday6(org.vesalainen.time.MutableDateTime)", value={"'Fri|Frid|Frida|Friday'"})
@@ -327,6 +329,17 @@ public abstract class InternetDateParser extends DateReducers
         return cal;
     }
     
+    public ZonedDateTime parseRMSExpressZonedDateTime(String text)
+    {
+        return ZonedDateTime.from(parseRMSExpressMutableZonedDateTime(text));
+    }
+    private SimpleMutableDateTime parseRMSExpressMutableZonedDateTime(String text)
+    {
+        SimpleMutableDateTime cal = getInstance();
+        parseRMSExpress(text, cal);
+        return cal;
+    }
+
     public LocalDateTime parseISO8601LocalDateTime(String text)
     {
         return LocalDateTime.from(parseISO8601MutableLocalDateTime(text));
@@ -438,5 +451,7 @@ public abstract class InternetDateParser extends DateReducers
     protected abstract void parseISO8601YM(String text, @ParserContext MutableDateTime dateTime);
     @ParseMethod(start = "iso8601T", whiteSpace = "whiteSpace", features={WideIndex, SingleThread})
     protected abstract void parseISO8601T(String text, @ParserContext MutableDateTime dateTime);
+    @ParseMethod(start = "rmsExpress", features={WideIndex, SingleThread})
+    protected abstract void parseRMSExpress(String text, @ParserContext MutableDateTime dateTime);
 
 }
