@@ -26,6 +26,7 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -204,6 +205,6 @@ public class DatesTest
     @Test
     public void testRMSExpress()
     {
-        ZonedDateTime d = Dates.parseRMSExpress("2018-04-18 18:34:28Z");
+        Date d = Dates.parseRMSExpress("2018-04-18 18:34:28Z");
     }    
 }

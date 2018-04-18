@@ -22,6 +22,7 @@ import java.time.LocalTime;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -157,8 +158,8 @@ public final class Dates
     {
         return parser.parseAscTimeLocalDateTime(text);
     }
-    public static final ZonedDateTime parseRMSExpress(String text)
+    public static final Date parseRMSExpress(String text)
     {
-        return parser.parseRMSExpressZonedDateTime(text);
+        return parser.parseRMSExpress(text);
     }
 }

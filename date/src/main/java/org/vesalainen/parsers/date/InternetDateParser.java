@@ -329,6 +329,10 @@ public abstract class InternetDateParser extends DateReducers
         return cal;
     }
     
+    public Date parseRMSExpress(String text)
+    {
+        return Date.from(Instant.from(parseRMSExpressZonedDateTime(text)));
+    }
     public ZonedDateTime parseRMSExpressZonedDateTime(String text)
     {
         return ZonedDateTime.from(parseRMSExpressMutableZonedDateTime(text));
