@@ -16,6 +16,7 @@
  */
 package org.vesalainen.parsers.coordinates;
 
+import org.vesalainen.lang.Primitives;
 import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.ParserConstants;
 import org.vesalainen.parser.ParserInfo;
@@ -41,7 +42,7 @@ public abstract class CoordinatesParser<T> implements ParserInfo
 {
     private CoordinateSupplier<T> supplier;
 
-    public CoordinatesParser(CoordinateSupplier<T> supplier)
+    protected CoordinatesParser(CoordinateSupplier<T> supplier)
     {
         this.supplier = supplier;
     }
@@ -53,22 +54,22 @@ public abstract class CoordinatesParser<T> implements ParserInfo
     
     @ParseMethod(start="coordinate", whiteSpace ="whiteSpace")
     public abstract T parseCoordinate(String text);
-    @Rule("number number")
-    protected T coordinate(double lat, double lon)
+    @Rule("sign? number '\\,' sign? number")
+    protected T coordinate(Integer sign1, double lat, Integer sign2, double lon)
     {
-        return supplier.supply(null, lat, lon);
+        return supplier.supply(lat, lon);
     }
 
-    @Rule("string? ns latitude we longitude")
-    protected T coordinate(String name, int ns, double lat, int we, double lon)
+    @Rule("ns latitude '\\,'? we longitude")
+    protected T coordinate(int ns, double lat, int we, double lon)
     {
-        return supplier.supply(name, ns*lat, we*lon);
+        return supplier.supply(ns*lat, we*lon);
     }
     
-    @Rule("string? latitude ns longitude we")
-    protected T coordinate(String name, double lat, int ns, double lon, int we)
+    @Rule("latitude ns '\\,'? longitude we")
+    protected T coordinate(double lat, int ns, double lon, int we)
     {
-        return supplier.supply(name, ns*lat, we*lon);
+        return supplier.supply(ns*lat, we*lon);
     }
     
     @Rule("number degreeChar?")
@@ -142,7 +143,7 @@ public abstract class CoordinatesParser<T> implements ParserInfo
         return d;
     }
 
-    @Terminal(expression="[\u00b0oO]")
+    @Terminal(expression="[\u00b0oO\\-]")
     protected abstract void degreeChar();
     
     @Terminal(expression="(\"|'')")
@@ -162,6 +163,10 @@ public abstract class CoordinatesParser<T> implements ParserInfo
         @Rule("east")
     })
     protected abstract int we(int sign);
+    
+    @Rule("plus")
+    @Rule("minus")
+    protected abstract Integer sign(Integer sign);
     
     @Rule("n")
     protected int north()
@@ -187,13 +192,28 @@ public abstract class CoordinatesParser<T> implements ParserInfo
         return -1;
     }
     
+    @Terminal(expression = "[\\+]", priority=1)
+    protected Integer plus()
+    {
+        return 1;
+    }
+    
+    @Terminal(expression = "[\\-]", priority=1)
+    protected Integer minus()
+    {
+        return -1;
+    }
+    
     @Terminal(expression = "[A-Za-z][A-Za-z0-9]+")
     protected abstract String string(String value);
 
-    @Terminal(expression = "[0-9]+(\\.[0-9]+)?")
-    protected abstract double number(double value);
+    @Terminal(expression = "[0-9]+([\\.\\,][0-9]+)?")
+    protected double number(String value)
+    {
+        return Primitives.parseDouble(value.replace(',', '.'));
+    }
 
-    @Terminal(expression = "[ \t\r\n\\,\\-–]+")
+    @Terminal(expression = "[ \t\r\n]+")
     protected abstract void whiteSpace();
 
     @ReservedWords(value =

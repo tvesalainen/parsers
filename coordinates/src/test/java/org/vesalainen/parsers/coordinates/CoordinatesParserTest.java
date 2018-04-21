@@ -34,16 +34,17 @@ public class CoordinatesParserTest
     @Test
     public void testParseCoordinate()
     {
-        CoordinatesParser<String> parser = CoordinatesParser.getInstance((s, lat, lon)->String.format(Locale.US, "%s %f %f", s, lat, lon));
+        CoordinatesParser<String> parser = CoordinatesParser.getInstance((lat, lon)->String.format(Locale.US, "%f %f", lat, lon));
         assertNotNull(parser);
-        assertEquals("null 60.500000 25.500000", parser.parseCoordinate("N 60 30.0, E 25 30.0"));
-        assertEquals("null 60.500000 25.500000", parser.parseCoordinate("60 30.0 N, 25 30.0 E"));
-        assertEquals("Waypoint1 60.500000 25.500000", parser.parseCoordinate("Waypoint1 60 30.0 N, 25 30.0 E"));
-        assertEquals("D02 12.074567 -68.857867", parser.parseCoordinate("D02 – 12o 04.474 N 68o 51.472 W"));
-        assertEquals("null 3.866667 30.233333", parser.parseCoordinate("03 52 N   30 14 E"));
-        assertEquals("null -10.000000 -120.000000", parser.parseCoordinate("10S120W"));
-        assertEquals("null 55.100000 179.400000", parser.parseCoordinate("55.1N179.4E"));
-        assertEquals("null 46.379500 -121.583500", parser.parseCoordinate("46-22.77N 121-35.01W"));
+        assertEquals("60.500000 25.500000", parser.parseCoordinate("N 60 30.0, E 25 30.0"));
+        assertEquals("60.500000 25.500000", parser.parseCoordinate("60 30.0 N, 25 30.0 E"));
+        assertEquals("60.500000 25.500000", parser.parseCoordinate("60 30.0 N, 25 30.0 E"));
+        assertEquals("12.074567 -68.857867", parser.parseCoordinate("12o 04.474 N 68o 51.472 W"));
+        assertEquals("3.866667 30.233333", parser.parseCoordinate("03 52 N   30 14 E"));
+        assertEquals("-10.000000 -120.000000", parser.parseCoordinate("10S120W"));
+        assertEquals("55.100000 179.400000", parser.parseCoordinate("55.1N179.4E"));
+        assertEquals("46.379500 -121.583500", parser.parseCoordinate("46-22.77N 121-35.01W"));
+        assertEquals("55.100000 179.400000", parser.parseCoordinate("+55.1, +179.4"));
     }
 
 }
