@@ -41,6 +41,7 @@ import org.vesalainen.regex.ant.MapParser;
         error="Error", 
         eof="Eof",
         value={
+@DFAMapEntry(key="deb", value="application/vnd.debian.binary-package"),
 @DFAMapEntry(key="ez", value="application/andrew-inset"),
 @DFAMapEntry(key="hqx", value="application/mac-binhex40"),
 @DFAMapEntry(key="cpt", value="application/mac-compactpro"),

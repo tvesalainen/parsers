@@ -18,6 +18,7 @@
         <module>xml</module>
         <module>unit-parser</module>
         <module>coordinates</module>
+        <module>printf-parser</module>
     </modules>
     <name>Utility parsers</name>
     <description>

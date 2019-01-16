@@ -51,6 +51,7 @@ public class ShortIdsWithMilitaryZones extends HashMap<String,String>
             put(String.valueOf((char)('N'+ii)), String.format("-%02d:00", id));
         }
         put("Z", "+00:00");
+        put("MART", "-09:30");
     }
     
 }
